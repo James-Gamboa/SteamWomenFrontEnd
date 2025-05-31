@@ -26,3 +26,26 @@
     --radius: 0.5rem;
   }
 }
+
+@layer components {
+  .container {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    max-width: 96rem;
+  }
+
+  @media screen and (min-width: 640px) {
+    .container {
+      max-width: 640px;
+    }
+  }
+
+  @media screen and (min-width: 1024px) {
+    .container {
+      max-width: 1280px;
+    }
+  }
+}

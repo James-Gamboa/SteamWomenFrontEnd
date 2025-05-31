@@ -4,12 +4,29 @@ import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { useState, useEffect } from "react"
 import { AuthModal } from "@/components/organisms/auth-modal"
+import { usePathname } from "next/navigation"
+import { Menu, X } from "lucide-react"
+import { MobileMenu } from "@/components/molecules/mobile-menu"
 
 export function Header() {
   const [prevScrollPos, setPrevScrollPos] = useState(0)
   const [visible, setVisible] = useState(true)
   const [authModalOpen, setAuthModalOpen] = useState(false)
   const [authMode, setAuthMode] = useState<"login" | "register">("register")
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const pathname = usePathname()
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 1024 && isMobileMenuOpen) {
+        setIsMobileMenuOpen(false)
+      }
+    }
+
+    handleResize()
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [isMobileMenuOpen])
 
   useEffect(() => {
     const handleScroll = () => {
@@ -38,37 +55,37 @@ export function Header() {
   return (
     <>
       <header
-        className={`fixed top-0 left-0 right-0 z-50 shadow-sm transition-transform duration-300 ${
+        className={`fixed top-0 left-0 right-0 z-50 shadow-sm transition-transform duration-300 w-full overflow-x-hidden ${
           visible ? "translate-y-0" : "-translate-y-full"
         }`}
         style={{ backgroundColor: "#FFFFFF" }}
       >
-        <div className="container mx-auto px-4 py-6">
-          <div className="flex items-center justify-between">
+        <div className="container mx-auto py-6">
+          <div className="flex items-center justify-between min-w-0">
             <Link
               href="/"
-              className="font-bold text-xl transition-colors hover:opacity-80"
+              className="font-bold text-xl transition-colors hover:opacity-80 truncate"
               style={{
                 color: "#8B5CF6",
                 fontFamily: "DM Sans, sans-serif",
                 fontSize: "24px",
                 lineHeight: "35px",
                 fontWeight: "600",
+                maxWidth: "100%",
               }}
             >
               STEAMWOMEN
             </Link>
-
-            <nav className="hidden md:flex items-center justify-center space-x-8 flex-1 mx-8">
+            <nav className="hidden lg:flex items-center justify-center space-x-8 flex-1 mx-8">
               <Link
                 href="/"
                 className="transition-colors font-medium hover:opacity-80"
                 style={{
-                  color: "#8B5CF6",
+                  color: pathname === "/" ? "#8B5CF6" : "#1A1F2C",
                   fontFamily: "DM Sans, sans-serif",
                   fontSize: "16px",
                   lineHeight: "20px",
-                  fontWeight: "500",
+                  fontWeight: pathname === "/" ? "600" : "500",
                 }}
               >
                 Inicio
@@ -77,11 +94,11 @@ export function Header() {
                 href="/oportunidades"
                 className="transition-colors font-medium hover:opacity-80"
                 style={{
-                  color: "#1A1F2C",
+                  color: pathname.startsWith("/oportunidades") ? "#8B5CF6" : "#1A1F2C",
                   fontFamily: "DM Sans, sans-serif",
                   fontSize: "16px",
                   lineHeight: "20px",
-                  fontWeight: "500",
+                  fontWeight: pathname.startsWith("/oportunidades") ? "600" : "500",
                 }}
               >
                 Oportunidades
@@ -90,11 +107,11 @@ export function Header() {
                 href="/eventos"
                 className="transition-colors font-medium hover:opacity-80"
                 style={{
-                  color: "#1A1F2C",
+                  color: pathname.startsWith("/eventos") ? "#8B5CF6" : "#1A1F2C",
                   fontFamily: "DM Sans, sans-serif",
                   fontSize: "16px",
                   lineHeight: "20px",
-                  fontWeight: "500",
+                  fontWeight: pathname.startsWith("/eventos") ? "600" : "500",
                 }}
               >
                 Eventos
@@ -103,18 +120,27 @@ export function Header() {
                 href="/nosotras"
                 className="transition-colors font-medium hover:opacity-80"
                 style={{
-                  color: "#1A1F2C",
+                  color: pathname.startsWith("/nosotras") ? "#8B5CF6" : "#1A1F2C",
                   fontFamily: "DM Sans, sans-serif",
                   fontSize: "16px",
                   lineHeight: "20px",
-                  fontWeight: "500",
+                  fontWeight: pathname.startsWith("/nosotras") ? "600" : "500",
                 }}
               >
                 Nosotras
               </Link>
             </nav>
 
-            <div className="flex items-center space-x-4">
+            <button
+              className="block lg:hidden p-2 rounded focus:outline-none focus:ring-2 focus:ring-purple-400"
+              aria-label={isMobileMenuOpen ? "Cerrar menú" : "Abrir menú"}
+              onClick={() => setIsMobileMenuOpen((open) => !open)}
+              tabIndex={0}
+            >
+              {isMobileMenuOpen ? <X className="h-6 w-6 text-purple-500" /> : <Menu className="h-6 w-6 text-purple-500" />}
+            </button>
+
+            <div className="hidden lg:flex items-center space-x-4">
               <Button
                 variant="outline"
                 className="hover:opacity-80"
@@ -149,7 +175,12 @@ export function Header() {
           </div>
         </div>
       </header>
-
+      <MobileMenu
+        isOpen={isMobileMenuOpen}
+        onClose={() => setIsMobileMenuOpen(false)}
+        onLogin={handleLoginClick}
+        onRegister={handleRegisterClick}
+      />
       <AuthModal
         isOpen={authModalOpen}
         onClose={() => setAuthModalOpen(false)}

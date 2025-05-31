@@ -1,3 +1,7 @@
-export default function Oportunidades() {
-  return <h1>Oportunidades</h1>
+"use client"
+
+import { OpportunityTemplate } from "@/components/templates/opportunity-template"
+
+export default function OpportunitiesPage() {
+  return <OpportunityTemplate />
 }

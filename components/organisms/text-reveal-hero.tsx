@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button"
+import Link from "next/link"
 
 export function TextRevealHero() {
   return (
@@ -15,9 +16,8 @@ export function TextRevealHero() {
 
       <div className="relative z-10 text-center max-w-4xl mx-auto px-4" style={{ color: "#FFFFFF" }}>
         <h1
-          className="mb-6 font-bold"
+          className="mb-6 font-bold text-[38px] lg:text-[90px]"
           style={{
-            fontSize: "90px",
             lineHeight: "95px",
             fontFamily: "DM Sans, sans-serif",
             fontWeight: "600",
@@ -51,6 +51,7 @@ export function TextRevealHero() {
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
           <Button
+            asChild
             variant="outline"
             className="backdrop-blur-sm px-8 py-3 border hover:opacity-80"
             style={{
@@ -63,7 +64,7 @@ export function TextRevealHero() {
               fontWeight: "600",
             }}
           >
-            Explorar oportunidades
+            <Link href="/oportunidades">Explorar oportunidades</Link>
           </Button>
           <Button
             className="px-8 py-3 hover:opacity-90"

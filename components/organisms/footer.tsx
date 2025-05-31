@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button"
 export function Footer() {
   return (
     <footer className="py-16" style={{ backgroundColor: "#1A1F2C" }}>
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
           <div>
             <h3
@@ -144,7 +144,7 @@ export function Footer() {
                     fontWeight: "400",
                   }}
                 >
-                  contacto@steamwomencommunity.org
+                  contacto@steamwomen.com
                 </a>
               </li>
               <li>
@@ -159,7 +159,7 @@ export function Footer() {
                     fontWeight: "400",
                   }}
                 >
-                  +52 55 1234 5678
+                  +506 2222 2222
                 </a>
               </li>
               <li>
@@ -174,7 +174,7 @@ export function Footer() {
                     fontWeight: "400",
                   }}
                 >
-                  Ciudad de México, México
+                  Heredia, Costa Rica
                 </a>
               </li>
             </ul>
@@ -245,7 +245,7 @@ export function Footer() {
                 fontWeight: "400",
               }}
             >
-              © 2024 STEAMWomen. Todos los derechos reservados.
+              © 2025 STEAMWomen. Todos los derechos reservados.
             </p>
             <div className="flex space-x-4">
               <a

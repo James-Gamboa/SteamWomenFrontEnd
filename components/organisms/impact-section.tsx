@@ -62,10 +62,8 @@ function Counter({ end, duration = 2000, suffix = "" }: CounterProps) {
   return (
     <div
       ref={counterRef}
-      className="mb-2 font-bold"
+      className="mb-2 font-bold text-[2.2rem] sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl leading-tight lg:leading-[85px] text-center"
       style={{
-        fontSize: "60px",
-        lineHeight: "85px",
         color: "#A78BFA",
         fontFamily: "DM Sans, sans-serif",
         fontWeight: "600",
@@ -102,21 +100,18 @@ export function ImpactSection() {
   ]
 
   return (
-    <section className="py-20 relative overflow-hidden" style={{ backgroundColor: "#1A1F2C" }}>
+    <section className="py-10 md:py-20 relative overflow-hidden" style={{ backgroundColor: "#1A1F2C" }}>
       <div
         className="absolute inset-0"
         style={{
           background: "linear-gradient(to right, rgba(139, 92, 246, 0.5), rgba(14, 165, 233, 0.5))",
         }}
       />
-      <div className="container mx-auto px-4 relative z-10">
-        <div className="text-center mb-12">
+      <div className="container mx-auto relative z-10">
+        <div className="text-center mb-8 md:mb-12">
           <h2
-            className="mb-4 font-bold"
+            className="mb-4 font-bold text-3xl sm:text-4xl md:text-5xl leading-tight md:leading-[65px] text-white"
             style={{
-              fontSize: "48px",
-              lineHeight: "65px",
-              color: "#FFFFFF",
               fontFamily: "DM Sans, sans-serif",
               fontWeight: "600",
             }}
@@ -125,18 +120,22 @@ export function ImpactSection() {
           </h2>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
           {stats.map((stat, index) => (
-            <div key={index} className="text-center">
-              <Counter
-                end={stat.number}
-                suffix={stat.suffix}
-                duration={2500 + index * 200}
-              />
+            <div key={index} className="text-center flex flex-col items-center">
               <div
+                className="mb-2 font-bold text-[2.2rem] sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl leading-tight lg:leading-[85px] text-center"
                 style={{
-                  fontSize: "16px",
-                  lineHeight: "20px",
+                  color: "#A78BFA",
+                  fontFamily: "DM Sans, sans-serif",
+                  fontWeight: "600",
+                }}
+              >
+                {stat.number.toLocaleString()}{stat.suffix}
+              </div>
+              <div
+                className="text-base sm:text-lg text-center max-w-[180px] break-words"
+                style={{
                   color: "#C8C8C9",
                   fontFamily: "DM Sans, sans-serif",
                   fontWeight: "400",

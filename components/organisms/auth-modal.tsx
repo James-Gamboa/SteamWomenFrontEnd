@@ -3,7 +3,7 @@
 import type React from "react"
 
 import { useState } from "react"
-import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -48,18 +48,20 @@ export function AuthModal({ isOpen, onClose, mode, onModeChange }: AuthModalProp
       >
         <div className="p-8">
           <DialogHeader className="text-center mb-8">
-            <h2
-              className="mb-4"
-              style={{
-                fontSize: "32px",
-                lineHeight: "40px",
-                color: "#1A1F2C",
-                fontFamily: "DM Sans, sans-serif",
-                fontWeight: "600",
-              }}
-            >
-              {mode === "register" ? "Crear Cuenta" : "Iniciar Sesión"}
-            </h2>
+            <DialogTitle asChild>
+              <h2
+                className="mb-4"
+                style={{
+                  fontSize: "32px",
+                  lineHeight: "40px",
+                  color: "#1A1F2C",
+                  fontFamily: "DM Sans, sans-serif",
+                  fontWeight: "600",
+                }}
+              >
+                {mode === "register" ? "Crear Cuenta" : "Iniciar Sesión"}
+              </h2>
+            </DialogTitle>
             <p
               style={{
                 fontSize: "16px",
