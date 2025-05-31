@@ -1,3 +1,3 @@
 export default function Loading() {
-  return null;
+  return <div style={{ padding: 32, textAlign: "center" }}>Cargando oportunidades...</div>;
 }
