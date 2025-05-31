@@ -50,11 +50,17 @@ export function OpportunitiesSection() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-          {opportunitiesEventsData.slice(0, 6).map((opportunity) => (
-            <OpportunityCard key={opportunity.id} opportunity={opportunity} />
-          ))}
-        </div>
+        {opportunitiesEventsData.slice(0, 6).length === 0 ? (
+          <div className="text-center py-12 text-lg text-[#8E9196]">
+            No se encontraron oportunidades para los filtros seleccionados.
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+            {opportunitiesEventsData.slice(0, 6).map((opportunity) => (
+              <OpportunityCard key={opportunity.id} opportunity={opportunity} />
+            ))}
+          </div>
+        )}
 
         <div className="text-center">
           <Button

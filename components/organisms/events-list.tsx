@@ -69,16 +69,22 @@ export function EventsList({
 
   return (
     <>
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mb-8 lg:mb-12">
-        {currentEvents.map((event) => (
-          <EventCard
-            key={event.id}
-            event={event}
-            getCategoryStyles={getCategoryStyles}
-            formatDate={formatDate}
-          />
-        ))}
-      </div>
+      {currentEvents.length === 0 ? (
+        <div className="text-center py-12 text-lg text-[#8E9196]">
+          No se encontraron eventos para los filtros seleccionados.
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mb-8 lg:mb-12">
+          {currentEvents.map((event) => (
+            <EventCard
+              key={event.id}
+              event={event}
+              getCategoryStyles={getCategoryStyles}
+              formatDate={formatDate}
+            />
+          ))}
+        </div>
+      )}
 
       {totalPages > 1 && (
         <div className="flex justify-center items-center gap-2 mt-8">
