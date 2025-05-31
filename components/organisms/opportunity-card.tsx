@@ -9,8 +9,16 @@ import { Badge } from "@/components/ui/badge";
 import { Calendar, MapPin } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { EventMeta } from "./event-meta";
 
 export function OpportunityCard({ opportunity }: { opportunity: any }) {
+  const formatDateISO = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toISOString().split("T")[0];
+  };
+
+  const getProvince = (location: string) => location.split(",")[0].trim();
+
   return (
     <Link
       href={`/oportunidades/${opportunity.slug}`}
@@ -70,30 +78,13 @@ export function OpportunityCard({ opportunity }: { opportunity: any }) {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-3">
-          <div className="flex items-center" style={{ color: "#8E9196" }}>
-            <MapPin className="h-4 w-4 mr-2" />
-            <span
-              style={{
-                fontSize: "14px",
-                lineHeight: "18px",
-                fontFamily: "DM Sans, sans-serif",
-              }}
-            >
-              {opportunity.location}
-            </span>
-          </div>
-          <div className="flex items-center" style={{ color: "8E9196" }}>
-            <Calendar className="h-4 w-4 mr-2" />
-            <span
-              style={{
-                fontSize: "14px",
-                lineHeight: "18px",
-                fontFamily: "DM Sans, sans-serif",
-              }}
-            >
-              {opportunity.date}
-            </span>
-          </div>
+          <EventMeta
+            date={opportunity.date}
+            time={opportunity.time || ""}
+            location={getProvince(opportunity.location)}
+            formatDate={formatDateISO}
+            showOrganizer={false}
+          />
         </CardContent>
       </Card>
     </Link>

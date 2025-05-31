@@ -11,6 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { Calendar, MapPin } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { EventMeta } from "./event-meta";
 
 interface EventCardProps {
   event: {
@@ -39,8 +40,14 @@ export function EventCard({
   formatDate,
   variant = "list",
 }: EventCardProps) {
+  const formatDateISO = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toISOString().split("T")[0];
+  };
+
+  const getProvince = (location: string) => location.split(",")[0].trim();
+
   if (variant === "calendar") {
-    const eventDate = formatDate(event.date);
     return (
       <Link href={`/eventos/${event.slug}`}>
         <Card
@@ -55,13 +62,13 @@ export function EventCard({
               className="text-2xl lg:text-3xl font-bold"
               style={{ color: "#FFFFFF" }}
             >
-              {eventDate.day}
+              {formatDate(event.date).day}
             </div>
             <div
               className="text-sm font-medium capitalize"
               style={{ color: "#FFFFFF" }}
             >
-              {eventDate.month}
+              {formatDate(event.date).month}
             </div>
           </div>
           <div className="flex-1 p-4">
@@ -88,20 +95,13 @@ export function EventCard({
             >
               {event.title}
             </h4>
-            <div className="space-y-1 text-xs">
-              <div className="flex items-center" style={{ color: "#8E9196" }}>
-                <Calendar className="h-3 w-3 mr-1" />
-                <span style={{ fontFamily: "DM Sans, sans-serif" }}>
-                  {event.time}
-                </span>
-              </div>
-              <div className="flex items-center" style={{ color: "#8E9196" }}>
-                <MapPin className="h-3 w-3 mr-1" />
-                <span style={{ fontFamily: "DM Sans, sans-serif" }}>
-                  {event.location}
-                </span>
-              </div>
-            </div>
+            <EventMeta
+              date={event.date}
+              time={event.time}
+              location={getProvince(event.location)}
+              formatDate={formatDateISO}
+              showOrganizer={false}
+            />
           </div>
         </Card>
       </Link>
@@ -160,25 +160,13 @@ export function EventCard({
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-2 pt-0">
-          <div
-            className="flex items-center text-sm"
-            style={{ color: "#8E9196" }}
-          >
-            <Calendar className="h-4 w-4 mr-2" />
-            <span style={{ fontFamily: "DM Sans, sans-serif" }}>
-              {formatDate(event.date).day} {formatDate(event.date).month},{" "}
-              {formatDate(event.date).year} • {event.time}
-            </span>
-          </div>
-          <div
-            className="flex items-center text-sm"
-            style={{ color: "#8E9196" }}
-          >
-            <MapPin className="h-4 w-4 mr-2" />
-            <span style={{ fontFamily: "DM Sans, sans-serif" }}>
-              {event.location}
-            </span>
-          </div>
+          <EventMeta
+            date={event.date}
+            time={event.time}
+            location={getProvince(event.location)}
+            formatDate={formatDateISO}
+            showOrganizer={false}
+          />
         </CardContent>
       </Card>
     </Link>
