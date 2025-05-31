@@ -1,3 +1,3 @@
 export default function Nosotras() {
-  return <h1>Nosotras</h1>
-} 
+  return <h1>Nosotras</h1>;
+}

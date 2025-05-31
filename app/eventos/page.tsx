@@ -1,3 +1,7 @@
-export default function Eventos() {
-  return <h1>Eventos</h1>
-} 
+"use client";
+
+import { EventsTemplate } from "@/components/templates/events-template";
+
+export default function EventsPage() {
+  return <EventsTemplate />;
+}

@@ -1,56 +1,57 @@
-"use client"
+"use client";
 
-import { Button } from "@/components/ui/button"
-import Link from "next/link"
-import { useState, useEffect } from "react"
-import { AuthModal } from "@/components/organisms/auth-modal"
-import { usePathname } from "next/navigation"
-import { Menu, X } from "lucide-react"
-import { MobileMenu } from "@/components/molecules/mobile-menu"
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { useState, useEffect } from "react";
+import { AuthModal } from "@/components/organisms/auth-modal";
+import { usePathname } from "next/navigation";
+import { Menu, X } from "lucide-react";
+import { MobileMenu } from "@/components/molecules/mobile-menu";
 
 export function Header() {
-  const [prevScrollPos, setPrevScrollPos] = useState(0)
-  const [visible, setVisible] = useState(true)
-  const [authModalOpen, setAuthModalOpen] = useState(false)
-  const [authMode, setAuthMode] = useState<"login" | "register">("register")
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-  const pathname = usePathname()
+  const [prevScrollPos, setPrevScrollPos] = useState(0);
+  const [visible, setVisible] = useState(true);
+  const [authModalOpen, setAuthModalOpen] = useState(false);
+  const [authMode, setAuthMode] = useState<"login" | "register">("register");
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 1024 && isMobileMenuOpen) {
-        setIsMobileMenuOpen(false)
+        setIsMobileMenuOpen(false);
       }
-    }
+    };
 
-    handleResize()
-    window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
-  }, [isMobileMenuOpen])
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [isMobileMenuOpen]);
 
   useEffect(() => {
     const handleScroll = () => {
-      const currentScrollPos = window.scrollY
+      const currentScrollPos = window.scrollY;
 
-      const isVisible = prevScrollPos > currentScrollPos || currentScrollPos < 10
+      const isVisible =
+        prevScrollPos > currentScrollPos || currentScrollPos < 10;
 
-      setPrevScrollPos(currentScrollPos)
-      setVisible(isVisible)
-    }
+      setPrevScrollPos(currentScrollPos);
+      setVisible(isVisible);
+    };
 
-    window.addEventListener("scroll", handleScroll)
-    return () => window.removeEventListener("scroll", handleScroll)
-  }, [prevScrollPos])
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [prevScrollPos]);
 
   const handleLoginClick = () => {
-    setAuthMode("login")
-    setAuthModalOpen(true)
-  }
+    setAuthMode("login");
+    setAuthModalOpen(true);
+  };
 
   const handleRegisterClick = () => {
-    setAuthMode("register")
-    setAuthModalOpen(true)
-  }
+    setAuthMode("register");
+    setAuthModalOpen(true);
+  };
 
   return (
     <>
@@ -94,11 +95,15 @@ export function Header() {
                 href="/oportunidades"
                 className="transition-colors font-medium hover:opacity-80"
                 style={{
-                  color: pathname.startsWith("/oportunidades") ? "#8B5CF6" : "#1A1F2C",
+                  color: pathname.startsWith("/oportunidades")
+                    ? "#8B5CF6"
+                    : "#1A1F2C",
                   fontFamily: "DM Sans, sans-serif",
                   fontSize: "16px",
                   lineHeight: "20px",
-                  fontWeight: pathname.startsWith("/oportunidades") ? "600" : "500",
+                  fontWeight: pathname.startsWith("/oportunidades")
+                    ? "600"
+                    : "500",
                 }}
               >
                 Oportunidades
@@ -107,7 +112,9 @@ export function Header() {
                 href="/eventos"
                 className="transition-colors font-medium hover:opacity-80"
                 style={{
-                  color: pathname.startsWith("/eventos") ? "#8B5CF6" : "#1A1F2C",
+                  color: pathname.startsWith("/eventos")
+                    ? "#8B5CF6"
+                    : "#1A1F2C",
                   fontFamily: "DM Sans, sans-serif",
                   fontSize: "16px",
                   lineHeight: "20px",
@@ -120,7 +127,9 @@ export function Header() {
                 href="/nosotras"
                 className="transition-colors font-medium hover:opacity-80"
                 style={{
-                  color: pathname.startsWith("/nosotras") ? "#8B5CF6" : "#1A1F2C",
+                  color: pathname.startsWith("/nosotras")
+                    ? "#8B5CF6"
+                    : "#1A1F2C",
                   fontFamily: "DM Sans, sans-serif",
                   fontSize: "16px",
                   lineHeight: "20px",
@@ -137,7 +146,11 @@ export function Header() {
               onClick={() => setIsMobileMenuOpen((open) => !open)}
               tabIndex={0}
             >
-              {isMobileMenuOpen ? <X className="h-6 w-6 text-purple-500" /> : <Menu className="h-6 w-6 text-purple-500" />}
+              {isMobileMenuOpen ? (
+                <X className="h-6 w-6 text-purple-500" />
+              ) : (
+                <Menu className="h-6 w-6 text-purple-500" />
+              )}
             </button>
 
             <div className="hidden lg:flex items-center space-x-4">
@@ -188,5 +201,5 @@ export function Header() {
         onModeChange={setAuthMode}
       />
     </>
-  )
+  );
 }

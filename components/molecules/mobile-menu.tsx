@@ -1,26 +1,31 @@
-"use client"
+"use client";
 
-import { motion, AnimatePresence } from "framer-motion"
-import { Button } from "@/components/ui/button"
-import { X } from "lucide-react"
-import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { motion, AnimatePresence } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import { X } from "lucide-react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 interface MobileMenuProps {
-  isOpen: boolean
-  onClose: () => void
-  onLogin: () => void
-  onRegister: () => void
+  isOpen: boolean;
+  onClose: () => void;
+  onLogin: () => void;
+  onRegister: () => void;
 }
 
-export function MobileMenu({ isOpen, onClose, onLogin, onRegister }: MobileMenuProps) {
-  const pathname = usePathname()
+export function MobileMenu({
+  isOpen,
+  onClose,
+  onLogin,
+  onRegister,
+}: MobileMenuProps) {
+  const pathname = usePathname();
   const menuItems = [
     { label: "Inicio", href: "/" },
     { label: "Oportunidades", href: "/oportunidades" },
     { label: "Eventos", href: "/eventos" },
     { label: "Nosotras", href: "/nosotras" },
-  ]
+  ];
 
   return (
     <AnimatePresence>
@@ -32,7 +37,13 @@ export function MobileMenu({ isOpen, onClose, onLogin, onRegister }: MobileMenuP
           transition={{ duration: 0.3 }}
           className="fixed inset-0 bg-white z-50 flex flex-col items-center justify-center"
         >
-          <Button variant="ghost" size="icon" className="absolute top-4 right-4" onClick={onClose} aria-label="Cerrar menú">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="absolute top-4 right-4"
+            onClick={onClose}
+            aria-label="Cerrar menú"
+          >
             <X className="h-6 w-6" />
             <span className="sr-only">Cerrar menú</span>
           </Button>
@@ -43,7 +54,8 @@ export function MobileMenu({ isOpen, onClose, onLogin, onRegister }: MobileMenuP
                 href={item.href}
                 onClick={onClose}
                 className={`text-lg font-medium px-6 py-2 rounded transition-colors w-full text-center ${
-                  pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href))
+                  pathname === item.href ||
+                  (item.href !== "/" && pathname.startsWith(item.href))
                     ? "text-purple-500 font-semibold bg-purple-50"
                     : "text-gray-900 hover:text-purple-500"
                 }`}
@@ -57,7 +69,10 @@ export function MobileMenu({ isOpen, onClose, onLogin, onRegister }: MobileMenuP
             <Button
               variant="outline"
               className="w-full hover:opacity-80"
-              onClick={() => { onLogin(); onClose(); }}
+              onClick={() => {
+                onLogin();
+                onClose();
+              }}
               style={{
                 color: "#1A1F2C",
                 borderColor: "#C8C8C9",
@@ -72,7 +87,10 @@ export function MobileMenu({ isOpen, onClose, onLogin, onRegister }: MobileMenuP
             </Button>
             <Button
               className="w-full hover:opacity-90"
-              onClick={() => { onRegister(); onClose(); }}
+              onClick={() => {
+                onRegister();
+                onClose();
+              }}
               style={{
                 backgroundColor: "#8B5CF6",
                 color: "#FFFFFF",
@@ -88,5 +106,5 @@ export function MobileMenu({ isOpen, onClose, onLogin, onRegister }: MobileMenuP
         </motion.div>
       )}
     </AnimatePresence>
-  )
-} 
+  );
+}

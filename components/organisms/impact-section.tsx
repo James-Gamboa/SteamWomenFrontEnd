@@ -1,63 +1,63 @@
-"use client"
+"use client";
 
-import { useEffect, useState, useRef } from "react"
+import { useEffect, useState, useRef } from "react";
 
 interface CounterProps {
-  end: number
-  duration?: number
-  suffix?: string
+  end: number;
+  duration?: number;
+  suffix?: string;
 }
 
 function Counter({ end, duration = 2000, suffix = "" }: CounterProps) {
-  const [count, setCount] = useState(0)
-  const [isVisible, setIsVisible] = useState(false)
-  const counterRef = useRef<HTMLDivElement>(null)
+  const [count, setCount] = useState(0);
+  const [isVisible, setIsVisible] = useState(false);
+  const counterRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting && !isVisible) {
-          setIsVisible(true)
+          setIsVisible(true);
         }
       },
       { threshold: 0.1 },
-    )
+    );
 
     if (counterRef.current) {
-      observer.observe(counterRef.current)
+      observer.observe(counterRef.current);
     }
 
-    return () => observer.disconnect()
-  }, [isVisible])
+    return () => observer.disconnect();
+  }, [isVisible]);
 
   useEffect(() => {
-    if (!isVisible) return
+    if (!isVisible) return;
 
-    let startTime: number
-    let animationFrame: number
+    let startTime: number;
+    let animationFrame: number;
 
     const animate = (currentTime: number) => {
-      if (!startTime) startTime = currentTime
-      const progress = Math.min((currentTime - startTime) / duration, 1)
+      if (!startTime) startTime = currentTime;
+      const progress = Math.min((currentTime - startTime) / duration, 1);
 
-      const easeOutQuart = 1 - Math.pow(1 - progress, 4)
-      const currentCount = Math.floor(easeOutQuart * end)
+      const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+      const currentCount = Math.floor(easeOutQuart * end);
 
-      setCount(currentCount)
+      setCount(currentCount);
 
       if (progress < 1) {
-        animationFrame = requestAnimationFrame(animate)
+        animationFrame = requestAnimationFrame(animate);
       }
-    }
+    };
 
-    animationFrame = requestAnimationFrame(animate)
+    animationFrame = requestAnimationFrame(animate);
 
     return () => {
       if (animationFrame) {
-        cancelAnimationFrame(animationFrame)
+        cancelAnimationFrame(animationFrame);
       }
-    }
-  }, [isVisible, end, duration])
+    };
+  }, [isVisible, end, duration]);
 
   return (
     <div
@@ -72,7 +72,7 @@ function Counter({ end, duration = 2000, suffix = "" }: CounterProps) {
       {count.toLocaleString()}
       {suffix}
     </div>
-  )
+  );
 }
 
 export function ImpactSection() {
@@ -97,14 +97,18 @@ export function ImpactSection() {
       suffix: "%",
       label: "Tasa de participación",
     },
-  ]
+  ];
 
   return (
-    <section className="py-10 md:py-20 relative overflow-hidden" style={{ backgroundColor: "#1A1F2C" }}>
+    <section
+      className="py-10 md:py-20 relative overflow-hidden"
+      style={{ backgroundColor: "#1A1F2C" }}
+    >
       <div
         className="absolute inset-0"
         style={{
-          background: "linear-gradient(to right, rgba(139, 92, 246, 0.5), rgba(14, 165, 233, 0.5))",
+          background:
+            "linear-gradient(to right, rgba(139, 92, 246, 0.5), rgba(14, 165, 233, 0.5))",
         }}
       />
       <div className="container mx-auto relative z-10">
@@ -131,7 +135,8 @@ export function ImpactSection() {
                   fontWeight: "600",
                 }}
               >
-                {stat.number.toLocaleString()}{stat.suffix}
+                {stat.number.toLocaleString()}
+                {stat.suffix}
               </div>
               <div
                 className="text-base sm:text-lg text-center max-w-[180px] break-words"
@@ -148,5 +153,5 @@ export function ImpactSection() {
         </div>
       </div>
     </section>
-  )
+  );
 }

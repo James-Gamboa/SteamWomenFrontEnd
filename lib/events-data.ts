@@ -1,0 +1,420 @@
+export const eventsData = [
+  {
+    id: 1,
+    slug: "networking-mujeres-tecnologia",
+    title: "Networking para Mujeres en Tecnología",
+    description:
+      "Evento de networking para conectar a mujeres profesionales en el sector tecnológico y fomentar colaboraciones.",
+    location: "San José, Costa Rica",
+    date: "2025-06-05",
+    time: "18:30 - 21:00",
+    organizer: "TechWomen Costa Rica",
+    category: "Networking",
+    website: "https://techwomen.cr/networking2025",
+    registrationUrl: "https://eventbrite.com/networking-mujeres-tech",
+    capacity: "80 participantes",
+    price: "Gratuito",
+    image:
+      "https://images.unsplash.com/photo-1573167243872-43c6433b9d40?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2069&q=80",
+    fullDescription: `Este evento de networking está diseñado especialmente para mujeres profesionales en el sector tecnológico de Costa Rica. Será una oportunidad única para conectar con otras profesionales, compartir experiencias, crear alianzas estratégicas y fortalecer la comunidad de mujeres en tecnología del país. El evento incluirá actividades de networking estructurado, charlas inspiradoras de líderes del sector y espacios para el intercambio informal de ideas y experiencias.`,
+    agenda: [
+      {
+        time: "18:30 - 19:00",
+        activity: "Registro y bienvenida",
+        description:
+          "Llegada de participantes, entrega de materiales y networking inicial",
+      },
+      {
+        time: "19:00 - 19:30",
+        activity: "Charla inaugural: 'Liderazgo femenino en tech'",
+        description: "Presentación de María González, CTO de TechCR",
+      },
+      {
+        time: "19:30 - 20:15",
+        activity: "Sesiones de networking estructurado",
+        description:
+          "Actividades dirigidas para facilitar conexiones profesionales",
+      },
+      {
+        time: "20:15 - 20:45",
+        activity: "Panel: 'Desafíos y oportunidades en el sector'",
+        description:
+          "Mesa redonda con expertas de diferentes áreas tecnológicas",
+      },
+      {
+        time: "20:45 - 21:00",
+        activity: "Cierre y próximos pasos",
+        description: "Resumen del evento y anuncio de futuras actividades",
+      },
+    ],
+    requirements: [
+      "Ser mujer profesional en el sector tecnológico",
+      "Tener experiencia mínima de 1 año en el área",
+      "Completar el formulario de registro",
+      "Confirmar asistencia 48 horas antes del evento",
+    ],
+    benefits: [
+      "Networking con más de 80 profesionales del sector",
+      "Acceso a oportunidades laborales exclusivas",
+      "Certificado de participación",
+      "Materiales y recursos digitales",
+      "Acceso al grupo privado de la comunidad",
+      "Refrigerio incluido",
+    ],
+    registrationInfo: `Para participar en este evento, completa el formulario de registro en el enlace oficial. El cupo es limitado a 80 participantes y se asignarán por orden de llegada. La confirmación de tu lugar se enviará por correo electrónico dentro de las 24 horas posteriores al registro. El evento es gratuito pero requiere confirmación de asistencia.`,
+  },
+  {
+    id: 2,
+    slug: "workshop-diseno-ux",
+    title: "Workshop de Diseño UX",
+    description:
+      "Taller práctico sobre metodologías y herramientas para el diseño UX, enfocado en mujeres que buscan especializarse.",
+    location: "Cartago, Costa Rica",
+    date: "2025-06-22",
+    time: "09:00 - 17:00",
+    organizer: "UX Women CR",
+    category: "Taller",
+    website: "https://uxwomencr.org/workshop2025",
+    registrationUrl: "https://eventbrite.com/workshop-ux",
+    capacity: "40 participantes",
+    price: "Gratuito",
+    image:
+    "https://images.unsplash.com/photo-1717439762694-47ef801e9350?q=80&w=1973&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3DBCWHMhUw",
+    fullDescription: `Este taller práctico está diseñado para mujeres que desean especializarse en diseño UX. Aprenderás metodologías y herramientas esenciales para el diseño de experiencias de usuario, con ejercicios prácticos y casos de estudio reales.`,
+    agenda: [
+      {
+        time: "09:00 - 10:30",
+        activity: "Introducción al Diseño UX",
+        description: "Conceptos básicos y metodologías",
+      },
+      {
+        time: "10:30 - 12:00",
+        activity: "Herramientas de Diseño",
+        description: "Taller práctico con Figma",
+      },
+      {
+        time: "12:00 - 13:00",
+        activity: "Almuerzo",
+        description: "Networking y descanso",
+      },
+      {
+        time: "13:00 - 15:00",
+        activity: "Casos de Estudio",
+        description: "Análisis de proyectos reales",
+      },
+      {
+        time: "15:00 - 17:00",
+        activity: "Proyecto Práctico",
+        description: "Desarrollo de un proyecto UX",
+      },
+    ],
+    requirements: ["Interés en diseño UX", "Computadora portátil"],
+    benefits: [
+      "Certificado de participación",
+      "Acceso a recursos digitales",
+      "Networking con profesionales del sector",
+    ],
+    registrationInfo: `Inscríbete en el sitio web antes del 15 de junio de 2025. Cupo limitado a 40 participantes.`,
+  },
+  {
+    id: 3,
+    slug: "webinar-ciencia-datos",
+    title: "Webinar: Carreras en Ciencia de Datos",
+    description:
+      "Descubre las oportunidades profesionales en el campo de la ciencia de datos y cómo prepararte para el éxito.",
+    location: "Virtual",
+    date: "2025-06-05",
+    time: "19:00 - 20:30",
+    organizer: "Data Science CR",
+    category: "Webinar",
+    website: "https://datasciencecr.org/webinar2025",
+    registrationUrl: "https://eventbrite.com/webinar-ciencia-datos",
+    capacity: "100 participantes",
+    price: "Gratuito",
+    image:
+      "https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    fullDescription: `Este webinar te permitirá explorar las oportunidades profesionales en el campo de la ciencia de datos. Aprenderás sobre las habilidades necesarias, las tendencias del mercado y cómo prepararte para una carrera exitosa en este sector.`,
+    agenda: [
+      {
+        time: "19:00 - 19:30",
+        activity: "Introducción a la Ciencia de Datos",
+        description: "Conceptos básicos y aplicaciones",
+      },
+      {
+        time: "19:30 - 20:00",
+        activity: "Oportunidades Laborales",
+        description: "Tendencias y demandas del mercado",
+      },
+      {
+        time: "20:00 - 20:30",
+        activity: "Panel de Expertos",
+        description: "Experiencias y consejos de profesionales",
+      },
+    ],
+    requirements: ["Interés en ciencia de datos"],
+    benefits: [
+      "Acceso a la grabación",
+      "Material de apoyo",
+      "Certificado de participación",
+    ],
+    registrationInfo: `Regístrate gratis en la web. Cupo limitado a 100 participantes.`,
+  },
+  {
+    id: 4,
+    slug: "hackathon-ia",
+    title: "Hackathon de Inteligencia Artificial",
+    description:
+      "Participa en este hackathon enfocado en desarrollar soluciones de IA para el sector salud en Costa Rica.",
+    location: "Heredia",
+    date: "2025-06-15",
+    time: "08:00 - 18:00",
+    organizer: "HealthTech CR",
+    category: "Hackathon",
+    website: "https://healthtechcr.org/hackathon2025",
+    registrationUrl: "https://eventbrite.com/hackathon-ia",
+    capacity: "60 participantes",
+    price: "Gratuito",
+    image:
+      "https://images.unsplash.com/photo-1573167243872-43c6433b9d40?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    fullDescription: `Este hackathon está diseñado para desarrollar soluciones innovadoras de IA para el sector salud en Costa Rica. Trabajarás en equipo para crear proyectos que puedan tener un impacto real en la salud de las personas.`,
+    agenda: [
+      {
+        time: "08:00 - 09:00",
+        activity: "Registro y bienvenida",
+        description: "Llegada de participantes y presentación del evento",
+      },
+      {
+        time: "09:00 - 12:00",
+        activity: "Desarrollo de Proyectos",
+        description: "Trabajo en equipo para crear soluciones de IA",
+      },
+      {
+        time: "12:00 - 13:00",
+        activity: "Almuerzo",
+        description: "Networking y descanso",
+      },
+      {
+        time: "13:00 - 16:00",
+        activity: "Continuación del Desarrollo",
+        description: "Finalización de proyectos",
+      },
+      {
+        time: "16:00 - 18:00",
+        activity: "Presentaciones y Premiación",
+        description: "Exposición de proyectos y entrega de premios",
+      },
+    ],
+    requirements: [
+      "Conocimientos básicos de programación",
+      "Interés en IA y salud",
+    ],
+    benefits: [
+      "Premios para los mejores equipos",
+      "Mentoría de expertos",
+      "Certificado de participación",
+    ],
+    registrationInfo: `Completa el formulario en línea antes del 10 de junio de 2025. Cupo limitado a 60 participantes.`,
+  },
+  {
+    id: 5,
+    slug: "taller-robotica-adolescentes",
+    title: "Taller de Robótica para Adolescentes",
+    description:
+      "Taller introductorio a la robótica para chicas de 13 a 17 años interesadas en ingeniería y tecnología.",
+    location: "Alajuela",
+    date: "2025-07-01",
+    time: "10:00 - 15:00",
+    organizer: "STEM Girls CR",
+    category: "Taller",
+    website: "https://stemgirlscr.org/robotica2025",
+    registrationUrl: "https://eventbrite.com/taller-robotica",
+    capacity: "30 participantes",
+    price: "Gratuito",
+    image:
+      "https://images.unsplash.com/photo-1581094794329-c8112a89af12?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    fullDescription: `Este taller está diseñado para adolescentes interesadas en robótica y tecnología. Aprenderás los conceptos básicos de robótica y programación, y construirás tu propio robot.`,
+    agenda: [
+      {
+        time: "10:00 - 11:30",
+        activity: "Introducción a la Robótica",
+        description: "Conceptos básicos y herramientas",
+      },
+      {
+        time: "11:30 - 13:00",
+        activity: "Construcción del Robot",
+        description: "Taller práctico de montaje",
+      },
+      {
+        time: "13:00 - 14:00",
+        activity: "Almuerzo",
+        description: "Networking y descanso",
+      },
+      {
+        time: "14:00 - 15:00",
+        activity: "Programación del Robot",
+        description: "Taller de programación básica",
+      },
+    ],
+    requirements: ["Tener entre 13 y 17 años", "Interés en tecnología"],
+    benefits: [
+      "Materiales incluidos",
+      "Certificado de participación",
+      "Networking con otras adolescentes",
+    ],
+    registrationInfo: `Inscríbete antes del 20 de junio de 2025. Cupo limitado a 30 participantes.`,
+  },
+  {
+    id: 6,
+    slug: "conferencia-matematicas",
+    title: "Conferencia de Mujeres en Matemáticas",
+    description:
+      "Conferencia que reúne a matemáticas destacadas de Costa Rica para compartir investigaciones y crear redes.",
+    location: "Puntarenas",
+    date: "2025-08-10",
+    time: "08:00 - 17:00",
+    organizer: "Women in Math CR",
+    category: "Conferencia",
+    website: "https://womeninmathcr.org/conferencia2025",
+    registrationUrl: "https://eventbrite.com/conferencia-matematicas",
+    capacity: "100 participantes",
+    price: "Gratuito",
+    image:
+      "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    fullDescription: `Esta conferencia reúne a matemáticas destacadas de Costa Rica para compartir sus investigaciones y crear redes profesionales. Será una oportunidad única para aprender sobre los últimos avances en matemáticas y conectar con otras profesionales del sector.`,
+    agenda: [
+      {
+        time: "08:00 - 09:00",
+        activity: "Registro y bienvenida",
+        description: "Llegada de participantes y presentación del evento",
+      },
+      {
+        time: "09:00 - 12:00",
+        activity: "Ponencias",
+        description: "Presentaciones de investigaciones",
+      },
+      {
+        time: "12:00 - 13:00",
+        activity: "Almuerzo",
+        description: "Networking y descanso",
+      },
+      {
+        time: "13:00 - 16:00",
+        activity: "Talleres",
+        description: "Sesiones prácticas y discusiones",
+      },
+      {
+        time: "16:00 - 17:00",
+        activity: "Cierre y networking",
+        description: "Resumen del evento y networking final",
+      },
+    ],
+    requirements: ["Ser estudiante o profesional en matemáticas"],
+    benefits: [
+      "Networking internacional",
+      "Talleres especializados",
+      "Certificado de participación",
+    ],
+    registrationInfo: `Envía tu propuesta o regístrate como asistente en la web. Cupo limitado a 100 participantes.`,
+  },
+  {
+    id: 7,
+    slug: "workshop-emprendimiento",
+    title: "Workshop de Emprendimiento Tecnológico",
+    description:
+      "Aprende las bases para crear tu startup tecnológica con mentoras exitosas del ecosistema costarricense.",
+    location: "Guanacaste",
+    date: "2025-07-20",
+    time: "09:00 - 16:00",
+    organizer: "Startup CR",
+    category: "Taller",
+    website: "https://startupcr.org/workshop2025",
+    registrationUrl: "https://eventbrite.com/workshop-emprendimiento",
+    capacity: "50 participantes",
+    price: "Gratuito",
+    image:
+      "https://images.unsplash.com/photo-1543286386-2e659306cd6c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    fullDescription: `Este taller intensivo está diseñado para mujeres que quieren emprender en tecnología. Aprenderás las bases para crear tu startup, con mentoría de emprendedoras exitosas del ecosistema costarricense.`,
+    agenda: [
+      {
+        time: "09:00 - 10:30",
+        activity: "Introducción al Emprendimiento",
+        description: "Conceptos básicos y tendencias",
+      },
+      {
+        time: "10:30 - 12:00",
+        activity: "Planificación de Negocios",
+        description: "Taller práctico de planificación",
+      },
+      {
+        time: "12:00 - 13:00",
+        activity: "Almuerzo",
+        description: "Networking y descanso",
+      },
+      {
+        time: "13:00 - 15:00",
+        activity: "Mentoría",
+        description: "Sesiones de mentoría con expertas",
+      },
+      {
+        time: "15:00 - 16:00",
+        activity: "Cierre y networking",
+        description: "Resumen del taller y networking final",
+      },
+    ],
+    requirements: ["Interés en emprendimiento"],
+    benefits: [
+      "Mentoría personalizada",
+      "Acceso a red de contactos",
+      "Certificado de participación",
+    ],
+    registrationInfo: `Regístrate en línea antes del 10 de julio de 2025. Cupo limitado a 50 participantes.`,
+  },
+  {
+    id: 8,
+    slug: "seminario-biotecnologia",
+    title: "Seminario de Biotecnología",
+    description:
+      "Explora las últimas innovaciones en biotecnología y sus aplicaciones en Costa Rica.",
+    location: "Limón",
+    date: "2025-09-05",
+    time: "14:00 - 18:00",
+    organizer: "BioTech CR",
+    category: "Conferencia",
+    website: "https://biotechcr.org/seminario2025",
+    registrationUrl: "https://eventbrite.com/seminario-biotecnologia",
+    capacity: "70 participantes",
+    price: "Gratuito",
+    image:
+      "https://images.unsplash.com/photo-1605379399642-870262d3d051?q=80&w=2106&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    fullDescription: `Este seminario te permitirá explorar las últimas innovaciones en biotecnología y sus aplicaciones en Costa Rica. Aprenderás sobre los avances más recientes y cómo se están aplicando en el país.`,
+    agenda: [
+      {
+        time: "14:00 - 15:00",
+        activity: "Introducción a la Biotecnología",
+        description: "Conceptos básicos y aplicaciones",
+      },
+      {
+        time: "15:00 - 16:00",
+        activity: "Innovaciones en Biotecnología",
+        description: "Presentación de casos de estudio",
+      },
+      {
+        time: "16:00 - 17:00",
+        activity: "Panel de Expertos",
+        description: "Discusión con profesionales del sector",
+      },
+      {
+        time: "17:00 - 18:00",
+        activity: "Cierre y networking",
+        description: "Resumen del seminario y networking final",
+      },
+    ],
+    requirements: ["Interés en biotecnología"],
+    benefits: [
+      "Certificado de asistencia",
+      "Material digital",
+      "Networking con profesionales",
+    ],
+    registrationInfo: `Inscríbete gratis en la web. Cupo limitado a 70 participantes.`,
+  },
+];

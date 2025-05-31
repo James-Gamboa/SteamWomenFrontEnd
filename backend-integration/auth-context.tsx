@@ -21,12 +21,12 @@
 //   useEffect(() => {
 //     const storedToken = localStorage.getItem('token')
 //     const storedUser = localStorage.getItem('user')
-    
+
 //     if (storedToken && storedUser) {
 //       setToken(storedToken)
 //       setUser(JSON.parse(storedUser))
 //     }
-    
+
 //     setIsLoading(false)
 //   }, [])
 
@@ -66,4 +66,4 @@
 //     throw new Error('useAuth must be used within an AuthProvider')
 //   }
 //   return context
-// } 
+// }

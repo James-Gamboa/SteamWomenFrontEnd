@@ -1,5 +1,5 @@
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 export function Footer() {
   return (
@@ -279,5 +279,5 @@ export function Footer() {
         </div>
       </div>
     </footer>
-  )
+  );
 }

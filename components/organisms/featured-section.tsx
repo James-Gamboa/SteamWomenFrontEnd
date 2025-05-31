@@ -1,4 +1,4 @@
-import Image from "next/image"
+import Image from "next/image";
 
 export function FeaturedSection() {
   return (
@@ -28,8 +28,9 @@ export function FeaturedSection() {
                 fontWeight: "400",
               }}
             >
-              Somos una plataforma comprometida con el empoderamiento y la diversidad en los campos de Ciencia,
-              Tecnología, Ingeniería, Arte y Matemáticas. Nuestra misión es conectar a mujeres talentosas con
+              Somos una plataforma comprometida con el empoderamiento y la
+              diversidad en los campos de Ciencia, Tecnología, Ingeniería, Arte
+              y Matemáticas. Nuestra misión es conectar a mujeres talentosas con
               oportunidades que impulsen su desarrollo profesional y personal.
             </p>
             <p
@@ -42,8 +43,9 @@ export function FeaturedSection() {
                 fontWeight: "400",
               }}
             >
-              Creemos que la diversidad alimenta la innovación y que las nuevas generaciones y promover la equidad de
-              género en áreas tradicionalmente dominadas por hombres.
+              Creemos que la diversidad alimenta la innovación y que las nuevas
+              generaciones y promover la equidad de género en áreas
+              tradicionalmente dominadas por hombres.
             </p>
           </div>
           <div className="relative">
@@ -58,5 +60,5 @@ export function FeaturedSection() {
         </div>
       </div>
     </section>
-  )
+  );
 }

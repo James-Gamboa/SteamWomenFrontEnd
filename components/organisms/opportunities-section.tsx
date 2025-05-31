@@ -1,9 +1,15 @@
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Calendar, MapPin, Users } from "lucide-react"
-import Image from "next/image"
-import Link from "next/link"
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Calendar, MapPin, Users } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
 
 export function OpportunitiesSection() {
   const opportunities = [
@@ -55,7 +61,8 @@ export function OpportunitiesSection() {
       date: "Inicia 1 Junio, 2025",
       participants: "20 participantes",
       category: "Mentoría",
-      image: "https://images.unsplash.com/photo-1543286386-2e659306cd6c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      image:
+        "https://images.unsplash.com/photo-1543286386-2e659306cd6c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
       slug: "mentoria-emprendedoras",
     },
     {
@@ -84,7 +91,7 @@ export function OpportunitiesSection() {
         "https://images.unsplash.com/photo-1581094794329-c8112a89af12?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
       slug: "taller-robotica",
     },
-  ]
+  ];
 
   const getCategoryStyles = (category: string) => {
     const styles = {
@@ -93,9 +100,14 @@ export function OpportunitiesSection() {
       Mentoría: { backgroundColor: "#8B5CF6", color: "#FFFFFF" },
       Conferencia: { backgroundColor: "#0EA5E9", color: "#FFFFFF" },
       Taller: { backgroundColor: "#F97316", color: "#FFFFFF" },
-    }
-    return styles[category as keyof typeof styles] || { backgroundColor: "#C8C8C9", color: "#1A1F2C" }
-  }
+    };
+    return (
+      styles[category as keyof typeof styles] || {
+        backgroundColor: "#C8C8C9",
+        color: "#1A1F2C",
+      }
+    );
+  };
 
   return (
     <section className="py-20" style={{ backgroundColor: "#F1F0FB" }}>
@@ -122,21 +134,24 @@ export function OpportunitiesSection() {
               fontWeight: "400",
             }}
           >
-            Descubre las últimas oportunidades en ciencia, tecnología, ingeniería, arte y matemáticas para impulsar tu
-            carrera.
+            Descubre las últimas oportunidades en ciencia, tecnología,
+            ingeniería, arte y matemáticas para impulsar tu carrera.
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
           {opportunities.map((opportunity) => (
-            <Link key={opportunity.id} href={`/oportunidades/${opportunity.slug}`}>
+            <Link
+              key={opportunity.id}
+              href={`/oportunidades/${opportunity.slug}`}
+            >
               <Card
                 className="overflow-hidden hover:shadow-lg border-0 shadow-sm cursor-pointer transition-all hover:scale-[1.01]"
                 style={{ backgroundColor: "#FFFFFF" }}
               >
                 <div className="relative">
                   <Image
-                    src={opportunity.image || "/placeholder.svg"}
+                    src={opportunity.image || "/dummy-image.jpg"}
                     alt={opportunity.title}
                     width={400}
                     height={200}
@@ -182,21 +197,48 @@ export function OpportunitiesSection() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-3">
-                  <div className="flex items-center" style={{ color: "#8E9196" }}>
+                  <div
+                    className="flex items-center"
+                    style={{ color: "#8E9196" }}
+                  >
                     <MapPin className="h-4 w-4 mr-2" />
-                    <span style={{ fontSize: "14px", lineHeight: "18px", fontFamily: "DM Sans, sans-serif" }}>
+                    <span
+                      style={{
+                        fontSize: "14px",
+                        lineHeight: "18px",
+                        fontFamily: "DM Sans, sans-serif",
+                      }}
+                    >
                       {opportunity.location}
                     </span>
                   </div>
-                  <div className="flex items-center" style={{ color: "#8E9196" }}>
+                  <div
+                    className="flex items-center"
+                    style={{ color: "#8E9196" }}
+                  >
                     <Calendar className="h-4 w-4 mr-2" />
-                    <span style={{ fontSize: "14px", lineHeight: "18px", fontFamily: "DM Sans, sans-serif" }}>
+                    <span
+                      style={{
+                        fontSize: "14px",
+                        lineHeight: "18px",
+                        fontFamily: "DM Sans, sans-serif",
+                      }}
+                    >
                       {opportunity.date}
                     </span>
                   </div>
-                  <div className="flex items-center" style={{ color: "#8E9196" }}>
+                  <div
+                    className="flex items-center"
+                    style={{ color: "#8E9196" }}
+                  >
                     <Users className="h-4 w-4 mr-2" />
-                    <span style={{ fontSize: "14px", lineHeight: "18px", fontFamily: "DM Sans, sans-serif" }}>
+                    <span
+                      style={{
+                        fontSize: "14px",
+                        lineHeight: "18px",
+                        fontFamily: "DM Sans, sans-serif",
+                      }}
+                    >
                       {opportunity.participants}
                     </span>
                   </div>
@@ -224,5 +266,5 @@ export function OpportunitiesSection() {
         </div>
       </div>
     </section>
-  )
+  );
 }

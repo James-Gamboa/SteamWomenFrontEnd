@@ -1,5 +1,5 @@
-import { Button } from "@/components/ui/button"
-import Image from "next/image"
+import { Button } from "@/components/ui/button";
+import Image from "next/image";
 
 export function JoinCommunitySection() {
   return (
@@ -43,8 +43,9 @@ export function JoinCommunitySection() {
                 fontWeight: "400",
               }}
             >
-              Forma parte de una red de mujeres apasionadas por STEAM. Accede a oportunidades exclusivas, eventos
-              inspiradores y conecta con mentoras que pueden ayudarte a alcanzar tus metas profesionales.
+              Forma parte de una red de mujeres apasionadas por STEAM. Accede a
+              oportunidades exclusivas, eventos inspiradores y conecta con
+              mentoras que pueden ayudarte a alcanzar tus metas profesionales.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Button
@@ -80,5 +81,5 @@ export function JoinCommunitySection() {
         </div>
       </div>
     </section>
-  )
+  );
 }

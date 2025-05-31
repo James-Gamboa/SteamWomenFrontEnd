@@ -1,5 +1,5 @@
-import { Button } from "@/components/ui/button"
-import Link from "next/link"
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export function TextRevealHero() {
   return (
@@ -7,14 +7,19 @@ export function TextRevealHero() {
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{
-          backgroundImage:
-            "url('/images/dummy-women.jpg.jpeg')",
+          backgroundImage: "url('/images/dummy-women.jpg.jpeg')",
         }}
       >
-        <div className="absolute inset-0" style={{ backgroundColor: "rgba(0, 0, 0, 0.4)" }} />
+        <div
+          className="absolute inset-0"
+          style={{ backgroundColor: "rgba(0, 0, 0, 0.4)" }}
+        />
       </div>
 
-      <div className="relative z-10 text-center max-w-4xl mx-auto px-4" style={{ color: "#FFFFFF" }}>
+      <div
+        className="relative z-10 text-center max-w-4xl mx-auto px-4"
+        style={{ color: "#FFFFFF" }}
+      >
         <h1
           className="mb-6 font-bold text-[38px] lg:text-[90px]"
           style={{
@@ -45,8 +50,8 @@ export function TextRevealHero() {
             fontWeight: "400",
           }}
         >
-          Plataforma dedicada a potenciar el talento femenino en áreas STEAM a través de oportunidades, eventos y
-          comunidad.
+          Plataforma dedicada a potenciar el talento femenino en áreas STEAM a
+          través de oportunidades, eventos y comunidad.
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
@@ -82,5 +87,5 @@ export function TextRevealHero() {
         </div>
       </div>
     </section>
-  )
+  );
 }

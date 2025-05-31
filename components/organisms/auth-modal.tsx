@@ -1,39 +1,51 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState } from "react"
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { GraduationCap, Building } from "lucide-react"
+import { useState } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { GraduationCap, Building } from "lucide-react";
 
 interface AuthModalProps {
-  isOpen: boolean
-  onClose: () => void
-  mode: "login" | "register"
-  onModeChange: (mode: "login" | "register") => void
+  isOpen: boolean;
+  onClose: () => void;
+  mode: "login" | "register";
+  onModeChange: (mode: "login" | "register") => void;
 }
 
-export function AuthModal({ isOpen, onClose, mode, onModeChange }: AuthModalProps) {
-  const [accountType, setAccountType] = useState<"student" | "company">("company")
+export function AuthModal({
+  isOpen,
+  onClose,
+  mode,
+  onModeChange,
+}: AuthModalProps) {
+  const [accountType, setAccountType] = useState<"student" | "company">(
+    "company",
+  );
   const [formData, setFormData] = useState({
     organizationName: "",
     firstName: "",
     lastName: "",
     email: "",
     password: "",
-  })
+  });
 
   const handleInputChange = (field: string, value: string) => {
-    setFormData((prev) => ({ ...prev, [field]: value }))
-  }
+    setFormData((prev) => ({ ...prev, [field]: value }));
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    console.log("Form submitted:", { accountType, ...formData, mode })
-  }
+    e.preventDefault();
+    console.log("Form submitted:", { accountType, ...formData, mode });
+  };
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -96,16 +108,21 @@ export function AuthModal({ isOpen, onClose, mode, onModeChange }: AuthModalProp
                   type="button"
                   onClick={() => setAccountType("student")}
                   className={`p-4 rounded-lg border-2 transition-all ${
-                    accountType === "student" ? "border-purple-500" : "border-gray-200"
+                    accountType === "student"
+                      ? "border-purple-500"
+                      : "border-gray-200"
                   }`}
                   style={{
                     backgroundColor: "#FFFFFF",
-                    borderColor: accountType === "student" ? "#8B5CF6" : "#C8C8C9",
+                    borderColor:
+                      accountType === "student" ? "#8B5CF6" : "#C8C8C9",
                   }}
                 >
                   <GraduationCap
                     className="h-6 w-6 mx-auto mb-2"
-                    style={{ color: accountType === "student" ? "#8B5CF6" : "#8E9196" }}
+                    style={{
+                      color: accountType === "student" ? "#8B5CF6" : "#8E9196",
+                    }}
                   />
                   <span
                     style={{
@@ -123,16 +140,21 @@ export function AuthModal({ isOpen, onClose, mode, onModeChange }: AuthModalProp
                   type="button"
                   onClick={() => setAccountType("company")}
                   className={`p-4 rounded-lg border-2 transition-all ${
-                    accountType === "company" ? "border-purple-500" : "border-gray-200"
+                    accountType === "company"
+                      ? "border-purple-500"
+                      : "border-gray-200"
                   }`}
                   style={{
                     backgroundColor: "#FFFFFF",
-                    borderColor: accountType === "company" ? "#8B5CF6" : "#C8C8C9",
+                    borderColor:
+                      accountType === "company" ? "#8B5CF6" : "#C8C8C9",
                   }}
                 >
                   <Building
                     className="h-6 w-6 mx-auto mb-2"
-                    style={{ color: accountType === "company" ? "#8B5CF6" : "#8E9196" }}
+                    style={{
+                      color: accountType === "company" ? "#8B5CF6" : "#8E9196",
+                    }}
                   />
                   <span
                     style={{
@@ -168,7 +190,9 @@ export function AuthModal({ isOpen, onClose, mode, onModeChange }: AuthModalProp
                   id="organizationName"
                   placeholder="Nombre de tu empresa u organización"
                   value={formData.organizationName}
-                  onChange={(e) => handleInputChange("organizationName", e.target.value)}
+                  onChange={(e) =>
+                    handleInputChange("organizationName", e.target.value)
+                  }
                   style={{
                     backgroundColor: "#FFFFFF",
                     borderColor: "#C8C8C9",
@@ -198,7 +222,9 @@ export function AuthModal({ isOpen, onClose, mode, onModeChange }: AuthModalProp
                     id="firstName"
                     placeholder="Tu nombre"
                     value={formData.firstName}
-                    onChange={(e) => handleInputChange("firstName", e.target.value)}
+                    onChange={(e) =>
+                      handleInputChange("firstName", e.target.value)
+                    }
                     style={{
                       backgroundColor: "#FFFFFF",
                       borderColor: "#C8C8C9",
@@ -224,7 +250,9 @@ export function AuthModal({ isOpen, onClose, mode, onModeChange }: AuthModalProp
                     id="lastName"
                     placeholder="Tu apellido"
                     value={formData.lastName}
-                    onChange={(e) => handleInputChange("lastName", e.target.value)}
+                    onChange={(e) =>
+                      handleInputChange("lastName", e.target.value)
+                    }
                     style={{
                       backgroundColor: "#FFFFFF",
                       borderColor: "#C8C8C9",
@@ -309,7 +337,9 @@ export function AuthModal({ isOpen, onClose, mode, onModeChange }: AuthModalProp
             <div className="text-center">
               <button
                 type="button"
-                onClick={() => onModeChange(mode === "register" ? "login" : "register")}
+                onClick={() =>
+                  onModeChange(mode === "register" ? "login" : "register")
+                }
                 className="transition-colors hover:opacity-80"
                 style={{
                   fontSize: "14px",
@@ -324,11 +354,17 @@ export function AuthModal({ isOpen, onClose, mode, onModeChange }: AuthModalProp
               >
                 {mode === "register" ? (
                   <>
-                    ¿Ya tienes cuenta? <span style={{ color: "#8B5CF6", fontWeight: "600" }}>Inicia Sesión</span>
+                    ¿Ya tienes cuenta?{" "}
+                    <span style={{ color: "#8B5CF6", fontWeight: "600" }}>
+                      Inicia Sesión
+                    </span>
                   </>
                 ) : (
                   <>
-                    ¿No tienes cuenta? <span style={{ color: "#8B5CF6", fontWeight: "600" }}>Registrarse</span>
+                    ¿No tienes cuenta?{" "}
+                    <span style={{ color: "#8B5CF6", fontWeight: "600" }}>
+                      Registrarse
+                    </span>
                   </>
                 )}
               </button>
@@ -337,5 +373,5 @@ export function AuthModal({ isOpen, onClose, mode, onModeChange }: AuthModalProp
         </div>
       </DialogContent>
     </Dialog>
-  )
+  );
 }
