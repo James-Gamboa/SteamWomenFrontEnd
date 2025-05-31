@@ -26,9 +26,9 @@ export function EventsList({
         event.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         event.description.toLowerCase().includes(searchTerm.toLowerCase());
       const matchesCategory =
-        !selectedCategory || event.category === selectedCategory;
+        selectedCategory === "all" || !selectedCategory || event.category === selectedCategory;
       const matchesLocation =
-        !selectedLocation || event.location === selectedLocation;
+        selectedLocation === "all" || !selectedLocation || event.location === selectedLocation;
 
       return matchesSearch && matchesCategory && matchesLocation;
     });
@@ -70,7 +70,14 @@ export function EventsList({
   return (
     <>
       {currentEvents.length === 0 ? (
-        <div className="text-center py-12 text-lg text-[#8E9196]">
+        <div
+          className="text-center py-12 text-lg"
+          style={{
+            color: "#8B5CF6",
+            fontFamily: "DM Sans, sans-serif",
+            fontWeight: 600,
+          }}
+        >
           No se encontraron eventos para los filtros seleccionados.
         </div>
       ) : (

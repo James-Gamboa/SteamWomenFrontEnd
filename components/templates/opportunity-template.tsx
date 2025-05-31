@@ -138,11 +138,24 @@ export function OpportunityTemplate() {
           setSelectedLocation={setSelectedLocation}
         />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-          {currentOpportunities.map((opportunity) => (
-            <OpportunityCard key={opportunity.id} opportunity={opportunity} />
-          ))}
-        </div>
+        {currentOpportunities.length === 0 ? (
+          <div
+            className="text-center py-12 text-lg"
+            style={{
+              color: "#8B5CF6",
+              fontFamily: "DM Sans, sans-serif",
+              fontWeight: 600,
+            }}
+          >
+            No se encontraron oportunidades para los filtros seleccionados.
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+            {currentOpportunities.map((opportunity) => (
+              <OpportunityCard key={opportunity.id} opportunity={opportunity} />
+            ))}
+          </div>
+        )}
 
         <div className="flex justify-center items-center gap-2 mt-8">
           <button
