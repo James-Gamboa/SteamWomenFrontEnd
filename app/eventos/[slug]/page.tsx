@@ -1,4 +1,5 @@
 import { EventsDetailTemplate } from "@/components/templates/events-detail-template";
-export default function EventDetailPage(props: any) {
-  return <EventsDetailTemplate slug={props.params.slug} />;
+
+export default async function EventDetailPage({ params }: { params: { slug: string } }) {
+  return <EventsDetailTemplate slug={params.slug} />;
 }
