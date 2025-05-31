@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Heart, Share } from "lucide-react";
+import { useState } from "react";
 
 interface EventDetailSidebarProps {
   event: {
@@ -24,6 +25,8 @@ export function EventDetailSidebar({
   formatDate,
   isSticky,
 }: EventDetailSidebarProps) {
+  const [liked, setLiked] = useState(false);
+
   return (
     <div
       className={`transition-all duration-300 ${isSticky ? "lg:sticky lg:top-24" : ""}`}
@@ -58,8 +61,13 @@ export function EventDetailSidebar({
                 fontFamily: "DM Sans, sans-serif",
                 borderRadius: "8px",
               }}
+              onClick={() => setLiked((prev) => !prev)}
             >
-              <Heart className="h-5 w-5 mr-1 text-pink-500" />
+              <Heart
+                className="h-5 w-5 mr-1"
+                fill={liked ? "#e25555" : "none"}
+                color={liked ? "#e25555" : "#8E9196"}
+              />
             </Button>
             <Button
               variant="outline"
