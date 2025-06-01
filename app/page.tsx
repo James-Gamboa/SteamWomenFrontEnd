@@ -2,7 +2,11 @@ import { HomeTemplate } from "@/components/templates/home-template";
 import type { Metadata } from "next";
 
 export default function Home() {
-  return <HomeTemplate />;
+  return (
+    <>
+      <HomeTemplate />
+    </>
+  );
 }
 
 export const generateMetadata = async (): Promise<Metadata> => ({

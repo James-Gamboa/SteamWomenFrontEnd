@@ -1,33 +1,37 @@
+'use client';
+
 import { OpportunityTemplate } from "@/components/templates/opportunity-template";
-import type { Metadata } from "next";
+import { useEffect, useRef } from "react";
+import { textReveal, parallaxScroll, gridReveal, magneticHover } from "@/lib/animations";
 
 export default function OpportunitiesPage() {
-  return <OpportunityTemplate />;
-}
+  const titleRef = useRef<HTMLHeadingElement>(null);
+  const heroRef = useRef<HTMLDivElement>(null);
 
-export const generateMetadata = async (): Promise<Metadata> => ({
-  title: "Oportunidades STEAM para Mujeres | STEAMWomen",
-  description: "Encuentra oportunidades exclusivas para mujeres en ciencia, tecnología, ingeniería, arte y matemáticas.",
-  openGraph: {
-    title: "Oportunidades STEAM para Mujeres | STEAMWomen",
-    description: "Encuentra oportunidades exclusivas para mujeres en ciencia, tecnología, ingeniería, arte y matemáticas.",
-    url: "https://steam-women-front-end.vercel.app/oportunidades",
-    siteName: "STEAMWomen",
-    images: [
-      {
-        url: "/img/og-oportunidades.jpg",
-        width: 1200,
-        height: 630,
-        alt: "STEAMWomen Oportunidades",
-      },
-    ],
-    locale: "es_CR",
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Oportunidades STEAM para Mujeres | STEAMWomen",
-    description: "Encuentra oportunidades exclusivas para mujeres en ciencia, tecnología, ingeniería, arte y matemáticas.",
-    images: ["/img/og-oportunidades.jpg"],
-  },
-});
+  useEffect(() => {
+    if (titleRef.current) {
+      textReveal(titleRef.current);
+    }
+
+    if (heroRef.current) {
+      parallaxScroll(heroRef.current, 0.3);
+    }
+
+    gridReveal('.opportunity-card');
+
+    document.querySelectorAll('.magnetic-button').forEach(button => {
+      magneticHover(button);
+    });
+  }, []);
+
+  return (
+    <div className="opportunities-page">
+      <div ref={heroRef} className="hero-section">
+        <h1 ref={titleRef} className="text-4xl font-bold mb-6">
+          Oportunidades STEAM para Mujeres
+        </h1>
+      </div>
+      <OpportunityTemplate />
+    </div>
+  );
+}
