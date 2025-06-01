@@ -87,7 +87,7 @@ export function OpportunityDetailTemplate({
     return (
       <div
         className="min-h-screen flex items-center justify-center"
-        style={{ backgroundColor: "#FFFFFF", paddingTop: "80px" }}
+        style={{ backgroundColor: "#FFFFFF" }}
       >
         <div className="text-center">
           <h1 className="text-2xl font-bold mb-4">Oportunidad no encontrada</h1>

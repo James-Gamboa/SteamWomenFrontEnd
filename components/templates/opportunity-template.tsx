@@ -97,10 +97,7 @@ export function OpportunityTemplate() {
   );
 
   return (
-    <div
-      className="min-h-screen"
-      style={{ backgroundColor: "#FFFFFF", paddingTop: "80px" }}
-    >
+    <div className="min-h-screen" style={{ backgroundColor: "#FFFFFF" }}>
       <div className="container mx-auto px-4 py-12">
         <div className="text-center mb-12">
           <h1

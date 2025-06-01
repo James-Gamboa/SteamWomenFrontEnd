@@ -14,15 +14,6 @@ export const fadeInUp = (element: string | Element, delay = 0) => {
   });
 };
 
-export const fadeIn = (element: string | Element, delay = 0) => {
-  return gsap.from(element, {
-    opacity: 0,
-    duration: 1,
-    delay,
-    ease: 'power2.out',
-  });
-};
-
 export const textReveal = (element: string | Element) => {
   const split = new SplitText(element, { type: 'chars,words' });
   
@@ -129,5 +120,75 @@ export const scrollReveal = (element: string | Element) => {
     opacity: 0,
     duration: 1,
     ease: 'power3.out',
+  });
+};
+
+export const fadeInSection = (selector: string) => {
+  gsap.utils.toArray(selector).forEach((section: any) => {
+    gsap.from(section, {
+      opacity: 0,
+      y: 60,
+      duration: 1,
+      scrollTrigger: {
+        trigger: section,
+        start: 'top 80%',
+        toggleActions: 'play none none none',
+      },
+    });
+  });
+};
+
+export const cardPopIn = (selector: string) => {
+  gsap.utils.toArray(selector).forEach((card: any) => {
+    card.addEventListener('mousemove', (e: MouseEvent) => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      const rotateY = ((x - centerX) / centerX) * 16;
+      const rotateX = -((y - centerY) / centerY) * 16;
+      card.style.transform = `perspective(900px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.04)`;
+      card.style.opacity = "1";
+    });
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = "perspective(900px) rotateX(0deg) rotateY(0deg) scale(1)";
+      card.style.opacity = "1";
+    });
+  });
+};
+
+export const animateCounters = (selector: string) => {
+  gsap.utils.toArray(selector).forEach((counter: any) => {
+    const end = +counter.dataset.end;
+    gsap.fromTo(counter, { innerText: 0 }, {
+      innerText: end,
+      duration: 2,
+      snap: { innerText: 1 },
+      scrollTrigger: {
+        trigger: counter,
+        start: 'top 80%',
+        once: true,
+      },
+      onUpdate: function () {
+        counter.innerText = Math.floor(counter.innerText);
+      },
+    });
+  });
+};
+
+export const fadeInSideSection = (selector: string) => {
+  gsap.utils.toArray(selector).forEach((section: any, i: number) => {
+    gsap.from(section, {
+      opacity: 0,
+      x: i % 2 === 0 ? -120 : 120,
+      duration: 1.6,
+      ease: 'power3.out',
+      scrollTrigger: {
+        trigger: section,
+        start: 'top 80%',
+        toggleActions: 'play none none none',
+      },
+    });
   });
 }; 

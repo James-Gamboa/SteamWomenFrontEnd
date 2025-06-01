@@ -17,8 +17,6 @@ export default function OpportunitiesPage() {
       parallaxScroll(heroRef.current, 0.3);
     }
 
-    gridReveal('.opportunity-card');
-
     document.querySelectorAll('.magnetic-button').forEach(button => {
       magneticHover(button);
     });
