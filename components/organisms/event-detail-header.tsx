@@ -30,7 +30,7 @@ export function EventDetailHeader({
     <>
       <div className="relative mb-6">
         <Image
-          src={event.image || "/placeholder.svg"}
+          src={event.image || "/dummy-women.jpg.jpeg"}
           alt={event.title}
           width={800}
           height={400}

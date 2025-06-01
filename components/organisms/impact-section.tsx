@@ -127,17 +127,7 @@ export function ImpactSection() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
           {stats.map((stat, index) => (
             <div key={index} className="text-center flex flex-col items-center">
-              <div
-                className="mb-2 font-bold text-[2.2rem] sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl leading-tight lg:leading-[85px] text-center"
-                style={{
-                  color: "#A78BFA",
-                  fontFamily: "DM Sans, sans-serif",
-                  fontWeight: "600",
-                }}
-              >
-                {stat.number.toLocaleString()}
-                {stat.suffix}
-              </div>
+              <Counter end={stat.number} suffix={stat.suffix} duration={3500} />
               <div
                 className="text-base sm:text-lg text-center max-w-[180px] break-words"
                 style={{

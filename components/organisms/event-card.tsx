@@ -116,7 +116,7 @@ export function EventCard({
       >
         <div className="relative">
           <Image
-            src={event.image || "/placeholder.svg"}
+            src={event.image || "/dummy-women.jpg.jpeg"}
             alt={event.title}
             width={400}
             height={200}

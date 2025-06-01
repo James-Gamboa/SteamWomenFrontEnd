@@ -17,6 +17,7 @@ export const metadata: Metadata = {
   title: "STEAMWomen - Impulsando mujeres en STEAM",
   description:
     "Plataforma dedicada a potenciar el talento femenino en áreas STEAM a través de oportunidades, eventos y comunidad.",
+  metadataBase: new URL("https://steam-women-front-end.vercel.app"),
 };
 
 export default function RootLayout({

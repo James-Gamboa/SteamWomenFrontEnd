@@ -7,7 +7,7 @@ export function TextRevealHero() {
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{
-          backgroundImage: "url('/images/dummy-women.jpg.jpeg')",
+          backgroundImage: "url('/img/dummy-women.jpg.jpeg')",
         }}
       >
         <div
