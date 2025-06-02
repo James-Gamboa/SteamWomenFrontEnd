@@ -1,39 +1,74 @@
 "use client"
 
 import type React from "react"
-
+import { useRouter } from "next/navigation"; // Para la redirección
 import { useState } from "react"
 import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { GraduationCap, Building } from "lucide-react"
+import { loginUsuario } from "../../services/login"; // Ajusta la ruta según tu estructura
+import { registerUsuario } from "../../services/register";
 
 interface AuthModalProps {
-  isOpen: boolean
-  onClose: () => void
-  mode: "login" | "register"
-  onModeChange: (mode: "login" | "register") => void
+  isOpen: boolean;
+  onClose: () => void;
+  mode: "login" | "register";
+  onModeChange: (mode: "login" | "register") => void;
 }
 
 export function AuthModal({ isOpen, onClose, mode, onModeChange }: AuthModalProps) {
-  const [accountType, setAccountType] = useState<"student" | "company">("company")
+  const router = useRouter();
+  const [accountType, setAccountType] = useState<"student" | "company">("company");
   const [formData, setFormData] = useState({
     organizationName: "",
     firstName: "",
     lastName: "",
+    username: "",
     email: "",
     password: "",
-  })
+  });
+  const [error, setError] = useState<string>("");
 
   const handleInputChange = (field: string, value: string) => {
-    setFormData((prev) => ({ ...prev, [field]: value }))
-  }
+    setFormData((prev) => ({ ...prev, [field]: value }));
+  };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    console.log("Form submitted:", { accountType, ...formData, mode })
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+  try {
+    if (mode === "register") {
+      const data = await registerUsuario({
+        first_name: formData.firstName,
+        last_name: formData.lastName,
+        username: formData.username,
+        email: formData.email,
+        password: formData.password,
+        account_type: accountType, // "student" o "company"
+        organization_name: accountType === "company" ? formData.organizationName : null,
+      });
+
+      console.log("✅ Usuario registrado exitosamente:", data);
+      alert("Registro exitoso. Ahora puedes iniciar sesión.");
+      onModeChange("login"); // Cambia a modo login tras el registro
+
+    } else {
+      const data = await loginUsuario(formData.email, formData.password);
+      localStorage.setItem("access", data.access);
+      localStorage.setItem("refresh", data.refresh);
+      localStorage.setItem("role", data.role);
+      
+      router.push(data.role === "admin" ? "/admin-dashboard" :
+                  data.role === "student" ? "/student-dashboard" :
+                  data.role === "company" ? "/company-dashboard" :
+                  "/");
+    }
+  } catch (err: any) {
+    setError(err.detail || "Error en la autenticación");
+    console.error("❌ Error:", err);
   }
+};
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -232,6 +267,35 @@ export function AuthModal({ isOpen, onClose, mode, onModeChange }: AuthModalProp
                 </div>
               </div>
             )}
+
+            
+            { <div>
+              <Label
+                htmlFor="username"
+                className="mb-2 block"
+                style={{
+                  fontSize: "14px",
+                  lineHeight: "18px",
+                  color: "#1A1F2C",
+                  fontFamily: "DM Sans, sans-serif",
+                  fontWeight: "600",
+                }}
+              >
+                Username
+              </Label>
+              <Input
+                id="username"
+                type="name"
+                placeholder="username"
+                value={formData.username}
+                onChange={(e) => handleInputChange("username", e.target.value)}
+                style={{
+                  backgroundColor: "#FFFFFF",
+                  borderColor: "#C8C8C9",
+                  fontFamily: "DM Sans, sans-serif",
+                }}
+              />
+            </div> }
 
             <div>
               <Label
