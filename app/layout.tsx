@@ -8,6 +8,7 @@ import { Header } from "@/components/organisms/header";
 import { Footer } from "@/components/organisms/footer";
 import NextTopLoader from 'nextjs-toploader';
 import { SmoothScrollProvider } from "./providers/smooth-scroll-provider";
+import { ApolloWrapper } from "./providers/apollo-provider";
 
 const dmSans = DM_Sans({
   subsets: ["latin"],
@@ -33,12 +34,14 @@ export default function RootLayout({
         style={{ fontFamily: "DM Sans, sans-serif" }}
       >
         <NextTopLoader color="#8B5CF6" showSpinner={true} height={4} />
-        <SmoothScrollProvider>
-          <Header />
-          <main>{children}</main>
-          <Footer />
-          <WhatsAppButton />
-        </SmoothScrollProvider>
+        <ApolloWrapper>
+          <SmoothScrollProvider>
+            <Header />
+            <main>{children}</main>
+            <Footer />
+            <WhatsAppButton />
+          </SmoothScrollProvider>
+        </ApolloWrapper>
         <Toaster />
       </body>
     </html>
