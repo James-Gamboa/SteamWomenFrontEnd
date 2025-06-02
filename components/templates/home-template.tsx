@@ -9,12 +9,12 @@ import { ParallaxSections } from "@/components/organisms/parallax-sections";
 export function HomeTemplate() {
 
   return (
-    <>
+    <div>
       <ParallaxSections />
-        <FeaturedSection />
-        <OpportunitiesSection />
-        <ImpactSection />
-        <JoinCommunitySection />
-    </>
+      <FeaturedSection />
+      <OpportunitiesSection />
+      <ImpactSection />
+      <JoinCommunitySection />
+    </div>
   );
 }

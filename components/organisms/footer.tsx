@@ -24,7 +24,7 @@ export function Footer() {
               <li>
                 <Link
                   href="/dashboard"
-                  className="transition-colors hover:opacity-80"
+                  className="transition-colors hover:underline hover:text-purple-500"
                   style={{
                     fontSize: "14px",
                     lineHeight: "18px",
@@ -39,7 +39,7 @@ export function Footer() {
               <li>
                 <Link
                   href="/dashboard"
-                  className="transition-colors hover:opacity-80"
+                  className="transition-colors hover:underline hover:text-purple-500"
                   style={{
                     fontSize: "14px",
                     lineHeight: "18px",
@@ -71,7 +71,7 @@ export function Footer() {
               <li>
                 <Link
                   href="/oportunidades"
-                  className="transition-colors hover:opacity-80"
+                  className="transition-colors hover:underline hover:text-purple-500"
                   style={{
                     fontSize: "14px",
                     lineHeight: "18px",
@@ -86,7 +86,7 @@ export function Footer() {
               <li>
                 <Link
                   href="/eventos"
-                  className="transition-colors hover:opacity-80"
+                  className="transition-colors hover:underline hover:text-purple-500"
                   style={{
                     fontSize: "14px",
                     lineHeight: "18px",
@@ -101,7 +101,7 @@ export function Footer() {
               <li>
                 <Link
                   href="/nosotras"
-                  className="transition-colors hover:opacity-80"
+                  className="transition-colors hover:underline hover:text-purple-500"
                   style={{
                     fontSize: "14px",
                     lineHeight: "18px",
@@ -116,7 +116,7 @@ export function Footer() {
               <li>
                 <Link
                   href="#"
-                  className="transition-colors hover:opacity-80"
+                  className="transition-colors hover:underline hover:text-purple-500"
                   style={{
                     fontSize: "14px",
                     lineHeight: "18px",
@@ -136,7 +136,7 @@ export function Footer() {
               <li>
                 <Link
                   href="mailto:contacto@steamwomen.com"
-                  className="transition-colors hover:opacity-80"
+                  className="transition-colors hover:underline hover:text-purple-500"
                   style={{
                     fontSize: "14px",
                     lineHeight: "18px",
@@ -153,7 +153,7 @@ export function Footer() {
               <li>
                 <Link
                   href="tel:+50622222222"
-                  className="transition-colors hover:opacity-80"
+                  className="transition-colors hover:underline hover:text-purple-500"
                   style={{
                     fontSize: "14px",
                     lineHeight: "18px",
@@ -170,7 +170,7 @@ export function Footer() {
               <li>
                 <Link
                   href="#"
-                  className="transition-colors hover:opacity-80"
+                  className="transition-colors hover:underline hover:text-purple-500"
                   style={{
                     fontSize: "14px",
                     lineHeight: "18px",
@@ -255,7 +255,7 @@ export function Footer() {
             <div className="flex space-x-4">
               <Link
                 href="#"
-                className="transition-colors hover:opacity-80"
+                className="transition-colors hover:underline hover:text-purple-500"
                 style={{
                   fontSize: "14px",
                   lineHeight: "18px",
@@ -268,7 +268,7 @@ export function Footer() {
               </Link>
               <Link
                 href="#"
-                className="transition-colors hover:opacity-80"
+                className="transition-colors hover:underline hover:text-purple-500"
                 style={{
                   fontSize: "14px",
                   lineHeight: "18px",

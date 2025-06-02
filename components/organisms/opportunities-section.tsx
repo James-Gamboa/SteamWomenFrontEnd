@@ -75,7 +75,9 @@ export function OpportunitiesSection() {
               fontWeight: "600",
             }}
           >
-            <Link href="/oportunidades">Ver todas las oportunidades</Link>
+            <Link href="/oportunidades">
+              <span>Ver todas las oportunidades</span>
+            </Link>
           </Button>
         </div>
       </div>

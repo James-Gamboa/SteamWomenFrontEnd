@@ -2,7 +2,11 @@ import { EventsTemplate } from "@/components/templates/events-template";
 import type { Metadata } from "next";
 
 export default function EventsPage() {
-  return <EventsTemplate />;
+  return (
+    <div>
+      <EventsTemplate />
+    </div>
+  );
 }
 
 export const generateMetadata = async (): Promise<Metadata> => ({

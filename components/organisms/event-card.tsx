@@ -80,7 +80,7 @@ export function EventCard({
 
   if (variant === "calendar") {
     return (
-      <Link href={`/eventos/${event.slug}`}>
+      <Link href={`/eventos/${event.slug}`} className="block">
         <Card
           className="overflow-hidden flex hover:shadow-lg border-0 shadow-sm cursor-pointer transition-all hover:scale-[1.01]"
           style={{ backgroundColor: "#FFFFFF" }}
@@ -140,7 +140,7 @@ export function EventCard({
   }
 
   return (
-    <Link href={`/eventos/${event.slug}`}>
+    <Link href={`/eventos/${event.slug}`} className="block">
       <div
         ref={cardRef}
         className="event-card relative overflow-hidden rounded-xl border-2 border-transparent group transition-all duration-300 cursor-pointer bg-white shadow-md"

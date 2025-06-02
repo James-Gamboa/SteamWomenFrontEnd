@@ -68,7 +68,7 @@ export function EventsList({
   const currentEvents = filteredEvents.slice(startIndex, endIndex);
 
   return (
-    <>
+    <div>
       {currentEvents.length === 0 ? (
         <div
           className="text-center py-12 text-lg"
@@ -136,6 +136,6 @@ export function EventsList({
           </button>
         </div>
       )}
-    </>
+    </div>
   );
 }

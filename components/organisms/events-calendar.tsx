@@ -99,7 +99,7 @@ export function EventsCalendar({
               {monthEvents.map((event) => {
                 const eventDate = formatDate(event.date);
                 return (
-                  <Link key={event.id} href={`/eventos/${event.slug}`}>
+                  <Link key={event.id} href={`/eventos/${event.slug}`} className="block">
                     <div
                       className="overflow-hidden flex hover:shadow-lg transition-all duration-300 border-0 shadow-sm cursor-pointer transform hover:scale-[1.02]"
                       style={{

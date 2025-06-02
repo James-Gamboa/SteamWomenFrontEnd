@@ -31,7 +31,7 @@ export function ValuesSection() {
       <div className="container">
         <div className="text-center mb-12 lg:mb-16">
           <h2
-            className="mb-4 font-bold text-2xl sm:text-3xl lg:text-4xl"
+            className="mb-4 font-bold text-2xl sm:text-3xl lg:text-4xl cur"
             style={{
               color: "#1A1F2C",
               fontFamily: "DM Sans, sans-serif",
@@ -43,7 +43,7 @@ export function ValuesSection() {
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 lg:gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 lg:gap-8 cursor-pointer">
           {values.map((value) => (
             <div
               key={value.number}

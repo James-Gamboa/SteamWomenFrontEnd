@@ -56,85 +56,87 @@ export function OpportunityCard({ opportunity }: { opportunity: any }) {
       tabIndex={0}
       style={{ outline: "none" }}
     >
-      <div
-        ref={cardRef}
-        className="opportunity-card relative overflow-hidden rounded-xl border-2 border-transparent group transition-all duration-300 cursor-pointer bg-white shadow-md"
-        style={{ backgroundColor: "#FFFFFF", opacity: 1, display: "block" }}
-        onMouseMove={handleMouseMove}
-        onMouseLeave={handleMouseLeave}
-      >
-        <span className="pointer-events-none absolute inset-0 z-10 rounded-xl border-2 border-transparent group-hover:border-gradient-to-r group-hover:from-[#8B5CF6] group-hover:via-[#38BDF8] group-hover:to-[#8B5CF6] transition-all duration-300" />
-        <span
-          ref={lightRef}
-          className="pointer-events-none absolute z-20 w-52 h-52 rounded-full opacity-0 group-hover:opacity-100"
-          style={{
-            background:
-              "radial-gradient(circle at center, rgba(139,92,246,0.25) 0%, rgba(139,92,246,0.10) 60%, transparent 100%)",
-            filter: "blur(16px)",
-            transition: "opacity 0.3s, left 0.2s, top 0.2s",
-            left: 0,
-            top: 0,
-          }}
-        />
-        <Card className="bg-transparent shadow-none border-0">
-          <div className="relative">
-            <Image
-              src={opportunity.image || "/dummy-image.jpg"}
-              alt={opportunity.title}
-              width={400}
-              height={200}
-              className="w-full h-48 object-cover rounded-t-xl"
-            />
-            <Badge
-              className="absolute top-3 left-3 px-3 py-1 rounded-full border-0"
-              style={{
-                backgroundColor: "#A78BFA",
-                color: "#FFFFFF",
-                fontFamily: "DM Sans, sans-serif",
-                fontSize: "12px",
-                lineHeight: "15px",
-                fontWeight: "600",
-              }}
-            >
-              {opportunity.category}
-            </Badge>
-          </div>
-          <CardHeader>
-            <CardTitle
-              className="line-clamp-2"
-              style={{
-                fontSize: "18px",
-                lineHeight: "25px",
-                color: "#1A1F2C",
-                fontFamily: "DM Sans, sans-serif",
-                fontWeight: "600",
-              }}
-            >
-              {opportunity.title}
-            </CardTitle>
-            <CardDescription
-              className="line-clamp-3"
-              style={{
-                fontSize: "14px",
-                lineHeight: "18px",
-                color: "#8E9196",
-                fontFamily: "DM Sans, sans-serif",
-                fontWeight: "400",
-              }}
-            >
-              {opportunity.description}
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            <EventMeta
-              date={opportunity.date}
-              time={opportunity.time || ""}
-              location={getProvince(opportunity.location)}
-              formatDate={formatDateISO}
-              showOrganizer={false}
-            />
-          </CardContent>
-        </Card>
+      <div>
+        <div
+          ref={cardRef}
+          className="opportunity-card relative overflow-hidden rounded-xl border-2 border-transparent group transition-all duration-300 cursor-pointer bg-white shadow-md"
+          style={{ backgroundColor: "#FFFFFF", opacity: 1, display: "block" }}
+          onMouseMove={handleMouseMove}
+          onMouseLeave={handleMouseLeave}
+        >
+          <span className="pointer-events-none absolute inset-0 z-10 rounded-xl border-2 border-transparent group-hover:border-gradient-to-r group-hover:from-[#8B5CF6] group-hover:via-[#38BDF8] group-hover:to-[#8B5CF6] transition-all duration-300" />
+          <span
+            ref={lightRef}
+            className="pointer-events-none absolute z-20 w-52 h-52 rounded-full opacity-0 group-hover:opacity-100"
+            style={{
+              background:
+                "radial-gradient(circle at center, rgba(139,92,246,0.25) 0%, rgba(139,92,246,0.10) 60%, transparent 100%)",
+              filter: "blur(16px)",
+              transition: "opacity 0.3s, left 0.2s, top 0.2s",
+              left: 0,
+              top: 0,
+            }}
+          />
+          <Card className="bg-transparent shadow-none border-0">
+            <div className="relative">
+              <Image
+                src={opportunity.image || "/dummy-image.jpg"}
+                alt={opportunity.title}
+                width={400}
+                height={200}
+                className="w-full h-48 object-cover rounded-t-xl"
+              />
+              <Badge
+                className="absolute top-3 left-3 px-3 py-1 rounded-full border-0"
+                style={{
+                  backgroundColor: "#A78BFA",
+                  color: "#FFFFFF",
+                  fontFamily: "DM Sans, sans-serif",
+                  fontSize: "12px",
+                  lineHeight: "15px",
+                  fontWeight: "600",
+                }}
+              >
+                {opportunity.category}
+              </Badge>
+            </div>
+            <CardHeader>
+              <CardTitle
+                className="line-clamp-2"
+                style={{
+                  fontSize: "18px",
+                  lineHeight: "25px",
+                  color: "#1A1F2C",
+                  fontFamily: "DM Sans, sans-serif",
+                  fontWeight: "600",
+                }}
+              >
+                {opportunity.title}
+              </CardTitle>
+              <CardDescription
+                className="line-clamp-3"
+                style={{
+                  fontSize: "14px",
+                  lineHeight: "18px",
+                  color: "#8E9196",
+                  fontFamily: "DM Sans, sans-serif",
+                  fontWeight: "400",
+                }}
+              >
+                {opportunity.description}
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <EventMeta
+                date={opportunity.date}
+                time={opportunity.time || ""}
+                location={getProvince(opportunity.location)}
+                formatDate={formatDateISO}
+                showOrganizer={false}
+              />
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </Link>
   );

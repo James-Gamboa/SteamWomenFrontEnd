@@ -15,7 +15,7 @@ export function EventsTemplate() {
   const [currentPage, setCurrentPage] = useState(1);
 
   return (
-    <div
+    <main
       className="min-h-screen"
       style={{ backgroundColor: "#FFFFFF", paddingTop: "80px" }}
     >
@@ -48,6 +48,6 @@ export function EventsTemplate() {
         )}
         <EventsCTA />
       </div>
-    </div>
+    </main>
   );
 }

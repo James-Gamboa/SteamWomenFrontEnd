@@ -81,6 +81,7 @@ export function ParallaxSections() {
                   <Link href="/oportunidades">Explorar oportunidades</Link>
                 </Button>
                 <Button
+                  asChild
                   className="px-8 py-3 hover:opacity-90"
                   style={{
                     backgroundColor: "#8B5CF6",
@@ -91,7 +92,7 @@ export function ParallaxSections() {
                     fontWeight: "600",
                   }}
                 >
-                  Unirse
+                  <Link href="/unirse">Unirse</Link>
                 </Button>
               </div>
             </div>

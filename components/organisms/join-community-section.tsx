@@ -47,21 +47,22 @@ export function JoinCommunitySection() {
               Descubre oportunidades exclusivas, eventos y conecta con mujeres líderes en STEAM.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
-              <Link href="/oportunidades" passHref legacyBehavior>
-                <Button
-                  className="px-8 py-3 hover:opacity-90 border-0"
-                  style={{
-                    backgroundColor: "#8B5CF6",
-                    color: "#FFFFFF",
-                    fontFamily: "DM Sans, sans-serif",
-                    fontSize: "16px",
-                    lineHeight: "20px",
-                    fontWeight: "600",
-                  }}
-                >
-                  Descubre oportunidades
-                </Button>
-              </Link>
+              <Button
+                asChild
+                className="px-8 py-3 hover:opacity-90 border-0"
+                style={{
+                  backgroundColor: "#8B5CF6",
+                  color: "#FFFFFF",
+                  fontFamily: "DM Sans, sans-serif",
+                  fontSize: "16px",
+                  lineHeight: "20px",
+                  fontWeight: "600",
+                }}
+              >
+                <Link href="/oportunidades">
+                  <span>Descubre oportunidades</span>
+                </Link>
+              </Button>
             </div>
           </div>
         </div>
