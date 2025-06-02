@@ -18,7 +18,7 @@ export function NosotrasTemplate() {
       <StatisticsSection />
       <TestimonialsSection />
       <PartnersSection />
-      <ContactFormSection />
+      <section id="contacto"><ContactFormSection /></section>
       <JoinMissionSection />
     </div>
   )

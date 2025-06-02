@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export function EventsCTA() {
   return (
@@ -40,8 +41,9 @@ export function EventsCTA() {
           fontFamily: "DM Sans, sans-serif",
           fontWeight: "600",
         }}
+        asChild
       >
-        Publicar un evento
+        <Link href="/dashboard">Publicar un evento</Link>
       </Button>
     </div>
   );

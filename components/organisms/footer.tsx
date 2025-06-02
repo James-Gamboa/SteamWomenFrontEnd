@@ -1,5 +1,6 @@
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export function Footer() {
   return (
@@ -21,8 +22,8 @@ export function Footer() {
             </h3>
             <ul className="space-y-2">
               <li>
-                <a
-                  href="#"
+                <Link
+                  href="/dashboard"
                   className="transition-colors hover:opacity-80"
                   style={{
                     fontSize: "14px",
@@ -32,12 +33,12 @@ export function Footer() {
                     fontWeight: "400",
                   }}
                 >
-                  Plataforma de eventos basados en áreas STEAM
-                </a>
+                  Publicar evento STEAM
+                </Link>
               </li>
               <li>
-                <a
-                  href="#"
+                <Link
+                  href="/dashboard"
                   className="transition-colors hover:opacity-80"
                   style={{
                     fontSize: "14px",
@@ -47,8 +48,8 @@ export function Footer() {
                     fontWeight: "400",
                   }}
                 >
-                  Eventos y oportunidades para mujeres
-                </a>
+                  Publicar oportunidad para mujeres
+                </Link>
               </li>
             </ul>
           </div>
@@ -68,8 +69,8 @@ export function Footer() {
             </h3>
             <ul className="space-y-2">
               <li>
-                <a
-                  href="#"
+                <Link
+                  href="/oportunidades"
                   className="transition-colors hover:opacity-80"
                   style={{
                     fontSize: "14px",
@@ -80,11 +81,11 @@ export function Footer() {
                   }}
                 >
                   Oportunidades
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href="#"
+                <Link
+                  href="/eventos"
                   className="transition-colors hover:opacity-80"
                   style={{
                     fontSize: "14px",
@@ -95,11 +96,11 @@ export function Footer() {
                   }}
                 >
                   Eventos
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href="#"
+                <Link
+                  href="/nosotras"
                   className="transition-colors hover:opacity-80"
                   style={{
                     fontSize: "14px",
@@ -110,10 +111,10 @@ export function Footer() {
                   }}
                 >
                   Sobre nosotras
-                </a>
+                </Link>
               </li>
               <li>
-                <a
+                <Link
                   href="#"
                   className="transition-colors hover:opacity-80"
                   style={{
@@ -125,7 +126,7 @@ export function Footer() {
                   }}
                 >
                   Preguntas frecuentes
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -133,8 +134,8 @@ export function Footer() {
           <div>
             <ul className="space-y-2">
               <li>
-                <a
-                  href="#"
+                <Link
+                  href="mailto:contacto@steamwomen.com"
                   className="transition-colors hover:opacity-80"
                   style={{
                     fontSize: "14px",
@@ -143,13 +144,15 @@ export function Footer() {
                     fontFamily: "DM Sans, sans-serif",
                     fontWeight: "400",
                   }}
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
                   contacto@steamwomen.com
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href="#"
+                <Link
+                  href="tel:+50622222222"
                   className="transition-colors hover:opacity-80"
                   style={{
                     fontSize: "14px",
@@ -158,12 +161,14 @@ export function Footer() {
                     fontFamily: "DM Sans, sans-serif",
                     fontWeight: "400",
                   }}
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
                   +506 2222 2222
-                </a>
+                </Link>
               </li>
               <li>
-                <a
+                <Link
                   href="#"
                   className="transition-colors hover:opacity-80"
                   style={{
@@ -175,7 +180,7 @@ export function Footer() {
                   }}
                 >
                   Heredia, Costa Rica
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -248,7 +253,7 @@ export function Footer() {
               © 2025 STEAMWomen. Todos los derechos reservados.
             </p>
             <div className="flex space-x-4">
-              <a
+              <Link
                 href="#"
                 className="transition-colors hover:opacity-80"
                 style={{
@@ -260,8 +265,8 @@ export function Footer() {
                 }}
               >
                 Política de privacidad
-              </a>
-              <a
+              </Link>
+              <Link
                 href="#"
                 className="transition-colors hover:opacity-80"
                 style={{
@@ -273,7 +278,7 @@ export function Footer() {
                 }}
               >
                 Términos de servicio
-              </a>
+              </Link>
             </div>
           </div>
         </div>

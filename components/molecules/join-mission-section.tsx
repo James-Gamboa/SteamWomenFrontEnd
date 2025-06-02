@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button"
+import Link from "next/link";
 
 export function JoinMissionSection() {
   return (
@@ -29,19 +30,21 @@ export function JoinMissionSection() {
             aliada o participando, tu contribución es valiosa.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Button
-              variant="outline"
-              className="px-8 py-3 hover:opacity-80 text-base lg:text-lg"
-              style={{
-                borderColor: "#8B5CF6",
-                color: "#8B5CF6",
-                backgroundColor: "transparent",
-                fontFamily: "DM Sans, sans-serif",
-                fontWeight: "600",
-              }}
-            >
-              Únirse a la comunidad
-            </Button>
+            <Link href="/oportunidades" passHref legacyBehavior>
+              <Button
+                variant="outline"
+                className="px-8 py-3 hover:opacity-80 text-base lg:text-lg"
+                style={{
+                  borderColor: "#8B5CF6",
+                  color: "#8B5CF6",
+                  backgroundColor: "transparent",
+                  fontFamily: "DM Sans, sans-serif",
+                  fontWeight: "600",
+                }}
+              >
+                Descubre oportunidades
+              </Button>
+            </Link>
           </div>
         </div>
       </div>

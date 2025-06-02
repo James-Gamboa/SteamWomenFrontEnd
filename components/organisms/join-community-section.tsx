@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import Link from "next/link";
 
 export function JoinCommunitySection() {
   return (
@@ -31,7 +32,7 @@ export function JoinCommunitySection() {
                 fontWeight: "600",
               }}
             >
-              Únete a nuestra comunidad
+              Únete a la comunidad STEAMWomen
             </h2>
             <p
               className="mb-8 leading-relaxed"
@@ -43,39 +44,24 @@ export function JoinCommunitySection() {
                 fontWeight: "400",
               }}
             >
-              Forma parte de una red de mujeres apasionadas por STEAM. Accede a
-              oportunidades exclusivas, eventos inspiradores y conecta con
-              mentoras que pueden ayudarte a alcanzar tus metas profesionales.
+              Descubre oportunidades exclusivas, eventos y conecta con mujeres líderes en STEAM.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button
-                className="px-8 py-3 hover:opacity-90 border-0"
-                style={{
-                  backgroundColor: "#8B5CF6",
-                  color: "#FFFFFF",
-                  fontFamily: "DM Sans, sans-serif",
-                  fontSize: "16px",
-                  lineHeight: "20px",
-                  fontWeight: "600",
-                }}
-              >
-                Registrarse ahora
-              </Button>
-              <Button
-                variant="outline"
-                className="px-8 py-3 hover:opacity-80"
-                style={{
-                  borderColor: "#8B5CF6",
-                  color: "#8B5CF6",
-                  backgroundColor: "transparent",
-                  fontFamily: "DM Sans, sans-serif",
-                  fontSize: "16px",
-                  lineHeight: "20px",
-                  fontWeight: "600",
-                }}
-              >
-                Conoce más
-              </Button>
+              <Link href="/oportunidades" passHref legacyBehavior>
+                <Button
+                  className="px-8 py-3 hover:opacity-90 border-0"
+                  style={{
+                    backgroundColor: "#8B5CF6",
+                    color: "#FFFFFF",
+                    fontFamily: "DM Sans, sans-serif",
+                    fontSize: "16px",
+                    lineHeight: "20px",
+                    fontWeight: "600",
+                  }}
+                >
+                  Descubre oportunidades
+                </Button>
+              </Link>
             </div>
           </div>
         </div>

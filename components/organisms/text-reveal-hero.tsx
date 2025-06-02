@@ -83,8 +83,9 @@ export function TextRevealHero() {
             lineHeight: "20px",
             fontWeight: "600",
           }}
+          asChild
         >
-          Unirse
+          <Link href="/dashboard">Unirse</Link>
         </Button>
       </div>
     </ParallaxHero>
