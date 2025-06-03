@@ -7,8 +7,8 @@ import { Toaster } from "sonner";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "STEAM Women",
-  description: "Conectando mujeres con oportunidades en STEAM",
+  title: "STEAMWomen",
+  description: "Plataforma para mujeres en STEAM",
 };
 
 export default function RootLayout({

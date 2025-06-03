@@ -79,7 +79,7 @@ export function MobileMenu({
           <div className="flex flex-col items-center gap-3 w-full max-w-xs">
             {user ? (
               <>
-                <Link href="/" className="w-full">
+                <Link href="/dashboard" className="w-full">
                   <Button
                     className="w-full hover:opacity-90"
                     onClick={onClose}

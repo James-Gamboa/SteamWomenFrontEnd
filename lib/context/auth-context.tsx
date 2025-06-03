@@ -77,8 +77,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
 
       Cookies.set("token", data.token, { expires: 7 });
+      localStorage.setItem("user", JSON.stringify(data.user));
       
       setUser(data.user);
+      setToken(data.token);
       return data.user;
     } catch (error) {
       console.error('Login error:', error);
@@ -105,15 +107,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         throw new Error(data.error || "Registration failed");
       }
 
-      const { token, user } = data;
-      
-      Cookies.set("token", token, { expires: 7 });
-      localStorage.setItem("user", JSON.stringify(user));
-
-      setToken(token);
-      setUser(user);
-      
       console.log("Registration successful");
+      return data;
     } catch (error) {
       console.error("Registration error:", error);
       throw error;
@@ -121,12 +116,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const logout = () => {
-    console.log("Logging out user");
-    Cookies.remove("token");
-    localStorage.removeItem("user");
-    setToken(null);
     setUser(null);
-    router.push("/");
+    localStorage.removeItem("user");
+    document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
   };
 
   return (

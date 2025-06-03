@@ -15,7 +15,7 @@ export const generateMetadata = async (): Promise<Metadata> => ({
     siteName: "STEAMWomen",
     images: [
       {
-        url: "/img/og-nosotras.jpg",
+        url: "/img/dummy-women.jpg.jpeg",
         width: 1200,
         height: 630,
         alt: "STEAMWomen Nosotras",
@@ -28,6 +28,6 @@ export const generateMetadata = async (): Promise<Metadata> => ({
     card: "summary_large_image",
     title: "Sobre Nosotras | STEAMWomen",
     description: "Conoce la historia, misión y equipo detrás de STEAMWomen, la comunidad que impulsa a mujeres en STEAM.",
-    images: ["/img/og-nosotras.jpg"],
+    images: ["/img/dummy-women.jpg.jpeg"],
   },
 });

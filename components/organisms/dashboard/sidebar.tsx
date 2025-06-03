@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,6 +14,8 @@ import {
   Home,
 } from "lucide-react";
 import { Dispatch, SetStateAction } from "react";
+import { useAuth } from "@/lib/context/auth-context";
+import { toast } from "sonner";
 
 const navigation = [
   {
@@ -38,10 +40,35 @@ const navigation = [
   },
 ];
 
-export function Sidebar({ open, setOpen }: { open: boolean; setOpen: Dispatch<SetStateAction<boolean>> }) {
+interface SidebarProps {
+  open: boolean;
+  setOpen: (open: boolean) => void;
+  onLogout: () => void;
+}
+
+export function Sidebar({ open, setOpen, onLogout }: SidebarProps) {
   const pathname = usePathname();
+  const router = useRouter();
+  const { logout } = useAuth();
 
   const handleNavClick = () => setOpen(false);
+
+  const handleLogout = () => {
+    logout();
+    toast.success("¡Sesión cerrada exitosamente!", {
+      style: {
+        backgroundColor: "#F1F0FB",
+        color: "#1A1F2C",
+        fontFamily: "DM Sans, sans-serif",
+        fontSize: "14px",
+        lineHeight: "18px",
+        fontWeight: "500",
+      },
+    });
+    setTimeout(() => {
+      router.push("/");
+    }, 100);
+  };
 
   const Drawer = (
     <div className={cn(
@@ -108,7 +135,7 @@ export function Sidebar({ open, setOpen }: { open: boolean; setOpen: Dispatch<Se
             className="flex items-center gap-2 text-[#8B5CF6] hover:bg-[#ede9fe] py-2"
             onClick={() => {
               setOpen(false);
-              // lógica de logout aquí
+              handleLogout();
             }}
           >
             <LogOut className="h-5 w-5" />
@@ -155,9 +182,7 @@ export function Sidebar({ open, setOpen }: { open: boolean; setOpen: Dispatch<Se
         <Button
           variant="ghost"
           className="flex items-center gap-2 text-[#8B5CF6] hover:bg-[#ede9fe] py-2"
-          onClick={() => {
-            // lógica de logout aquí
-          }}
+          onClick={handleLogout}
         >
           <LogOut className="h-5 w-5" />
           Cerrar sesión

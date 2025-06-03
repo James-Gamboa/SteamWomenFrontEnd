@@ -2,19 +2,28 @@
 
 import { Menu } from "lucide-react";
 
-export function DashboardHeader({ onMenuClick }: { onMenuClick?: () => void }) {
+interface DashboardHeaderProps {
+  onMenuClick?: () => void;
+  onLogout: () => void;
+}
+
+export function DashboardHeader({ onMenuClick, onLogout }: DashboardHeaderProps) {
   return (
-    <header className="fixed left-0 top-0 w-full z-30 flex items-center bg-white dark:bg-[#1A1F2C] border-b border-gray-100 dark:border-gray-800 h-16 px-4 md:ml-64 shadow-sm">
-      {onMenuClick && (
+    <header className="fixed top-0 left-0 right-0 h-16 bg-white dark:bg-[#1A1F2C] border-b border-gray-200 dark:border-gray-800 z-50">
+      <div className="h-full px-4 flex items-center justify-between">
         <button
-          className="md:hidden mr-2 p-2 rounded hover:bg-[#ede9fe]"
           onClick={onMenuClick}
-          aria-label="Abrir menú"
+          className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
         >
-          <Menu className="h-6 w-6 text-[#8B5CF6]" />
+          <Menu className="h-6 w-6 text-gray-600 dark:text-gray-400" />
         </button>
-      )}
-      <span className="text-xl font-extrabold text-[#8B5CF6] tracking-wide md:hidden">STEAMWomen</span>
+        <button
+          onClick={onLogout}
+          className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg"
+        >
+          Cerrar sesión
+        </button>
+      </div>
     </header>
   );
 } 

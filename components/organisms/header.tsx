@@ -161,7 +161,7 @@ export function Header() {
             <div className="hidden lg:flex items-center space-x-4">
               {user ? (
                 <>
-                  <Link href="/">
+                  <Link href="/dashboard">
                     <Button
                       className="hover:opacity-90"
                       style={{

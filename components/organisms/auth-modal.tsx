@@ -40,14 +40,12 @@ export function AuthModal({
   });
   const [error, setError] = useState("");
 
-  // Prevenir scroll cuando el modal está abierto
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = 'unset';
     }
-    // Limpiar el estilo cuando el componente se desmonte
     return () => {
       document.body.style.overflow = 'unset';
     };
@@ -64,32 +62,43 @@ export function AuthModal({
 
     try {
       if (mode === "login") {
-        // Primero intentamos con el rol seleccionado
-        try {
-          await login(formData.email, formData.password, accountType);
-          toast.success("¡Inicio de sesión exitoso!");
-          onClose();
-        } catch (error) {
-          // Si falla, intentamos con el rol de admin
-          try {
-            await login(formData.email, formData.password, "admin");
-            toast.success("¡Inicio de sesión exitoso!");
-            onClose();
-          } catch (adminError) {
-            // Si ambos fallan, mostramos el error original
-            throw error;
-          }
-        }
+        await login(formData.email, formData.password, accountType);
+        toast.success("¡Bienvenido de nuevo!");
+        onClose();
       } else {
         await register({
           ...formData,
           role: accountType,
         });
-        toast.success("¡Registro exitoso!");
-        onClose();
+        
+        toast.success("¡Cuenta creada exitosamente! Por favor inicia sesión.");
+        setFormData({
+          organizationName: "",
+          firstName: "",
+          lastName: "",
+          email: "",
+          password: "",
+        });
+        onModeChange("login");
       }
     } catch (error) {
-      setError(error instanceof Error ? error.message : "Algo salió mal");
+      if (mode === "register") {
+        const errorMessage = error instanceof Error ? error.message : "";
+        if (errorMessage.toLowerCase().includes("email") || errorMessage.toLowerCase().includes("correo")) {
+          setError("Este correo electrónico ya está registrado");
+        } else {
+          setError(errorMessage || "Error al crear la cuenta");
+        }
+      } else {
+        const errorMessage = error instanceof Error ? error.message : "";
+        if (errorMessage.toLowerCase().includes("email") || errorMessage.toLowerCase().includes("correo")) {
+          setError("El correo electrónico no está registrado");
+        } else if (errorMessage.toLowerCase().includes("password") || errorMessage.toLowerCase().includes("contraseña")) {
+          setError("La contraseña es incorrecta");
+        } else {
+          setError("El correo electrónico o la contraseña son incorrectos");
+        }
+      }
     } finally {
       setIsLoading(false);
     }
@@ -205,6 +214,21 @@ export function AuthModal({
             </div>
           </div>
 
+          {error && (
+            <div
+              className="mb-4 p-3 rounded-md"
+              style={{
+                backgroundColor: "#FEE2E2",
+                color: "#DC2626",
+                fontFamily: "DM Sans, sans-serif",
+                fontSize: "14px",
+                lineHeight: "18px",
+              }}
+            >
+              {error}
+            </div>
+          )}
+
           <form onSubmit={handleSubmit} className="space-y-6">
             {mode === "register" && accountType === "company" && (
               <div>
@@ -219,12 +243,12 @@ export function AuthModal({
                     fontWeight: "600",
                   }}
                 >
-                  Nombre de la organización
+                  Nombre de la empresa
                 </Label>
                 <Input
                   id="organizationName"
                   type="text"
-                  placeholder="Ingrese el nombre de su organización"
+                  placeholder="Ingrese el nombre de su empresa"
                   value={formData.organizationName}
                   onChange={(e) =>
                     handleInputChange("organizationName", e.target.value)

@@ -14,26 +14,10 @@ export async function POST(request: Request) {
       );
     }
 
-    const user = mockDb.findUserByEmail(email);
-    console.log('Found user:', user);
-
-    if (!user) {
-      return NextResponse.json(
-        { error: "Credenciales inválidas" },
-        { status: 401 }
-      );
-    }
-
-    if (user.password !== password) {
-      return NextResponse.json(
-        { error: "Credenciales inválidas" },
-        { status: 401 }
-      );
-    }
-
-    if (user.role === "admin") {
-      console.log('Admin login successful');
+    try {
+      const user = mockDb.validateLogin(email, password, role);
       const token = "mock-jwt-token";
+      
       return NextResponse.json({
         token,
         user: {
@@ -46,27 +30,13 @@ export async function POST(request: Request) {
           isPrimaryAdmin: user.isPrimaryAdmin
         }
       });
-    }
-
-    if (user.role !== role) {
+    } catch (error) {
+      console.error('Login validation error:', error);
       return NextResponse.json(
-        { error: "Tipo de cuenta incorrecto" },
+        { error: error instanceof Error ? error.message : "Datos inválidos" },
         { status: 401 }
       );
     }
-
-    const token = "mock-jwt-token";
-    return NextResponse.json({
-      token,
-      user: {
-        id: user.id,
-        email: user.email,
-        role: user.role,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        organizationName: user.organizationName
-      }
-    });
   } catch (error) {
     console.error('Login error:', error);
     return NextResponse.json(
