@@ -23,13 +23,6 @@ export default function OpportunitiesPage() {
   }, []);
 
   return (
-    <div className="opportunities-page">
-      <div ref={heroRef} className="hero-section">
-        <h1 ref={titleRef} className="text-4xl font-bold mb-6">
-          Oportunidades STEAM para Mujeres
-        </h1>
-      </div>
       <OpportunityTemplate />
-    </div>
   );
 }

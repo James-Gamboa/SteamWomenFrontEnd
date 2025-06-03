@@ -98,12 +98,12 @@ export function OpportunityTemplate() {
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: "#FFFFFF" }}>
-      <div className="container mx-auto px-4 py-12">
-        <div className="text-center mb-12">
+      <div className="container mx-auto px-4 py-12 mt-20">
+        <div className="text-center mb-8 lg:mb-12">
           <h1
-            className="text-[32px] sm:text-[37px] lg:text-[48px] mb-4 font-bold"
+            className="mb-4 font-bold text-3xl sm:text-4xl lg:text-5xl xl:text-6xl"
             style={{
-              lineHeight: "65px",
+              lineHeight: "1.1",
               color: "#1A1F2C",
               fontFamily: "DM Sans, sans-serif",
               fontWeight: "600",
@@ -112,13 +112,12 @@ export function OpportunityTemplate() {
             Oportunidades
           </h1>
           <p
-            className="max-w-2xl mx-auto"
+            className="max-w-2xl mx-auto text-base sm:text-lg"
             style={{
-              fontSize: "18px",
-              lineHeight: "28px",
               color: "#8E9196",
               fontFamily: "DM Sans, sans-serif",
               fontWeight: "400",
+              lineHeight: "1.6",
             }}
           >
             Explora becas, eventos, talleres y más oportunidades diseñadas para

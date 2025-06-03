@@ -108,7 +108,7 @@ export function TestimonialsSection() {
           </p>
         </div>
 
-        <div className="relative max-w-4xl mx-auto">
+        <div className="relative max-w-4xl mx-auto select-none">
           <Carousel
             className=""
             opts={{ containScroll: false, loop: false }}
@@ -150,7 +150,7 @@ export function TestimonialsSection() {
                         </div>
                         <div className="flex-1 text-center lg:text-left">
                           <blockquote
-                            className="text-lg lg:text-xl mb-6 italic"
+                            className="text-lg lg:text-xl mb-6 italic select-none"
                             style={{
                               color: "#1A1F2C",
                               fontFamily: "DM Sans, sans-serif",

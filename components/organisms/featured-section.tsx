@@ -7,9 +7,8 @@ export function FeaturedSection() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div>
             <h2
-              className="mb-6 font-bold"
+              className="mb-6 font-bold break-words text-[36px] md:text-[48px] sm:text-[36px]"
               style={{
-                fontSize: "48px",
                 lineHeight: "65px",
                 color: "#1A1F2C",
                 fontFamily: "DM Sans, sans-serif",
@@ -19,7 +18,7 @@ export function FeaturedSection() {
               Potenciando el talento femenino en STEAM
             </h2>
             <p
-              className="mb-6 leading-relaxed"
+              className="mb-6 leading-relaxed break-words"
               style={{
                 fontSize: "18px",
                 lineHeight: "28px",
@@ -34,7 +33,7 @@ export function FeaturedSection() {
               oportunidades que impulsen su desarrollo profesional y personal.
             </p>
             <p
-              className="leading-relaxed"
+              className="leading-relaxed break-words"
               style={{
                 fontSize: "18px",
                 lineHeight: "28px",

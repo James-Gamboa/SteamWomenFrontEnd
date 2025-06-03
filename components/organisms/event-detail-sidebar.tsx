@@ -211,11 +211,12 @@ export function EventDetailSidebar({
               href={event.website}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-sm hover:opacity-80"
+              className="text-sm hover:opacity-80 break-words"
               style={{
                 color: "#8B5CF6",
                 fontFamily: "DM Sans, sans-serif",
                 textDecoration: "underline",
+                wordBreak: "break-word",
               }}
             >
               {event.website}

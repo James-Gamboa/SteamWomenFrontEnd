@@ -23,9 +23,8 @@ export function JoinCommunitySection() {
           </div>
           <div>
             <h2
-              className="mb-6 font-bold"
+              className="mb-6 font-bold break-words text-[36px] md:text-[48px]"
               style={{
-                fontSize: "48px",
                 lineHeight: "65px",
                 color: "#1A1F2C",
                 fontFamily: "DM Sans, sans-serif",
@@ -35,7 +34,7 @@ export function JoinCommunitySection() {
               Únete a la comunidad STEAMWomen
             </h2>
             <p
-              className="mb-8 leading-relaxed"
+              className="mb-8 leading-relaxed break-words"
               style={{
                 fontSize: "18px",
                 lineHeight: "28px",
