@@ -5,10 +5,18 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { AuthModal } from "@/components/organisms/auth-modal";
 import { usePathname } from "next/navigation";
-import { Menu, X } from "lucide-react";
+import { Menu, X, User, LogOut } from "lucide-react";
 import { MobileMenu } from "@/components/molecules/mobile-menu";
+import { useAuth } from "@/lib/context/auth-context";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export function Header() {
+  const { user, logout } = useAuth();
   const [prevScrollPos, setPrevScrollPos] = useState(0);
   const [visible, setVisible] = useState(true);
   const [authModalOpen, setAuthModalOpen] = useState(false);
@@ -31,10 +39,7 @@ export function Header() {
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollPos = window.scrollY;
-
-      const isVisible =
-        prevScrollPos > currentScrollPos || currentScrollPos < 10;
-
+      const isVisible = prevScrollPos > currentScrollPos || currentScrollPos < 10;
       setPrevScrollPos(currentScrollPos);
       setVisible(isVisible);
     };
@@ -56,7 +61,7 @@ export function Header() {
   return (
     <>
       <header
-        className={`fixed top-0 left-0 right-0 z-50 shadow-sm transition-transform duration-300 w-full overflow-x-hidden ${
+        className={`fixed top-0 left-0 right-0 z-50 transition-transform duration-300 ${
           visible ? "translate-y-0" : "-translate-y-full"
         }`}
         style={{ backgroundColor: "#FFFFFF" }}
@@ -154,36 +159,84 @@ export function Header() {
             </button>
 
             <div className="hidden lg:flex items-center space-x-4">
-              <Button
-                variant="outline"
-                className="hover:opacity-80"
-                onClick={handleLoginClick}
-                style={{
-                  color: "#1A1F2C",
-                  borderColor: "#C8C8C9",
-                  backgroundColor: "transparent",
-                  fontFamily: "DM Sans, sans-serif",
-                  fontSize: "16px",
-                  lineHeight: "20px",
-                  fontWeight: "600",
-                }}
-              >
-                Iniciar sesión
-              </Button>
-              <Button
-                className="hover:opacity-90"
-                onClick={handleRegisterClick}
-                style={{
-                  backgroundColor: "#8B5CF6",
-                  color: "#FFFFFF",
-                  fontFamily: "DM Sans, sans-serif",
-                  fontSize: "16px",
-                  lineHeight: "20px",
-                  fontWeight: "600",
-                }}
-              >
-                Registrarse
-              </Button>
+              {user ? (
+                <>
+                  <Link href="/">
+                    <Button
+                      className="hover:opacity-90"
+                      style={{
+                        backgroundColor: "#8B5CF6",
+                        color: "#FFFFFF",
+                        fontFamily: "DM Sans, sans-serif",
+                        fontSize: "16px",
+                        lineHeight: "20px",
+                        fontWeight: "600",
+                      }}
+                    >
+                      Ir al Dashboard
+                    </Button>
+                  </Link>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className="hover:opacity-80"
+                        style={{
+                          color: "#1A1F2C",
+                          borderColor: "#C8C8C9",
+                          backgroundColor: "transparent",
+                          fontFamily: "DM Sans, sans-serif",
+                          fontSize: "16px",
+                          lineHeight: "20px",
+                          fontWeight: "600",
+                        }}
+                      >
+                        <User className="h-5 w-5 mr-2" />
+                        {user.firstName || user.email}
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem onClick={logout}>
+                        <LogOut className="h-4 w-4 mr-2" />
+                        Cerrar sesión
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </>
+              ) : (
+                <>
+                  <Button
+                    variant="outline"
+                    className="hover:opacity-80"
+                    onClick={handleLoginClick}
+                    style={{
+                      color: "#1A1F2C",
+                      borderColor: "#C8C8C9",
+                      backgroundColor: "transparent",
+                      fontFamily: "DM Sans, sans-serif",
+                      fontSize: "16px",
+                      lineHeight: "20px",
+                      fontWeight: "600",
+                    }}
+                  >
+                    Iniciar sesión
+                  </Button>
+                  <Button
+                    className="hover:opacity-90"
+                    onClick={handleRegisterClick}
+                    style={{
+                      backgroundColor: "#8B5CF6",
+                      color: "#FFFFFF",
+                      fontFamily: "DM Sans, sans-serif",
+                      fontSize: "16px",
+                      lineHeight: "20px",
+                      fontWeight: "600",
+                    }}
+                  >
+                    Registrarse
+                  </Button>
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -193,6 +246,8 @@ export function Header() {
         onClose={() => setIsMobileMenuOpen(false)}
         onLogin={handleLoginClick}
         onRegister={handleRegisterClick}
+        user={user}
+        onLogout={logout}
       />
       <AuthModal
         isOpen={authModalOpen}

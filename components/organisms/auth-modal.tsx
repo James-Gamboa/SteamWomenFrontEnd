@@ -1,8 +1,7 @@
 "use client";
 
 import type React from "react";
-
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Dialog,
   DialogContent,
@@ -12,7 +11,9 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { GraduationCap, Building } from "lucide-react";
+import { GraduationCap, Building, User } from "lucide-react";
+import { useAuth } from "@/lib/context/auth-context";
+import { toast } from "sonner";
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -27,9 +28,9 @@ export function AuthModal({
   mode,
   onModeChange,
 }: AuthModalProps) {
-  const [accountType, setAccountType] = useState<"student" | "company">(
-    "company",
-  );
+  const { login, register } = useAuth();
+  const [accountType, setAccountType] = useState<"student" | "company">("student");
+  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     organizationName: "",
     firstName: "",
@@ -37,20 +38,70 @@ export function AuthModal({
     email: "",
     password: "",
   });
+  const [error, setError] = useState("");
+
+  // Prevenir scroll cuando el modal está abierto
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    // Limpiar el estilo cuando el componente se desmonte
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isOpen]);
 
   const handleInputChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Form submitted:", { accountType, ...formData, mode });
+    setIsLoading(true);
+    setError("");
+
+    try {
+      if (mode === "login") {
+        // Primero intentamos con el rol seleccionado
+        try {
+          await login(formData.email, formData.password, accountType);
+          toast.success("¡Inicio de sesión exitoso!");
+          onClose();
+        } catch (error) {
+          // Si falla, intentamos con el rol de admin
+          try {
+            await login(formData.email, formData.password, "admin");
+            toast.success("¡Inicio de sesión exitoso!");
+            onClose();
+          } catch (adminError) {
+            // Si ambos fallan, mostramos el error original
+            throw error;
+          }
+        }
+      } else {
+        await register({
+          ...formData,
+          role: accountType,
+        });
+        toast.success("¡Registro exitoso!");
+        onClose();
+      }
+    } catch (error) {
+      setError(error instanceof Error ? error.message : "Algo salió mal");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
+      {isOpen && (
+        <div className="fixed inset-0 z-[100] bg-black/70 backdrop-blur-[6px] transition-all" />
+      )}
       <DialogContent
-        className="max-w-md mx-auto p-0 border-0"
+        className="max-w-md mx-auto p-0 border-0 z-[110]"
         style={{
           backgroundColor: "#F1F0FB",
           borderRadius: "12px",
@@ -58,119 +109,103 @@ export function AuthModal({
           overflow: "auto",
         }}
       >
-        <div className="p-8">
-          <DialogHeader className="text-center mb-8">
-            <DialogTitle asChild>
-              <h2
-                className="mb-4"
-                style={{
-                  fontSize: "32px",
-                  lineHeight: "40px",
-                  color: "#1A1F2C",
-                  fontFamily: "DM Sans, sans-serif",
-                  fontWeight: "600",
-                }}
-              >
-                {mode === "register" ? "Crear Cuenta" : "Iniciar Sesión"}
-              </h2>
-            </DialogTitle>
-            <p
+        <DialogHeader className="p-6 pb-0">
+          <DialogTitle
+            style={{
+              fontSize: "24px",
+              lineHeight: "32px",
+              color: "#1A1F2C",
+              fontFamily: "DM Sans, sans-serif",
+              fontWeight: "700",
+            }}
+          >
+            {mode === "register" ? "Crear cuenta" : "Iniciar sesión"}
+          </DialogTitle>
+        </DialogHeader>
+
+        <div className="p-6">
+          <div className="mb-6">
+            <Label
+              className="mb-4 block"
               style={{
                 fontSize: "16px",
-                lineHeight: "24px",
-                color: "#8E9196",
+                lineHeight: "20px",
+                color: "#1A1F2C",
                 fontFamily: "DM Sans, sans-serif",
-                fontWeight: "400",
+                fontWeight: "600",
               }}
             >
-              {mode === "register"
-                ? "Únete a la comunidad y accede a oportunidades exclusivas"
-                : "Accede a tu cuenta y continúa tu crecimiento profesional"}
-            </p>
-          </DialogHeader>
-
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div>
-              <Label
-                className="mb-4 block"
+              Tipo de cuenta
+            </Label>
+            <div className="grid grid-cols-2 gap-4">
+              <button
+                type="button"
+                onClick={() => setAccountType("student")}
+                className={`p-4 rounded-lg border-2 transition-all ${
+                  accountType === "student"
+                    ? "border-purple-500"
+                    : "border-gray-200"
+                }`}
                 style={{
-                  fontSize: "16px",
-                  lineHeight: "20px",
-                  color: "#1A1F2C",
-                  fontFamily: "DM Sans, sans-serif",
-                  fontWeight: "600",
+                  backgroundColor: "#FFFFFF",
+                  borderColor:
+                    accountType === "student" ? "#8B5CF6" : "#C8C8C9",
                 }}
               >
-                Tipo de cuenta
-              </Label>
-              <div className="grid grid-cols-2 gap-4">
-                <button
-                  type="button"
-                  onClick={() => setAccountType("student")}
-                  className={`p-4 rounded-lg border-2 transition-all ${
-                    accountType === "student"
-                      ? "border-purple-500"
-                      : "border-gray-200"
-                  }`}
+                <GraduationCap
+                  className="h-6 w-6 mx-auto mb-2"
                   style={{
-                    backgroundColor: "#FFFFFF",
-                    borderColor:
-                      accountType === "student" ? "#8B5CF6" : "#C8C8C9",
+                    color: accountType === "student" ? "#8B5CF6" : "#8E9196",
+                  }}
+                />
+                <span
+                  style={{
+                    fontSize: "14px",
+                    lineHeight: "18px",
+                    color: accountType === "student" ? "#8B5CF6" : "#8E9196",
+                    fontFamily: "DM Sans, sans-serif",
+                    fontWeight: "500",
                   }}
                 >
-                  <GraduationCap
-                    className="h-6 w-6 mx-auto mb-2"
-                    style={{
-                      color: accountType === "student" ? "#8B5CF6" : "#8E9196",
-                    }}
-                  />
-                  <span
-                    style={{
-                      fontSize: "14px",
-                      lineHeight: "18px",
-                      color: accountType === "student" ? "#8B5CF6" : "#8E9196",
-                      fontFamily: "DM Sans, sans-serif",
-                      fontWeight: "500",
-                    }}
-                  >
-                    Estudiante
-                  </span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setAccountType("company")}
-                  className={`p-4 rounded-lg border-2 transition-all ${
-                    accountType === "company"
-                      ? "border-purple-500"
-                      : "border-gray-200"
-                  }`}
+                  Estudiante
+                </span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setAccountType("company")}
+                className={`p-4 rounded-lg border-2 transition-all ${
+                  accountType === "company"
+                    ? "border-purple-500"
+                    : "border-gray-200"
+                }`}
+                style={{
+                  backgroundColor: "#FFFFFF",
+                  borderColor:
+                    accountType === "company" ? "#8B5CF6" : "#C8C8C9",
+                }}
+              >
+                <Building
+                  className="h-6 w-6 mx-auto mb-2"
                   style={{
-                    backgroundColor: "#FFFFFF",
-                    borderColor:
-                      accountType === "company" ? "#8B5CF6" : "#C8C8C9",
+                    color: accountType === "company" ? "#8B5CF6" : "#8E9196",
+                  }}
+                />
+                <span
+                  style={{
+                    fontSize: "14px",
+                    lineHeight: "18px",
+                    color: accountType === "company" ? "#8B5CF6" : "#8E9196",
+                    fontFamily: "DM Sans, sans-serif",
+                    fontWeight: "500",
                   }}
                 >
-                  <Building
-                    className="h-6 w-6 mx-auto mb-2"
-                    style={{
-                      color: accountType === "company" ? "#8B5CF6" : "#8E9196",
-                    }}
-                  />
-                  <span
-                    style={{
-                      fontSize: "14px",
-                      lineHeight: "18px",
-                      color: accountType === "company" ? "#8B5CF6" : "#8E9196",
-                      fontFamily: "DM Sans, sans-serif",
-                      fontWeight: "500",
-                    }}
-                  >
-                    Empresa
-                  </span>
-                </button>
-              </div>
+                  Empresa
+                </span>
+              </button>
             </div>
+          </div>
 
+          <form onSubmit={handleSubmit} className="space-y-6">
             {mode === "register" && accountType === "company" && (
               <div>
                 <Label
@@ -188,11 +223,13 @@ export function AuthModal({
                 </Label>
                 <Input
                   id="organizationName"
-                  placeholder="Nombre de tu empresa u organización"
+                  type="text"
+                  placeholder="Ingrese el nombre de su organización"
                   value={formData.organizationName}
                   onChange={(e) =>
                     handleInputChange("organizationName", e.target.value)
                   }
+                  required
                   style={{
                     backgroundColor: "#FFFFFF",
                     borderColor: "#C8C8C9",
@@ -202,8 +239,8 @@ export function AuthModal({
               </div>
             )}
 
-            {mode === "register" && (
-              <div className="grid grid-cols-2 gap-4">
+            {mode === "register" && accountType === "student" && (
+              <>
                 <div>
                   <Label
                     htmlFor="firstName"
@@ -220,11 +257,13 @@ export function AuthModal({
                   </Label>
                   <Input
                     id="firstName"
-                    placeholder="Tu nombre"
+                    type="text"
+                    placeholder="Ingrese su nombre"
                     value={formData.firstName}
                     onChange={(e) =>
                       handleInputChange("firstName", e.target.value)
                     }
+                    required
                     style={{
                       backgroundColor: "#FFFFFF",
                       borderColor: "#C8C8C9",
@@ -232,6 +271,7 @@ export function AuthModal({
                     }}
                   />
                 </div>
+
                 <div>
                   <Label
                     htmlFor="lastName"
@@ -248,11 +288,13 @@ export function AuthModal({
                   </Label>
                   <Input
                     id="lastName"
-                    placeholder="Tu apellido"
+                    type="text"
+                    placeholder="Ingrese su apellido"
                     value={formData.lastName}
                     onChange={(e) =>
                       handleInputChange("lastName", e.target.value)
                     }
+                    required
                     style={{
                       backgroundColor: "#FFFFFF",
                       borderColor: "#C8C8C9",
@@ -260,7 +302,7 @@ export function AuthModal({
                     }}
                   />
                 </div>
-              </div>
+              </>
             )}
 
             <div>
@@ -280,9 +322,10 @@ export function AuthModal({
               <Input
                 id="email"
                 type="email"
-                placeholder="tu@correo.com"
+                placeholder="ejemplo@correo.com"
                 value={formData.email}
                 onChange={(e) => handleInputChange("email", e.target.value)}
+                required
                 style={{
                   backgroundColor: "#FFFFFF",
                   borderColor: "#C8C8C9",
@@ -311,6 +354,7 @@ export function AuthModal({
                 placeholder="••••••••"
                 value={formData.password}
                 onChange={(e) => handleInputChange("password", e.target.value)}
+                required
                 style={{
                   backgroundColor: "#FFFFFF",
                   borderColor: "#C8C8C9",
@@ -322,6 +366,7 @@ export function AuthModal({
             <Button
               type="submit"
               className="w-full py-3 border-0"
+              disabled={isLoading}
               style={{
                 backgroundColor: "#8B5CF6",
                 color: "#FFFFFF",
@@ -331,7 +376,11 @@ export function AuthModal({
                 fontWeight: "600",
               }}
             >
-              {mode === "register" ? "Registrarse" : "Iniciar Sesión"}
+              {isLoading
+                ? "Cargando..."
+                : mode === "register"
+                ? "Registrarse"
+                : "Iniciar Sesión"}
             </Button>
 
             <div className="text-center">

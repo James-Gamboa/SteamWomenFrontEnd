@@ -1,16 +1,28 @@
-import { DM_Sans } from "next/font/google";
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
 import "./globals.css";
+import { AuthProvider } from "@/lib/context/auth-context";
+import { Toaster } from "sonner";
 
-const dmSans = DM_Sans({
-  subsets: ["latin"],
-  variable: "--font-dm-sans",
-});
+const inter = Inter({ subsets: ["latin"] });
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export const metadata: Metadata = {
+  title: "STEAM Women",
+  description: "Conectando mujeres con oportunidades en STEAM",
+};
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="es">
-      <body className={`${dmSans.variable} font-sans antialiased min-h-screen`} style={{ fontFamily: "DM Sans, sans-serif" }}>
-        {children}
+      <body className={inter.className}>
+        <AuthProvider>
+          {children}
+          <Toaster position="top-right" />
+        </AuthProvider>
       </body>
     </html>
   );

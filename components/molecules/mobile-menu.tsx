@@ -11,6 +11,15 @@ interface MobileMenuProps {
   onClose: () => void;
   onLogin: () => void;
   onRegister: () => void;
+  user: {
+    id: string;
+    email: string;
+    role: "student" | "company" | "admin";
+    firstName?: string;
+    lastName?: string;
+    organizationName?: string;
+  } | null;
+  onLogout: () => void;
 }
 
 export function MobileMenu({
@@ -18,6 +27,8 @@ export function MobileMenu({
   onClose,
   onLogin,
   onRegister,
+  user,
+  onLogout,
 }: MobileMenuProps) {
   const pathname = usePathname();
   const menuItems = [
@@ -66,42 +77,84 @@ export function MobileMenu({
             ))}
           </nav>
           <div className="flex flex-col items-center gap-3 w-full max-w-xs">
-            <Button
-              variant="outline"
-              className="w-full hover:opacity-80"
-              onClick={() => {
-                onLogin();
-                onClose();
-              }}
-              style={{
-                color: "#1A1F2C",
-                borderColor: "#C8C8C9",
-                backgroundColor: "transparent",
-                fontFamily: "DM Sans, sans-serif",
-                fontSize: "16px",
-                lineHeight: "20px",
-                fontWeight: "600",
-              }}
-            >
-              Iniciar sesión
-            </Button>
-            <Button
-              className="w-full hover:opacity-90"
-              onClick={() => {
-                onRegister();
-                onClose();
-              }}
-              style={{
-                backgroundColor: "#8B5CF6",
-                color: "#FFFFFF",
-                fontFamily: "DM Sans, sans-serif",
-                fontSize: "16px",
-                lineHeight: "20px",
-                fontWeight: "600",
-              }}
-            >
-              Registrarse
-            </Button>
+            {user ? (
+              <>
+                <Link href="/" className="w-full">
+                  <Button
+                    className="w-full hover:opacity-90"
+                    onClick={onClose}
+                    style={{
+                      backgroundColor: "#8B5CF6",
+                      color: "#FFFFFF",
+                      fontFamily: "DM Sans, sans-serif",
+                      fontSize: "16px",
+                      lineHeight: "20px",
+                      fontWeight: "600",
+                    }}
+                  >
+                    Ir al Dashboard
+                  </Button>
+                </Link>
+                <Button
+                  variant="outline"
+                  className="w-full hover:opacity-80"
+                  onClick={() => {
+                    onLogout();
+                    onClose();
+                  }}
+                  style={{
+                    color: "#1A1F2C",
+                    borderColor: "#C8C8C9",
+                    backgroundColor: "transparent",
+                    fontFamily: "DM Sans, sans-serif",
+                    fontSize: "16px",
+                    lineHeight: "20px",
+                    fontWeight: "600",
+                  }}
+                >
+                  Cerrar sesión
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button
+                  variant="outline"
+                  className="w-full hover:opacity-80"
+                  onClick={() => {
+                    onLogin();
+                    onClose();
+                  }}
+                  style={{
+                    color: "#1A1F2C",
+                    borderColor: "#C8C8C9",
+                    backgroundColor: "transparent",
+                    fontFamily: "DM Sans, sans-serif",
+                    fontSize: "16px",
+                    lineHeight: "20px",
+                    fontWeight: "600",
+                  }}
+                >
+                  Iniciar sesión
+                </Button>
+                <Button
+                  className="w-full hover:opacity-90"
+                  onClick={() => {
+                    onRegister();
+                    onClose();
+                  }}
+                  style={{
+                    backgroundColor: "#8B5CF6",
+                    color: "#FFFFFF",
+                    fontFamily: "DM Sans, sans-serif",
+                    fontSize: "16px",
+                    lineHeight: "20px",
+                    fontWeight: "600",
+                  }}
+                >
+                  Registrarse
+                </Button>
+              </>
+            )}
           </div>
         </motion.div>
       )}
