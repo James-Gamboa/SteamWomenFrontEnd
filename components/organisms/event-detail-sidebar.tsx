@@ -4,6 +4,9 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Heart, Share } from "lucide-react";
 import { useState } from "react";
+import { useAuth } from "@/lib/context/auth-context";
+import { toast } from "sonner";
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 interface EventDetailSidebarProps {
   event: {
@@ -12,6 +15,9 @@ interface EventDetailSidebarProps {
     time: string;
     location: string;
     organizer: string;
+    title?: string;
+    slug?: string;
+    category: string;
   };
   formatDate: (dateString: string) => string;
   isSticky: boolean;
@@ -23,6 +29,44 @@ export function EventDetailSidebar({
   isSticky,
 }: EventDetailSidebarProps) {
   const [liked, setLiked] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+  const { user } = useAuth();
+
+  const handleRegisterClick = () => {
+    if (!user) {
+      toast.error("Debes iniciar sesión para registrarte en el evento.");
+      return;
+    }
+    if (user.role !== "student") return;
+    const registrations = JSON.parse(localStorage.getItem("student_event_registrations") || "[]");
+    const alreadyRegistered = registrations.some(
+      (reg: any) => reg.userId === user.id && reg.eventSlug === event.slug
+    );
+    if (alreadyRegistered) {
+      toast.error("Ya te has registrado a este evento.");
+      return;
+    }
+    setModalOpen(true);
+  };
+
+  const handleConfirm = () => {
+    if (!user) return;
+    const registrations = JSON.parse(localStorage.getItem("student_event_registrations") || "[]");
+    const province = event.location.split(",")[0].trim();
+    registrations.push({
+      userId: user.id,
+      userName: `${user.firstName} ${user.lastName}`,
+      eventSlug: event.slug,
+      eventTitle: event.title,
+      organizer: event.organizer,
+      fechaRegistro: new Date().toISOString(),
+      provincia: province,
+      categoria: event.category,
+    });
+    localStorage.setItem("student_event_registrations", JSON.stringify(registrations));
+    setModalOpen(false);
+    toast.success("¡Registro exitoso!");
+  };
 
   return (
     <div
@@ -43,10 +87,30 @@ export function EventDetailSidebar({
               fontWeight: "600",
               borderRadius: "8px",
             }}
-            onClick={() => window.open(event.website, "_blank")}
+            onClick={handleRegisterClick}
           >
-            Visitar sitio web
+            Inscribirse al evento
           </Button>
+          <Dialog open={modalOpen} onOpenChange={setModalOpen}>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>¿Deseas registrarte a este evento?</DialogTitle>
+              </DialogHeader>
+              <div className="mb-4">
+                <p className="font-semibold">{event.title}</p>
+                <p className="text-sm text-[#8E9196]">{event.organizer}</p>
+                <p className="text-xs text-[#8E9196]">{formatDate(event.date)}</p>
+              </div>
+              <DialogFooter>
+                <Button variant="outline" onClick={() => setModalOpen(false)}>
+                  Cancelar
+                </Button>
+                <Button className="bg-[#8B5CF6] hover:bg-[#7C3AED]" onClick={handleConfirm}>
+                  Confirmar registro
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
           <div className="flex gap-2">
             <Button
               variant="outline"

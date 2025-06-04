@@ -313,7 +313,7 @@ export function CreateEventModal({ onEventCreated }: CreateEventModalProps) {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="organizer">Organizador</Label>
+                <Label htmlFor="organizer">Empresa</Label>
                 <Input
                   id="organizer"
                   name="organizer"

@@ -298,13 +298,13 @@ export function EditEventModal({ event, open, onOpenChange, onEventUpdated }: Ed
             </div>
 
             <div>
-              <Label htmlFor="organizer">Organizador</Label>
+              <Label htmlFor="organizer">Empresa</Label>
               <Input
                 id="organizer"
                 name="organizer"
                 value={formData.organizer}
                 onChange={handleInputChange}
-                placeholder="Ingresa el nombre del organizador"
+                placeholder="Ingresa el nombre del Empresa"
               />
             </div>
 

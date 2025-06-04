@@ -150,7 +150,6 @@ export function EventModal({ mode, open, onOpenChange, onSubmit, initialData, lo
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (toastShown.current) return;
-    // Validar formato dd-mm-aaaa
     const dateRegex = /^\d{2}-\d{2}-\d{4}$/;
     if (!dateRegex.test(formData.date)) {
       toast.error("La fecha debe tener el formato dd-mm-aaaa", {
@@ -166,7 +165,8 @@ export function EventModal({ mode, open, onOpenChange, onSubmit, initialData, lo
       return;
     }
     toastShown.current = true;
-    onSubmit({ ...formData, slug: formData.title.toLowerCase().replace(/\s+/g, "-") });
+    const uniqueSlug = `${formData.title.toLowerCase().replace(/\s+/g, "-")}-${formData.id}`;
+    onSubmit({ ...formData, slug: uniqueSlug });
     setTimeout(() => {
       toastShown.current = false;
     }, 1000);
@@ -307,7 +307,7 @@ export function EventModal({ mode, open, onOpenChange, onSubmit, initialData, lo
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="organizer">Organizador</Label>
+                <Label htmlFor="organizer">Empresa</Label>
                 <Input
                   id="organizer"
                   name="organizer"

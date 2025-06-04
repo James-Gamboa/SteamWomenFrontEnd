@@ -2,6 +2,7 @@
 
 import { EventsDetailTemplate } from "@/components/templates/events-detail-template";
 import { useEffect, useState, use } from "react";
+import { eventsData } from "@/lib/events-data";
 
 interface Event {
   id: number;
@@ -18,7 +19,7 @@ interface Event {
   fullDescription: string;
   requirements: string[];
   benefits: string[];
-  applicationProcess: string;
+  applicationProcess?: string;
 }
 
 export default function EventDetailPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -27,7 +28,10 @@ export default function EventDetailPage({ params }: { params: Promise<{ slug: st
 
   useEffect(() => {
     const storedEvents = JSON.parse(localStorage.getItem("events") || "[]");
-    const currentEvent = storedEvents.find((e: Event) => e.slug === slug);
+    let currentEvent = storedEvents.find((e: Event) => e.slug === slug);
+    if (!currentEvent) {
+      currentEvent = eventsData.find((e: Event) => e.slug === slug);
+    }
     setEvent(currentEvent || null);
   }, [slug]);
 
@@ -42,5 +46,5 @@ export default function EventDetailPage({ params }: { params: Promise<{ slug: st
     );
   }
 
-  return <EventsDetailTemplate slug={slug} />;
+  return <EventsDetailTemplate event={event} />;
 }

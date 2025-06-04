@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-
 const protectedRoutes = {
   "/dashboard": ["student", "company", "admin"],
   "/dashboard/student": ["student", "admin"],
@@ -18,9 +17,10 @@ const publicRoutes = [
   "/api/auth/assign-admin"
 ];
 
-export function middleware(request: NextRequest) {
-  const token = request.cookies.get("token")?.value;
+export async function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
+  const token = request.cookies.get("token")?.value;
+  const userRole = request.cookies.get("userRole")?.value;
 
   if (publicRoutes.some(route => path.startsWith(route))) {
     return NextResponse.next();
@@ -33,24 +33,37 @@ export function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  const isProtectedRoute = Object.keys(protectedRoutes).some((route) =>
-    path.startsWith(route)
-  );
+  if (path.startsWith("/login") || path.startsWith("/signup")) {
+    if (token) {
+      return NextResponse.redirect(new URL("/dashboard", request.url));
+    }
+    return NextResponse.next();
+  }
 
-  if (isProtectedRoute) {
+  if (path.startsWith("/dashboard")) {
     if (!token) {
-      const loginUrl = new URL("/", request.url);
-      loginUrl.searchParams.set("redirect", path);
-      return NextResponse.redirect(loginUrl);
+      return NextResponse.redirect(new URL("/login", request.url));
     }
 
-    try {
-      // TODO: Implementar la lógica de verificación de token con el backend
-      return NextResponse.next();
-    } catch (error) {
-      const loginUrl = new URL("/", request.url);
-      loginUrl.searchParams.set("redirect", path);
-      return NextResponse.redirect(loginUrl);
+    if (path.startsWith("/dashboard/usuarios") || 
+        path.startsWith("/dashboard/postulaciones") || 
+        path.startsWith("/dashboard/configuracion")) {
+      if (userRole !== "admin") {
+        return NextResponse.redirect(new URL("/dashboard", request.url));
+      }
+    }
+
+    if (path.startsWith("/dashboard/oportunidades/crear") || 
+        path.startsWith("/dashboard/estadisticas")) {
+      if (userRole !== "company") {
+        return NextResponse.redirect(new URL("/dashboard", request.url));
+      }
+    }
+
+    if (path.startsWith("/dashboard/recomendaciones")) {
+      if (userRole !== "student") {
+        return NextResponse.redirect(new URL("/dashboard", request.url));
+      }
     }
   }
 
@@ -58,7 +71,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: [
-    "/((?!_next/static|_next/image|favicon.ico).*)",
-  ],
+  matcher: ["/dashboard/:path*", "/login", "/signup"],
 }; 

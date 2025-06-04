@@ -5,10 +5,6 @@ import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
-  LayoutDashboard,
-  Calendar,
-  Briefcase,
-  User,
   LogOut,
   X,
   Home,
@@ -18,29 +14,8 @@ import {
 import { Dispatch, SetStateAction, useState } from "react";
 import { useAuth } from "@/lib/context/auth-context";
 import { toast } from "sonner";
-
-const navigation = [
-  {
-    name: "Dashboard",
-    href: "/dashboard",
-    icon: LayoutDashboard,
-  },
-  {
-    name: "Eventos",
-    href: "/dashboard/eventos",
-    icon: Calendar,
-  },
-  {
-    name: "Oportunidades",
-    href: "/dashboard/oportunidades",
-    icon: Briefcase,
-  },
-  {
-    name: "Perfil",
-    href: "/dashboard/perfil",
-    icon: User,
-  },
-];
+import { navigationByRole } from "@/lib/navigation";
+import { getRoleLabel } from "@/utils/role-label";
 
 interface SidebarProps {
   open: boolean;
@@ -72,6 +47,8 @@ export function Sidebar({ open, setOpen, onLogout }: SidebarProps) {
       router.push("/");
     }, 100);
   };
+
+  const navigation = user?.role ? navigationByRole[user.role as keyof typeof navigationByRole] : [];
 
   const Drawer = (
     <div className={cn(
@@ -167,7 +144,7 @@ export function Sidebar({ open, setOpen, onLogout }: SidebarProps) {
             <span className="text-base font-semibold text-[#1A1F2C] dark:text-white">
               {user.firstName ? `${user.firstName} ${user.lastName || ""}`.trim() : user.email}
             </span>
-            <span className="text-xs text-[#8B5CF6] font-medium capitalize">{user.role}</span>
+            <span className="text-xs text-[#8B5CF6] font-medium capitalize">{getRoleLabel(user.role)}</span>
           </div>
         )}
       </div>
@@ -191,6 +168,18 @@ export function Sidebar({ open, setOpen, onLogout }: SidebarProps) {
             </Link>
           );
         })}
+        <Link
+          href="/"
+          className={cn(
+            "flex items-center gap-3 px-4 py-2 rounded-lg font-medium transition-colors mt-2",
+            pathname === "/"
+              ? "bg-[#8B5CF6] text-white shadow"
+              : "text-[#1A1F2C] dark:text-[#C8C8C9] hover:bg-[#ede9fe] dark:hover:bg-[#2a2342]"
+          )}
+        >
+          <Home className="h-5 w-5" />
+          {!collapsed && <span>Volver al inicio</span>}
+        </Link>
       </nav>
       <div className="mt-auto px-4 py-4 border-t border-gray-100 dark:border-gray-800">
         <Button

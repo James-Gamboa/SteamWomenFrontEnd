@@ -9,44 +9,29 @@ import { EventDetailContent } from "@/components/organisms/event-detail-content"
 import { EventDetailSimilar } from "@/components/organisms/event-detail-similar";
 
 interface EventsDetailTemplateProps {
-  slug: string;
+  event: {
+    id: number;
+    title: string;
+    description: string;
+    location: string;
+    date: string;
+    time: string;
+    category: string;
+    organizer: string;
+    website: string;
+    slug: string;
+    image: string;
+    fullDescription: string;
+    requirements: string[];
+    benefits: string[];
+    applicationProcess?: string;
+  };
 }
 
-interface Event {
-  id: number;
-  title: string;
-  description: string;
-  location: string;
-  date: string;
-  time: string;
-  category: string;
-  organizer: string;
-  website: string;
-  slug: string;
-  image: string;
-  fullDescription: string;
-  requirements: string[];
-  benefits: string[];
-  applicationProcess: string;
-}
-
-export function EventsDetailTemplate({ slug }: EventsDetailTemplateProps) {
+export function EventsDetailTemplate({ event }: EventsDetailTemplateProps) {
   const [isSticky, setIsSticky] = useState(true);
-  const [event, setEvent] = useState<Event | null>(null);
-  const [similarEvents, setSimilarEvents] = useState<Event[]>([]);
   const registrationInfoRef = useRef<HTMLDivElement>(null);
   const sidebarRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const storedEvents = JSON.parse(localStorage.getItem("events") || "[]");
-    const currentEvent = storedEvents.find((e: Event) => e.slug === slug);
-    setEvent(currentEvent || null);
-
-    const otherEvents = storedEvents
-      .filter((e: Event) => e.slug !== slug)
-      .slice(0, 2);
-    setSimilarEvents(otherEvents);
-  }, [slug]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -154,11 +139,12 @@ export function EventsDetailTemplate({ slug }: EventsDetailTemplateProps) {
             </div>
           </div>
         </div>
-        <EventDetailSimilar
+        {/* Opcional: puedes ajustar cómo se obtienen los similares si lo deseas */}
+        {/* <EventDetailSimilar
           similarEvents={similarEvents}
           getCategoryStyles={getCategoryStyles}
           formatDate={formatDateObject}
-        />
+        /> */}
       </div>
     </div>
   );

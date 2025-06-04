@@ -176,6 +176,92 @@ export function EventCard({
     );
   }
 
+  if (!isDashboard) {
+    return (
+      <Link href={`/eventos/${event.slug}`} tabIndex={0} style={{ outline: "none" }}>
+        <div
+          ref={cardRef}
+          className="event-card relative overflow-hidden rounded-xl border-2 border-transparent group transition-all duration-300 cursor-pointer bg-white shadow-md"
+          style={{ backgroundColor: "#FFFFFF", opacity: 1, display: "block" }}
+          onMouseMove={handleMouseMove}
+          onMouseLeave={handleMouseLeave}
+        >
+          <span className="pointer-events-none absolute inset-0 z-10 rounded-xl border-2 border-transparent group-hover:border-gradient-to-r group-hover:from-[#8B5CF6] group-hover:via-[#38BDF8] group-hover:to-[#8B5CF6] transition-all duration-300" />
+          <span
+            ref={lightRef}
+            className="pointer-events-none absolute z-20 w-52 h-52 rounded-full opacity-0 group-hover:opacity-100"
+            style={{
+              background:
+                "radial-gradient(circle at center, rgba(139,92,246,0.25) 0%, rgba(139,92,246,0.10) 60%, transparent 100%)",
+              filter: "blur(16px)",
+              transition: "opacity 0.3s, left 0.2s, top 0.2s",
+              left: 0,
+              top: 0,
+            }}
+          />
+          <Card className="bg-transparent shadow-none border-0">
+            <div className="relative">
+              <Image
+                src={event.image || "/dummy-women.jpg.jpeg"}
+                alt={event.title}
+                width={400}
+                height={200}
+                className="w-full h-48 object-cover rounded-t-xl"
+              />
+              <Badge
+                className="absolute top-3 left-3 px-3 py-1 rounded-full border-0"
+                style={{
+                  ...getCategoryStyles(event.category),
+                  fontFamily: "DM Sans, sans-serif",
+                  fontSize: "12px",
+                  lineHeight: "15px",
+                  fontWeight: "600",
+                }}
+              >
+                {event.category}
+              </Badge>
+            </div>
+            <CardHeader>
+              <CardTitle
+                className="line-clamp-2"
+                style={{
+                  fontSize: "18px",
+                  lineHeight: "25px",
+                  color: "#1A1F2C",
+                  fontFamily: "DM Sans, sans-serif",
+                  fontWeight: "600",
+                }}
+              >
+                {event.title}
+              </CardTitle>
+              <CardDescription
+                className="line-clamp-3"
+                style={{
+                  fontSize: "14px",
+                  lineHeight: "18px",
+                  color: "#8E9196",
+                  fontFamily: "DM Sans, sans-serif",
+                  fontWeight: "400",
+                }}
+              >
+                {event.description}
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <EventMeta
+                date={event.date}
+                time={event.time}
+                location={getProvince(event.location)}
+                formatDate={formatDateISO}
+                showOrganizer={false}
+              />
+            </CardContent>
+          </Card>
+        </div>
+      </Link>
+    );
+  }
+
   return (
     <div
       ref={cardRef}
@@ -225,31 +311,33 @@ export function EventCard({
             {event.category}
           </Badge>
         </div>
-        <CardHeader className="pb-3">
+        <CardHeader>
           <CardTitle
-            className="line-clamp-2 text-base lg:text-lg"
+            className="line-clamp-2"
             style={{
+              fontSize: "18px",
+              lineHeight: "25px",
               color: "#1A1F2C",
               fontFamily: "DM Sans, sans-serif",
               fontWeight: "600",
-              lineHeight: "1.3",
             }}
           >
             {event.title}
           </CardTitle>
           <CardDescription
-            className="line-clamp-3 text-sm"
+            className="line-clamp-3"
             style={{
+              fontSize: "14px",
+              lineHeight: "18px",
               color: "#8E9196",
               fontFamily: "DM Sans, sans-serif",
               fontWeight: "400",
-              lineHeight: "1.4",
             }}
           >
             {event.description}
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-2 pt-0">
+        <CardContent className="space-y-3">
           <EventMeta
             date={event.date}
             time={event.time}
@@ -257,35 +345,6 @@ export function EventCard({
             formatDate={formatDateISO}
             showOrganizer={false}
           />
-          <div className="flex justify-between items-center pt-4 border-t border-gray-100 mt-4">
-            {isDashboard ? (
-              <>
-                <div className="flex gap-2">
-                  <button
-                    onClick={handleEdit}
-                    className="flex items-center gap-2 text-[#8B5CF6] hover:text-[#7C3AED]"
-                  >
-                    <Pencil className="h-4 w-4" />
-                    <span className="text-sm">Editar</span>
-                  </button>
-                  <button
-                    onClick={handleDelete}
-                    className="flex items-center gap-2 text-red-500 hover:text-red-600"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                    <span className="text-sm">Eliminar</span>
-                  </button>
-                </div>
-                <button
-                  onClick={handleViewPublic}
-                  className="flex items-center gap-2 text-[#8B5CF6] hover:text-[#7C3AED] hover:underline"
-                >
-                  <Eye className="h-4 w-4" />
-                  <span className="text-sm">Ir al evento</span>
-                </button>
-              </>
-            ) : null}
-          </div>
         </CardContent>
       </Card>
     </div>
