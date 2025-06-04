@@ -19,7 +19,7 @@ export default function OportunidadesPage() {
             Oportunidades
           </h1>
           <p className="text-[#C8C8C9] mt-2">
-            Gestiona tus oportunidades laborales y de formación
+            Gestiona tus oportunidades laborales y de formación publicadas
           </p>
         </div>
         <Button className="bg-[#8B5CF6] hover:bg-[#7C3AED]">

@@ -1,5 +1,5 @@
 "use client"
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Sidebar } from "@/components/organisms/dashboard/sidebar";
 import { DashboardHeader } from "@/components/organisms/dashboard/header";
 import { useRouter } from "next/navigation";
@@ -14,8 +14,11 @@ export default function DashboardLayout({
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { logout } = useAuth();
   const router = useRouter();
+  const toastShown = useRef(false);
 
   const handleLogout = () => {
+    if (toastShown.current) return;
+    toastShown.current = true;
     logout();
     toast.success("¡Sesión cerrada exitosamente!", {
       style: {
@@ -28,6 +31,7 @@ export default function DashboardLayout({
       },
     });
     setTimeout(() => {
+      toastShown.current = false;
       router.push("/");
     }, 1000);
   };
@@ -37,7 +41,7 @@ export default function DashboardLayout({
       <Toaster position="top-center" />
       <Sidebar open={sidebarOpen} setOpen={setSidebarOpen} onLogout={handleLogout} />
       <div className="flex-1 flex flex-col">
-        <DashboardHeader onMenuClick={() => setSidebarOpen(true)} onLogout={handleLogout} />
+        <DashboardHeader onMenuClick={() => setSidebarOpen(true)} />
         <main className="flex-1 overflow-y-auto p-8 mt-16">
           <div className="container mx-auto space-y-8">{children}</div>
         </main>

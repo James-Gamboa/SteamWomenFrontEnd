@@ -1,15 +1,13 @@
 "use client";
 
-import { AgendaList } from "./agenda-list";
 import { SectionList } from "./section-list";
 
 interface EventDetailContentProps {
   event: {
     fullDescription: string;
-    agenda: Array<{ activity: string; time: string; description: string }>;
     requirements: string[];
     benefits: string[];
-    registrationInfo: string;
+    applicationProcess: string;
   };
 }
 
@@ -39,10 +37,6 @@ export function EventDetailContent({ event }: EventDetailContentProps) {
           {event.fullDescription}
         </p>
       </div>
-      <div className="mb-8">
-        <SectionList title="Agenda del evento" items={[]} />
-        <AgendaList agenda={event.agenda} />
-      </div>
       <SectionList
         title="Requisitos para participar"
         items={event.requirements}
@@ -57,7 +51,7 @@ export function EventDetailContent({ event }: EventDetailContentProps) {
             fontWeight: "600",
           }}
         >
-          Información de registro
+          Proceso de aplicación
         </h3>
         <p
           className="text-sm lg:text-base"
@@ -68,7 +62,7 @@ export function EventDetailContent({ event }: EventDetailContentProps) {
             lineHeight: "1.6",
           }}
         >
-          {event.registrationInfo}
+          {event.applicationProcess}
         </p>
       </div>
     </>

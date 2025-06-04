@@ -7,14 +7,11 @@ import { useState } from "react";
 
 interface EventDetailSidebarProps {
   event: {
-    registrationUrl: string;
+    website: string;
     date: string;
     time: string;
     location: string;
     organizer: string;
-    capacity: string;
-    price: string;
-    website: string;
   };
   formatDate: (dateString: string) => string;
   isSticky: boolean;
@@ -46,9 +43,9 @@ export function EventDetailSidebar({
               fontWeight: "600",
               borderRadius: "8px",
             }}
-            onClick={() => window.open(event.registrationUrl, "_blank")}
+            onClick={() => window.open(event.website, "_blank")}
           >
-            Registrarse ahora
+            Visitar sitio web
           </Button>
           <div className="flex gap-2">
             <Button
@@ -109,7 +106,7 @@ export function EventDetailSidebar({
                   fontWeight: "600",
                 }}
               >
-                {formatDate(event.date).split(",")[1]}
+                {formatDate(event.date)}
               </span>
             </div>
             <div className="flex justify-between">
@@ -160,38 +157,6 @@ export function EventDetailSidebar({
                 {event.organizer}
               </span>
             </div>
-            <div className="flex justify-between">
-              <span
-                style={{ color: "#8E9196", fontFamily: "DM Sans, sans-serif" }}
-              >
-                Capacidad
-              </span>
-              <span
-                style={{
-                  color: "#1A1F2C",
-                  fontFamily: "DM Sans, sans-serif",
-                  fontWeight: "600",
-                }}
-              >
-                {event.capacity}
-              </span>
-            </div>
-            <div className="flex justify-between">
-              <span
-                style={{ color: "#8E9196", fontFamily: "DM Sans, sans-serif" }}
-              >
-                Precio
-              </span>
-              <span
-                style={{
-                  color: "#8B5CF6",
-                  fontFamily: "DM Sans, sans-serif",
-                  fontWeight: "600",
-                }}
-              >
-                {event.price}
-              </span>
-            </div>
           </div>
           <div
             className="mt-4 pt-4 border-t"
@@ -205,7 +170,7 @@ export function EventDetailSidebar({
                 fontWeight: "600",
               }}
             >
-              Sitio web del organizador
+              Sitio web de la empresa
             </h5>
             <a
               href={event.website}

@@ -3,7 +3,6 @@
 import { useRef, useEffect, useState } from "react";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
-import { eventsData } from "@/lib/events-data";
 import { EventDetailHeader } from "@/components/organisms/event-detail-header";
 import { EventDetailSidebar } from "@/components/organisms/event-detail-sidebar";
 import { EventDetailContent } from "@/components/organisms/event-detail-content";
@@ -13,24 +12,41 @@ interface EventsDetailTemplateProps {
   slug: string;
 }
 
-const eventsDataBySlug = eventsData.reduce(
-  (acc, curr) => {
-    acc[curr.slug] = curr;
-    return acc;
-  },
-  {} as Record<string, (typeof eventsData)[number]>,
-);
+interface Event {
+  id: number;
+  title: string;
+  description: string;
+  location: string;
+  date: string;
+  time: string;
+  category: string;
+  organizer: string;
+  website: string;
+  slug: string;
+  image: string;
+  fullDescription: string;
+  requirements: string[];
+  benefits: string[];
+  applicationProcess: string;
+}
 
 export function EventsDetailTemplate({ slug }: EventsDetailTemplateProps) {
   const [isSticky, setIsSticky] = useState(true);
+  const [event, setEvent] = useState<Event | null>(null);
+  const [similarEvents, setSimilarEvents] = useState<Event[]>([]);
   const registrationInfoRef = useRef<HTMLDivElement>(null);
   const sidebarRef = useRef<HTMLDivElement>(null);
 
-  const event = eventsDataBySlug[slug as keyof typeof eventsDataBySlug];
-  const similarEvents = Object.entries(eventsDataBySlug)
-    .filter(([key]) => key !== slug)
-    .slice(0, 2)
-    .map(([key, value]) => ({ ...value, slug: key, id: String(value.id) }));
+  useEffect(() => {
+    const storedEvents = JSON.parse(localStorage.getItem("events") || "[]");
+    const currentEvent = storedEvents.find((e: Event) => e.slug === slug);
+    setEvent(currentEvent || null);
+
+    const otherEvents = storedEvents
+      .filter((e: Event) => e.slug !== slug)
+      .slice(0, 2);
+    setSimilarEvents(otherEvents);
+  }, [slug]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(

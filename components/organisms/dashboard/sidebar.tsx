@@ -12,8 +12,10 @@ import {
   LogOut,
   X,
   Home,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { useAuth } from "@/lib/context/auth-context";
 import { toast } from "sonner";
 
@@ -49,12 +51,13 @@ interface SidebarProps {
 export function Sidebar({ open, setOpen, onLogout }: SidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
-  const { logout } = useAuth();
+  const { user } = useAuth();
+  const [collapsed, setCollapsed] = useState(false);
 
   const handleNavClick = () => setOpen(false);
 
   const handleLogout = () => {
-    logout();
+    onLogout();
     toast.success("¡Sesión cerrada exitosamente!", {
       style: {
         backgroundColor: "#F1F0FB",
@@ -121,7 +124,7 @@ export function Sidebar({ open, setOpen, onLogout }: SidebarProps) {
             );
           })}
         </nav>
-        <div className="mt-8 flex flex-col gap-2 md:hidden px-4">
+        <div className="mt-auto flex flex-col gap-2 px-4 pb-4">
           <Link
             href="/"
             className="flex items-center gap-2 text-[#8B5CF6] font-bold text-lg py-2"
@@ -147,18 +150,29 @@ export function Sidebar({ open, setOpen, onLogout }: SidebarProps) {
   );
 
   const FixedSidebar = (
-    <aside className="hidden md:flex w-64 bg-white dark:bg-[#1A1F2C] border-r border-gray-100 dark:border-gray-800 shadow-md flex-col py-6 px-2 min-h-screen">
-      <div className="flex flex-col gap-2 mb-8 px-4 pt-8">
-        <span className="text-2xl font-extrabold text-[#8B5CF6] tracking-wide">STEAMWomen</span>
-        <Link
-          href="/"
-          className="flex items-center gap-2 text-[#8B5CF6] font-bold text-lg py-2"
-        >
-          <Home className="h-5 w-5" />
-          Volver al Home
-        </Link>
+    <aside className={cn(
+      "hidden md:flex bg-white dark:bg-[#1A1F2C] border-r border-gray-100 dark:border-gray-800 shadow-md flex-col py-0 min-h-screen transition-all duration-300",
+      collapsed ? "w-20" : "w-64"
+    )}>
+      <div className="flex flex-col items-center gap-2 py-8 px-4 bg-[#F1F0FB] dark:bg-[#232347] border-b border-gray-100 dark:border-gray-800">
+        <span className={cn(
+          "font-extrabold text-[#8B5CF6] tracking-wide transition-all duration-300",
+          collapsed ? "text-xl" : "text-3xl"
+        )}>SW</span>
+        {user && !collapsed && (
+          <div className="flex flex-col items-center mt-2">
+            <div className="w-12 h-12 rounded-full bg-[#8B5CF6] flex items-center justify-center text-white text-xl font-bold mb-1">
+              {(user.firstName ? user.firstName[0] : user.email[0]).toUpperCase()}
+            </div>
+            <span className="text-base font-semibold text-[#1A1F2C] dark:text-white">
+              {user.firstName ? `${user.firstName} ${user.lastName || ""}`.trim() : user.email}
+            </span>
+            <span className="text-xs text-[#8B5CF6] font-medium capitalize">{user.role}</span>
+          </div>
+        )}
       </div>
-      <nav className="flex-1 space-y-1">
+      <div className="border-b border-gray-100 dark:border-gray-800 my-2" />
+      <nav className="flex-1 space-y-1 px-2">
         {navigation.map((item) => {
           const isActive = pathname === item.href;
           return (
@@ -173,19 +187,27 @@ export function Sidebar({ open, setOpen, onLogout }: SidebarProps) {
               )}
             >
               <item.icon className="h-5 w-5" />
-              {item.name}
+              {!collapsed && <span>{item.name}</span>}
             </Link>
           );
         })}
       </nav>
-      <div className="mt-auto px-4 hidden md:flex">
+      <div className="mt-auto px-4 py-4 border-t border-gray-100 dark:border-gray-800">
         <Button
           variant="ghost"
-          className="flex items-center gap-2 text-[#8B5CF6] hover:bg-[#ede9fe] py-2"
+          className="w-full flex items-center justify-center gap-2 text-[#8B5CF6] hover:bg-[#ede9fe] py-2"
+          onClick={() => setCollapsed(!collapsed)}
+        >
+          {collapsed ? <ChevronRight className="h-5 w-5" /> : <ChevronLeft className="h-5 w-5" />}
+          {!collapsed && <span>Colapsar</span>}
+        </Button>
+        <Button
+          variant="ghost"
+          className="w-full flex items-center justify-center gap-2 text-[#8B5CF6] hover:bg-[#ede9fe] py-2 mt-2"
           onClick={handleLogout}
         >
           <LogOut className="h-5 w-5" />
-          Cerrar sesión
+          {!collapsed && <span>Cerrar sesión</span>}
         </Button>
       </div>
     </aside>
