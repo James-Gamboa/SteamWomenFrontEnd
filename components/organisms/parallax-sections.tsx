@@ -36,11 +36,14 @@ export function ParallaxSections() {
       }, {
         backgroundPosition: () => `50% ${window.innerHeight * (1 - getRatio(section))}px`,
         ease: 'none',
+        force3D: true,
         scrollTrigger: {
           trigger: section,
           start: () => i ? 'top bottom' : 'top top',
           end: 'bottom top',
-          scrub: true,
+          scrub: 1,
+          fastScrollEnd: true,
+          preventOverlaps: true,
           invalidateOnRefresh: true
         }
       });
@@ -55,7 +58,7 @@ export function ParallaxSections() {
           key={img}
           className="parallax-section relative h-screen flex items-center justify-center overflow-hidden"
         >
-          <div className="bg absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat -z-10" />
+          <div className="bg absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat -z-10 will-change-transform" />
           {i === 0 ? (
             <div className="text-center max-w-4xl mx-auto px-4">
               <h1 className="mb-6 font-bold text-[38px] lg:text-[90px] text-white" style={{lineHeight: '95px', fontFamily: 'DM Sans, sans-serif', fontWeight: 600}}>STEAMWOMEN</h1>

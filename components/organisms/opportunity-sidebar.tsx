@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Heart, Share } from "lucide-react";
@@ -6,13 +8,47 @@ import { useAuth } from "@/lib/context/auth-context";
 import { toast } from "sonner";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
-export function OpportunitySidebar({ opportunity }: { opportunity: any }) {
+interface Opportunity {
+  id: string;
+  title: string;
+  company: string;
+  location: string;
+  date: string;
+  category: string;
+  website?: string;
+}
+
+interface OpportunitySidebarProps {
+  opportunity: Opportunity;
+  isSticky?: boolean;
+}
+
+export function OpportunitySidebar({
+  opportunity,
+  isSticky = false,
+}: OpportunitySidebarProps) {
   const [liked, setLiked] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const { user } = useAuth();
 
+  const formatDate = (dateString: string) => {
+    const options: Intl.DateTimeFormatOptions = { 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric' 
+    };
+    return new Date(dateString).toLocaleDateString('es-ES', options);
+  };
+
   const handleApplyClick = () => {
-    if (!user || user.role !== "student") return;
+    if (!user) {
+      toast.error("Debes iniciar sesión para postularte a esta oportunidad.");
+      return;
+    }
+    if (user.role !== "student") {
+      toast.error("Solo los estudiantes pueden postularse a oportunidades.");
+      return;
+    }
     const applications = JSON.parse(localStorage.getItem("student_applications") || "[]");
     const alreadyApplied = applications.some(
       (app: any) => app.userId === user.id && app.opportunityId === opportunity.id
@@ -26,19 +62,37 @@ export function OpportunitySidebar({ opportunity }: { opportunity: any }) {
 
   const handleConfirm = () => {
     if (!user) return;
-    const applications = JSON.parse(localStorage.getItem("student_applications") || "[]");
-    const province = opportunity.location.split(",")[0].trim();
-    applications.push({
-      userId: user.id,
-      userName: `${user.firstName} ${user.lastName}`,
+    
+    if (user.role === "student") {
+      const applications = JSON.parse(localStorage.getItem("student_applications") || "[]");
+      const province = opportunity.location.split(",")[0].trim();
+      applications.push({
+        userId: user.id,
+        userName: `${user.firstName} ${user.lastName}`,
+        opportunityId: opportunity.id,
+        opportunityTitle: opportunity.title,
+        company: opportunity.company,
+        fechaAplicacion: new Date().toISOString(),
+        provincia: province,
+        categoria: opportunity.category,
+        estado: "Pendiente"
+      });
+      localStorage.setItem("student_applications", JSON.stringify(applications));
+    }
+
+    const companyApplications = JSON.parse(localStorage.getItem("company_applications") || "[]");
+    companyApplications.push({
       opportunityId: opportunity.id,
       opportunityTitle: opportunity.title,
-      company: opportunity.organizer || opportunity.company,
-      fechaPostulacion: new Date().toISOString(),
-      provincia: province,
-      categoria: opportunity.category,
+      company: opportunity.company,
+      applicantId: user.id,
+      applicantName: `${user.firstName} ${user.lastName}`,
+      applicantEmail: user.email,
+      fechaAplicacion: new Date().toISOString(),
+      estado: "Pendiente"
     });
-    localStorage.setItem("student_applications", JSON.stringify(applications));
+    localStorage.setItem("company_applications", JSON.stringify(companyApplications));
+
     setModalOpen(false);
     toast.success("¡Postulación enviada con éxito!");
   };
@@ -49,43 +103,43 @@ export function OpportunitySidebar({ opportunity }: { opportunity: any }) {
       style={{ backgroundColor: "#F1F0FB" }}
     >
       <CardHeader>
-        {user?.role === "student" && (
-          <>
-        <Button
-          className="w-full mb-4 py-6 text-lg shadow-md transform transition-transform hover:scale-[1.02] active:scale-[0.98]"
-          style={{
-            backgroundColor: "#8B5CF6",
-            color: "#FFFFFF",
-            fontFamily: "DM Sans, sans-serif",
-            fontSize: "16px",
-            fontWeight: "600",
-            borderRadius: "8px",
-          }}
-              onClick={handleApplyClick}
-        >
-          Aplicar ahora
-        </Button>
-            <Dialog open={modalOpen} onOpenChange={setModalOpen}>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>¿Deseas postularte a esta oportunidad?</DialogTitle>
-                </DialogHeader>
-                <div className="mb-4">
-                  <p className="font-semibold">{opportunity.title}</p>
-                  <p className="text-sm text-[#8E9196]">{opportunity.organizer || opportunity.company}</p>
-                </div>
-                <DialogFooter>
-                  <Button variant="outline" onClick={() => setModalOpen(false)}>
-                    Cancelar
-                  </Button>
-                  <Button className="bg-[#8B5CF6] hover:bg-[#7C3AED]" onClick={handleConfirm}>
-                    Confirmar postulación
-                  </Button>
-                </DialogFooter>
-              </DialogContent>
-            </Dialog>
-          </>
-        )}
+        {
+          <Button
+            className="w-full mb-4 py-6 text-lg shadow-md transform transition-transform hover:scale-[1.02] active:scale-[0.98]"
+            style={{
+              backgroundColor: "#8B5CF6",
+              color: "#FFFFFF",
+              fontFamily: "DM Sans, sans-serif",
+              fontSize: "16px",
+              fontWeight: "600",
+              borderRadius: "8px",
+            }}
+            onClick={handleApplyClick}
+          >
+            Aplicar ahora
+          </Button>
+        }
+          <Dialog open={modalOpen} onOpenChange={setModalOpen}>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>¿Deseas postularte a esta oportunidad?</DialogTitle>
+              </DialogHeader>
+              <div className="mb-4">
+                <p className="font-semibold">{opportunity.title}</p>
+                <p className="text-sm text-[#8E9196]">{opportunity.company}</p>
+                <p className="text-xs text-[#8E9196]">{formatDate(opportunity.date)}</p>
+                <p className="text-xs text-[#8E9196] mt-2">Categoría: {opportunity.category}</p>
+              </div>
+              <DialogFooter>
+                <Button variant="outline" onClick={() => setModalOpen(false)}>
+                  Cancelar
+                </Button>
+                <Button className="bg-[#8B5CF6] hover:bg-[#7C3AED]" onClick={handleConfirm}>
+                  Confirmar postulación
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
         <div className="flex gap-2">
           <Button
             variant="outline"
@@ -182,7 +236,7 @@ export function OpportunitySidebar({ opportunity }: { opportunity: any }) {
               {opportunity.date}
             </span>
           </div>
-          {opportunity.organizer && (
+          {opportunity.company && (
             <div className="flex justify-between">
               <span
                 style={{ color: "#8E9196", fontFamily: "DM Sans, sans-serif" }}
@@ -196,7 +250,7 @@ export function OpportunitySidebar({ opportunity }: { opportunity: any }) {
                   fontWeight: "600",
                 }}
               >
-                {opportunity.organizer}
+                {opportunity.company}
               </span>
             </div>
           )}

@@ -11,10 +11,10 @@ import {
   CarouselContent,
   CarouselItem,
 } from "@/components/ui/carousel"
-import emblaFade from "embla-carousel-fade"
 
 export function TestimonialsSection() {
   const [currentTestimonial, setCurrentTestimonial] = useState(0)
+  const [isLoading, setIsLoading] = useState(true)
   const carouselRef = useRef<any>(null)
 
   const testimonials = [
@@ -70,6 +70,7 @@ export function TestimonialsSection() {
       carouselRef.current.scrollTo(currentTestimonial + 1)
     }
   }
+
   const prevTestimonial = () => {
     if (carouselRef.current) {
       carouselRef.current.scrollTo(currentTestimonial - 1)
@@ -80,39 +81,32 @@ export function TestimonialsSection() {
     setCurrentTestimonial(index)
   }
 
+  const handleImageLoad = () => {
+    setIsLoading(false)
+  }
+
   return (
-    <section className="py-12 lg:py-20" style={{ backgroundColor: "#1A1F2C" }}>
+    <section className="py-12 lg:py-20 bg-[#1A1F2C]">
       <div className="container">
         <div className="text-center mb-12 lg:mb-16">
-          <h2
-            className="mb-4 font-bold text-2xl sm:text-3xl lg:text-4xl"
-            style={{
-              color: "#FFFFFF",
-              fontFamily: "DM Sans, sans-serif",
-              fontWeight: "600",
-              lineHeight: "1.2",
-            }}
-          >
+          <h2 className="mb-4 text-2xl sm:text-3xl lg:text-4xl text-white font-dm-sans font-semibold leading-tight">
             Lo que dicen nuestras usuarias
           </h2>
-          <p
-            className="max-w-2xl mx-auto text-base sm:text-lg"
-            style={{
-              color: "#C8C8C9",
-              fontFamily: "DM Sans, sans-serif",
-              fontWeight: "400",
-              lineHeight: "1.6",
-            }}
-          >
+          <p className="max-w-2xl mx-auto text-base sm:text-lg text-[#C8C8C9] font-dm-sans font-normal leading-relaxed">
             Historias reales de mujeres que han transformado sus carreras a través de STEAMWomen
           </p>
         </div>
 
         <div className="relative max-w-4xl mx-auto select-none">
           <Carousel
-            className=""
-            opts={{ containScroll: false, loop: false }}
-            plugins={[emblaFade()]}
+            className="transition-transform duration-300 ease-in-out"
+            opts={{ 
+              containScroll: "trimSnaps",
+              loop: false,
+              dragFree: false,
+              align: "center",
+              skipSnaps: false
+            }}
             setApi={(api) => {
               if (api && api.selectedScrollSnap) {
                 api.on("select", () => {
@@ -124,71 +118,42 @@ export function TestimonialsSection() {
           >
             <CarouselContent>
               {testimonials.map((testimonial, index) => (
-                <CarouselItem key={testimonial.id} className="">
-                  <Card className="border-0 shadow-2xl overflow-hidden" style={{ backgroundColor: "#F1F0FB" }}>
+                <CarouselItem key={testimonial.id} className="transition-all duration-300 ease-in-out">
+                  <Card className="border-0 shadow-2xl overflow-hidden bg-[#F1F0FB]">
                     <CardContent className="p-8 lg:p-12">
                       <div className="flex flex-col lg:flex-row items-center gap-8">
                         <div className="flex-shrink-0">
                           <div className="relative">
+                            <div className={`w-32 h-32 lg:w-38 lg:h-38 rounded-full bg-gray-200 animate-pulse ${isLoading ? 'block' : 'hidden'}`} />
                             <Image
                               src={testimonial.image || "/img/dummy-women.jpg.jpeg"}
                               alt={testimonial.name}
                               width={180}
                               height={180}
-                              quality={100}
+                              quality={85}
+                              loading={index === 0 ? "eager" : "lazy"}
                               sizes="(max-width: 768px) 96px, 120px"
-                              className="w-32 h-32 lg:w-38 lg:h-38 rounded-full object-cover border-4"
-                              style={{ borderColor: "#8B5CF6" }}
+                              className={`w-32 h-32 lg:w-38 lg:h-38 rounded-full object-cover border-4 border-[#8B5CF6] transition-opacity duration-300 ${isLoading ? 'opacity-0' : 'opacity-100'}`}
+                              onLoad={handleImageLoad}
+                              priority={index === 0}
                             />
-                            <div
-                              className="absolute -top-2 -right-2 w-8 h-8 rounded-full flex items-center justify-center"
-                              style={{ backgroundColor: "#8B5CF6" }}
-                            >
-                              <Quote className="w-4 h-4" style={{ color: "#FFFFFF" }} />
+                            <div className="absolute -top-2 -right-2 w-8 h-8 rounded-full flex items-center justify-center bg-[#8B5CF6]">
+                              <Quote className="w-4 h-4 text-white" />
                             </div>
                           </div>
                         </div>
                         <div className="flex-1 text-center lg:text-left">
-                          <blockquote
-                            className="text-lg lg:text-xl mb-6 italic select-none"
-                            style={{
-                              color: "#1A1F2C",
-                              fontFamily: "DM Sans, sans-serif",
-                              fontWeight: "400",
-                              lineHeight: "1.6",
-                            }}
-                          >
+                          <blockquote className="text-lg lg:text-xl mb-6 italic select-none text-[#1A1F2C] font-dm-sans font-normal leading-relaxed">
                             "{testimonial.testimonial}"
                           </blockquote>
                           <div>
-                            <h4
-                              className="font-bold text-lg lg:text-xl mb-1"
-                              style={{
-                                color: "#1A1F2C",
-                                fontFamily: "DM Sans, sans-serif",
-                                fontWeight: "600",
-                              }}
-                            >
+                            <h4 className="text-lg lg:text-xl mb-1 text-[#1A1F2C] font-dm-sans font-semibold">
                               {testimonial.name}
                             </h4>
-                            <p
-                              className="text-sm lg:text-base"
-                              style={{
-                                color: "#8B5CF6",
-                                fontFamily: "DM Sans, sans-serif",
-                                fontWeight: "500",
-                              }}
-                            >
+                            <p className="text-sm lg:text-base text-[#8B5CF6] font-dm-sans font-medium">
                               {testimonial.role}
                             </p>
-                            <p
-                              className="text-sm"
-                              style={{
-                                color: "#8E9196",
-                                fontFamily: "DM Sans, sans-serif",
-                                fontWeight: "400",
-                              }}
-                            >
+                            <p className="text-sm text-[#8E9196] font-dm-sans font-normal">
                               {testimonial.company}
                             </p>
                           </div>
@@ -206,7 +171,11 @@ export function TestimonialsSection() {
               size="sm"
               onClick={() => carouselRef.current && carouselRef.current.scrollPrev()}
               disabled={carouselRef.current && carouselRef.current.selectedScrollSnap() === 0}
-              className={`w-12 h-12 rounded-full border-2 transition-all hover:scale-110 ${carouselRef.current && carouselRef.current.selectedScrollSnap() === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
+              className={`w-12 h-12 rounded-full border-2 transition-all duration-300 hover:scale-110 ${
+                carouselRef.current && carouselRef.current.selectedScrollSnap() === 0 
+                  ? 'opacity-50 cursor-not-allowed' 
+                  : 'hover:bg-[#8B5CF6] hover:text-white'
+              }`}
               style={{
                 borderColor: "#8B5CF6",
                 color: "#8B5CF6",
@@ -220,7 +189,11 @@ export function TestimonialsSection() {
               size="sm"
               onClick={() => carouselRef.current && carouselRef.current.scrollNext()}
               disabled={carouselRef.current && carouselRef.current.selectedScrollSnap() === testimonials.length - 1}
-              className={`w-12 h-12 rounded-full border-2 transition-all hover:scale-110 ${carouselRef.current && carouselRef.current.selectedScrollSnap() === testimonials.length - 1 ? 'opacity-50 cursor-not-allowed' : ''}`}
+              className={`w-12 h-12 rounded-full border-2 transition-all duration-300 hover:scale-110 ${
+                carouselRef.current && carouselRef.current.selectedScrollSnap() === testimonials.length - 1 
+                  ? 'opacity-50 cursor-not-allowed' 
+                  : 'hover:bg-[#8B5CF6] hover:text-white'
+              }`}
               style={{
                 borderColor: "#8B5CF6",
                 color: "#8B5CF6",

@@ -1,6 +1,5 @@
 "use client";
 import { useEffect, useState } from "react";
-import { mockDb } from "@/lib/mock-db";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -13,12 +12,15 @@ import { toast } from "sonner";
 import { useAuth } from "@/lib/context/auth-context";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import type { User } from "@/lib/mock-db";
+import { storageUtils } from "@/lib/local-storage";
+import { useRouter } from "next/navigation";
 
 type ConfirmModalProps = {
   open: boolean;
   onConfirm: () => void;
   onCancel: () => void;
 };
+
 const ConfirmModal = ({ open, onConfirm, onCancel }: ConfirmModalProps) => {
   if (!open) return null;
   return (
@@ -43,8 +45,39 @@ type UserDetailModalProps = {
   open: boolean;
   onClose: () => void;
 };
+
 const UserDetailModal = ({ user, open, onClose }: UserDetailModalProps) => {
   if (!open || !user) return null;
+
+  const getRoleLabel = (role: User["role"]) => {
+    switch (role) {
+      case "admin":
+        return "Administrador";
+      case "company":
+        return "Empresa";
+      case "student":
+        return "Estudiante";
+      default:
+        return role;
+    }
+  };
+
+  const formatDate = (dateString: string) => {
+    try {
+      const date = new Date(dateString);
+      if (isNaN(date.getTime())) {
+        return "Fecha no disponible";
+      }
+      return date.toLocaleDateString('es-ES', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+      });
+    } catch (error) {
+      return "Fecha no disponible";
+    }
+  };
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
       <Card className="w-11/12 max-w-lg">
@@ -67,14 +100,19 @@ const UserDetailModal = ({ user, open, onClose }: UserDetailModalProps) => {
                   : user.role === "company"
                   ? "bg-blue-100 text-blue-700 px-2 py-1 rounded text-xs font-semibold"
                   : "bg-green-100 text-green-700 px-2 py-1 rounded text-xs font-semibold"
-              }>{user.role}</span>
+              }>{getRoleLabel(user.role)}</span>
             </div>
             <div>
-              <span className="font-semibold">Fecha de registro:</span> {user.id ? new Date(Number(user.id)).toLocaleDateString() : "-"}
+              <span className="font-semibold">Fecha de registro:</span> {formatDate(user.createdAt)}
             </div>
-            {user.isPrimaryAdmin && <div className="text-xs text-purple-700 font-bold">Admin principal</div>}
+            {user.isPrimaryAdmin && <div className="text-xs text-purple-700 font-bold">Administrador principal</div>}
           </div>
-          <Button className="mt-6 w-full" onClick={onClose}>Cerrar</Button>
+          <Button 
+            className="mt-6 w-full bg-purple-600 hover:bg-purple-700 text-white" 
+            onClick={onClose}
+          >
+            Cerrar
+          </Button>
         </CardContent>
       </Card>
     </div>
@@ -92,11 +130,66 @@ const AdminUsuariosPage = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [userToDelete, setUserToDelete] = useState<User | null>(null);
+  const router = useRouter();
+
+  const formatDate = (dateString: string) => {
+    try {
+      const date = new Date(dateString);
+      if (isNaN(date.getTime())) {
+        return "Fecha no disponible";
+      }
+      return date.toLocaleDateString('es-ES', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+      });
+    } catch (error) {
+      return "Fecha no disponible";
+    }
+  };
+
+  const getRoleLabel = (role: User["role"]) => {
+    switch (role) {
+      case "admin":
+        return "Administrador";
+      case "company":
+        return "Empresa";
+      case "student":
+        return "Estudiante";
+      default:
+        return role;
+    }
+  };
+
+  const getRoleStyle = (role: User["role"]) => {
+    switch (role) {
+      case "admin":
+        return "bg-purple-100 text-purple-700 px-2 py-1 rounded text-xs font-semibold";
+      case "company":
+        return "bg-blue-100 text-blue-700 px-2 py-1 rounded text-xs font-semibold";
+      case "student":
+        return "bg-green-100 text-green-700 px-2 py-1 rounded text-xs font-semibold";
+      default:
+        return "";
+    }
+  };
 
   useEffect(() => {
-    setUsers(mockDb.getAllUsers());
-    setLoading(false);
-  }, []);
+    if (!currentUser || currentUser.role !== "admin") {
+      toast.error("Acceso denegado");
+      router.push("/dashboard");
+      return;
+    }
+
+    try {
+      const storedUsers = storageUtils.getUsers();
+      setUsers(storedUsers);
+    } catch (error) {
+      toast.error("Error al cargar los usuarios. Por favor, revise los datos en localStorage.");
+    } finally {
+      setLoading(false);
+    }
+  }, [currentUser, router]);
 
   const handleRoleChange = (userId: string, newRole: User["role"]) => {
     setEditedRoles((prev) => ({ ...prev, [userId]: newRole }));
@@ -104,22 +197,18 @@ const AdminUsuariosPage = () => {
 
   const handleSaveRole = (userId: string) => {
     if (!currentUser) return;
-    const userToUpdate = users.find((u) => u.id === userId);
-    if (!userToUpdate) return;
-    try {
-      mockDb.assignAdminRole(userToUpdate.email, currentUser.email);
-      const updatedUsers = users.map((u) =>
-        u.id === userId ? { ...u, role: editedRoles[userId] } : u
-      );
-      setUsers(updatedUsers);
+    const result = storageUtils.updateUserRole(userId, editedRoles[userId]);
+    
+    if (result.success) {
+      setUsers(storageUtils.getUsers());
       setEditedRoles((prev) => {
         const copy = { ...prev };
         delete copy[userId];
         return copy;
       });
       toast.success("Rol actualizado correctamente");
-    } catch (error: any) {
-      toast.error(error.message || "Error al actualizar el rol");
+    } else {
+      toast.error(result.error || "Error al actualizar el rol");
     }
   };
 
@@ -133,15 +222,16 @@ const AdminUsuariosPage = () => {
 
   const confirmDelete = () => {
     if (!userToDelete || !currentUser) return;
-    if (userToDelete.isPrimaryAdmin || userToDelete.id === currentUser.id) {
-      toast.error("No puedes eliminar este usuario");
+    const result = storageUtils.deleteUser(userToDelete.id);
+    
+    if (result.success) {
+      setUsers(storageUtils.getUsers());
       setConfirmOpen(false);
-      return;
+      toast.success("Usuario eliminado correctamente");
+    } else {
+      toast.error(result.error || "Error al eliminar el usuario");
+      setConfirmOpen(false);
     }
-    mockDb.deleteUser(userToDelete.email);
-    setUsers(users.filter((u) => u.id !== userToDelete.id));
-    setConfirmOpen(false);
-    toast.success("Usuario eliminado correctamente");
   };
 
   const handleViewUser = (user: User) => {
@@ -151,6 +241,19 @@ const AdminUsuariosPage = () => {
 
   if (loading) {
     return <div className="flex justify-center items-center h-96">Cargando usuarios...</div>;
+  }
+
+  if (users.length === 0) {
+    return (
+      <div className="container py-8">
+        <h1 className="text-3xl font-bold mb-6 text-center">Gestión de Usuarios</h1>
+        <Card>
+          <CardContent className="py-8">
+            <p className="text-center text-gray-500">No se encontraron usuarios registrados.</p>
+          </CardContent>
+        </Card>
+      </div>
+    );
   }
 
   return (
@@ -182,17 +285,11 @@ const AdminUsuariosPage = () => {
                         </td>
                         <td className="px-6 py-4 break-words max-w-xs">{user.email}</td>
                         <td className="px-6 py-4">
-                          <span className={
-                            editedRole === "admin"
-                              ? "bg-purple-100 text-purple-700 px-2 py-1 rounded text-xs font-semibold"
-                              : editedRole === "company"
-                              ? "bg-blue-100 text-blue-700 px-2 py-1 rounded text-xs font-semibold"
-                              : "bg-green-100 text-green-700 px-2 py-1 rounded text-xs font-semibold"
-                          }>
-                            {editedRole}
+                          <span className={getRoleStyle(editedRole)}>
+                            {getRoleLabel(editedRole)}
                           </span>
                         </td>
-                        <td className="px-6 py-4">{user.id ? new Date(Number(user.id)).toLocaleDateString() : "-"}</td>
+                        <td className="px-6 py-4">{formatDate(user.createdAt)}</td>
                         <td className="px-6 py-4 flex flex-wrap gap-2">
                           <Select
                             value={editedRole}
@@ -205,7 +302,7 @@ const AdminUsuariosPage = () => {
                             <SelectContent>
                               <SelectItem value="student">Estudiante</SelectItem>
                               <SelectItem value="company">Empresa</SelectItem>
-                              <SelectItem value="admin">Admin</SelectItem>
+                              <SelectItem value="admin">Administrador</SelectItem>
                             </SelectContent>
                           </Select>
                           <Button
@@ -225,7 +322,11 @@ const AdminUsuariosPage = () => {
                           >
                             Eliminar
                           </Button>
-                          <Button size="sm" variant="secondary" onClick={() => handleViewUser(user)}>
+                          <Button 
+                            size="sm" 
+                            className="bg-purple-600 hover:bg-purple-700 text-white" 
+                            onClick={() => handleViewUser(user)}
+                          >
                             Ver
                           </Button>
                         </td>
@@ -254,18 +355,12 @@ const AdminUsuariosPage = () => {
               </div>
               <div className="mb-2">
                 <span className="font-semibold">Rol: </span>
-                <span className={
-                  editedRole === "admin"
-                    ? "bg-purple-100 text-purple-700 px-2 py-1 rounded text-xs font-semibold"
-                    : editedRole === "company"
-                    ? "bg-blue-100 text-blue-700 px-2 py-1 rounded text-xs font-semibold"
-                    : "bg-green-100 text-green-700 px-2 py-1 rounded text-xs font-semibold"
-                }>
-                  {editedRole}
+                <span className={getRoleStyle(editedRole)}>
+                  {getRoleLabel(editedRole)}
                 </span>
               </div>
               <div className="mb-2">
-                <span className="font-semibold">Fecha: </span>{user.id ? new Date(Number(user.id)).toLocaleDateString() : "-"}
+                <span className="font-semibold">Fecha: </span>{formatDate(user.createdAt)}
               </div>
               <div className="flex flex-wrap gap-2 mt-2">
                 <Select
@@ -279,7 +374,7 @@ const AdminUsuariosPage = () => {
                   <SelectContent>
                     <SelectItem value="student">Estudiante</SelectItem>
                     <SelectItem value="company">Empresa</SelectItem>
-                    <SelectItem value="admin">Admin</SelectItem>
+                    <SelectItem value="admin">Administrador</SelectItem>
                   </SelectContent>
                 </Select>
                 <Button

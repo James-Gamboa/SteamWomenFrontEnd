@@ -374,10 +374,10 @@ export function EventCard({
               rel="noopener noreferrer"
               className="flex items-center gap-1 text-[#8B5CF6] bg-gray-50 rounded px-3 py-1.5 hover:bg-[#ede9fe] transition focus:outline-none focus:ring-2"
               tabIndex={0}
-              aria-label={type === "event" ? "Ir al evento" : "Ir a la oportunidad"}
+              aria-label={type === "event" ? "Ir al evento" : "Ver"}
             >
               <Eye className="h-4 w-4" />
-              {type === "event" ? "Ir al evento" : "Ir a la oportunidad"}
+              {type === "event" ? "Ir al evento" : "Ver"}
             </a>
           </div>
         )}

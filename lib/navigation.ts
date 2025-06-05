@@ -28,7 +28,7 @@ export const navigationByRole = {
     },
     {
       title: "Ver Candidatos",
-      href: "/dashboard/postulaciones-aplicadas",
+      href: "/dashboard/oportunidades-aplicadas",
       icon: FileText,
     },
     {

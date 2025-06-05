@@ -8,17 +8,20 @@ import { useAuth } from "@/lib/context/auth-context";
 import { toast } from "sonner";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
+interface Event {
+  id: string;
+  title: string;
+  date: string;
+  time: string;
+  location: string;
+  organizer: string;
+  website: string;
+  category: string;
+  slug: string;
+}
+
 interface EventDetailSidebarProps {
-  event: {
-    website: string;
-    date: string;
-    time: string;
-    location: string;
-    organizer: string;
-    title?: string;
-    slug?: string;
-    category: string;
-  };
+  event: Event;
   formatDate: (dateString: string) => string;
   isSticky: boolean;
 }
@@ -37,7 +40,10 @@ export function EventDetailSidebar({
       toast.error("Debes iniciar sesión para registrarte en el evento.");
       return;
     }
-    if (user.role !== "student") return;
+    if (user.role !== "student") {
+      toast.error("Solo los estudiantes pueden registrarse a eventos.");
+      return;
+    }
     const registrations = JSON.parse(localStorage.getItem("student_event_registrations") || "[]");
     const alreadyRegistered = registrations.some(
       (reg: any) => reg.userId === user.id && reg.eventSlug === event.slug
@@ -51,6 +57,7 @@ export function EventDetailSidebar({
 
   const handleConfirm = () => {
     if (!user) return;
+
     const registrations = JSON.parse(localStorage.getItem("student_event_registrations") || "[]");
     const province = event.location.split(",")[0].trim();
     registrations.push({
@@ -62,8 +69,23 @@ export function EventDetailSidebar({
       fechaRegistro: new Date().toISOString(),
       provincia: province,
       categoria: event.category,
+      estado: "Pendiente"
     });
     localStorage.setItem("student_event_registrations", JSON.stringify(registrations));
+
+    const organizerRegistrations = JSON.parse(localStorage.getItem("organizer_event_registrations") || "[]");
+    organizerRegistrations.push({
+      eventId: event.id,
+      eventTitle: event.title,
+      organizer: event.organizer,
+      registrantId: user.id,
+      registrantName: `${user.firstName} ${user.lastName}`,
+      registrantEmail: user.email,
+      fechaRegistro: new Date().toISOString(),
+      estado: "Pendiente"
+    });
+    localStorage.setItem("organizer_event_registrations", JSON.stringify(organizerRegistrations));
+
     setModalOpen(false);
     toast.success("¡Registro exitoso!");
   };
@@ -77,40 +99,45 @@ export function EventDetailSidebar({
         style={{ backgroundColor: "#F1F0FB" }}
       >
         <CardHeader>
-          <Button
-            className="w-full mb-4 py-6 text-lg shadow-md transform transition-transform hover:scale-[1.02] active:scale-[0.98]"
-            style={{
-              backgroundColor: "#8B5CF6",
-              color: "#FFFFFF",
-              fontFamily: "DM Sans, sans-serif",
-              fontSize: "16px",
-              fontWeight: "600",
-              borderRadius: "8px",
-            }}
-            onClick={handleRegisterClick}
-          >
-            Inscribirse al evento
-          </Button>
-          <Dialog open={modalOpen} onOpenChange={setModalOpen}>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>¿Deseas registrarte a este evento?</DialogTitle>
-              </DialogHeader>
-              <div className="mb-4">
-                <p className="font-semibold">{event.title}</p>
-                <p className="text-sm text-[#8E9196]">{event.organizer}</p>
-                <p className="text-xs text-[#8E9196]">{formatDate(event.date)}</p>
-              </div>
-              <DialogFooter>
-                <Button variant="outline" onClick={() => setModalOpen(false)}>
-                  Cancelar
-                </Button>
-                <Button className="bg-[#8B5CF6] hover:bg-[#7C3AED]" onClick={handleConfirm}>
-                  Confirmar registro
-                </Button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
+          {
+            <Button
+              className="w-full mb-4 py-6 text-lg shadow-md transform transition-transform hover:scale-[1.02] active:scale-[0.98]"
+              style={{
+                backgroundColor: "#8B5CF6",
+                color: "#FFFFFF",
+                fontFamily: "DM Sans, sans-serif",
+                fontSize: "16px",
+                fontWeight: "600",
+                borderRadius: "8px",
+              }}
+              onClick={handleRegisterClick}
+            >
+              Inscribirse al evento
+            </Button>
+          }
+          {user?.role === "student" && (
+            <Dialog open={modalOpen} onOpenChange={setModalOpen}>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>¿Deseas registrarte a este evento?</DialogTitle>
+                </DialogHeader>
+                <div className="mb-4">
+                  <p className="font-semibold">{event.title}</p>
+                  <p className="text-sm text-[#8E9196]">{event.organizer}</p>
+                  <p className="text-xs text-[#8E9196]">{formatDate(event.date)}</p>
+                  <p className="text-xs text-[#8E9196] mt-2">Categoría: {event.category}</p>
+                </div>
+                <DialogFooter>
+                  <Button variant="outline" onClick={() => setModalOpen(false)}>
+                    Cancelar
+                  </Button>
+                  <Button className="bg-[#8B5CF6] hover:bg-[#7C3AED]" onClick={handleConfirm}>
+                    Confirmar registro
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+          )}
           <div className="flex gap-2">
             <Button
               variant="outline"
@@ -234,7 +261,7 @@ export function EventDetailSidebar({
                 fontWeight: "600",
               }}
             >
-              Sitio web de la empresa
+              Sitio web del organizador
             </h5>
             <a
               href={event.website}
