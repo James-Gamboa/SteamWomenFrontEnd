@@ -12,7 +12,7 @@ import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
 import Link from "next/link";
 import { EventMeta } from "./event-meta";
-import { ExternalLink, Pencil, Trash2, Eye } from "lucide-react";
+import { ExternalLink, Pencil, Trash2, Eye, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 interface EventCardProps {
@@ -38,6 +38,7 @@ interface EventCardProps {
   isDashboard?: boolean;
   onEdit?: (event: any) => void;
   onDelete?: (event: any) => void;
+  type: "event" | "oportunidad";
 }
 
 export function EventCard({
@@ -48,6 +49,7 @@ export function EventCard({
   isDashboard = false,
   onEdit,
   onDelete,
+  type,
 }: EventCardProps) {
   const cardRef = useRef<HTMLDivElement>(null);
   const lightRef = useRef<HTMLSpanElement>(null);
@@ -112,12 +114,12 @@ export function EventCard({
 
   const handleViewPublic = (e: React.MouseEvent) => {
     e.preventDefault();
-    router.push(`/eventos/${event.slug}`);
+    router.push(`/${type === "event" ? "eventos" : "oportunidades"}/${event.slug}`);
   };
 
   if (variant === "calendar") {
     return (
-      <Link href={`/eventos/${event.slug}`} className="block">
+      <Link href={`/${type === "event" ? "eventos" : "oportunidades"}/${event.slug}`} className="block">
         <Card
           className="overflow-hidden flex hover:shadow-lg border-0 shadow-sm cursor-pointer transition-all hover:scale-[1.01]"
           style={{ backgroundColor: "#FFFFFF" }}
@@ -178,7 +180,7 @@ export function EventCard({
 
   if (!isDashboard) {
     return (
-      <Link href={`/eventos/${event.slug}`} tabIndex={0} style={{ outline: "none" }}>
+      <Link href={`/${type === "event" ? "eventos" : "oportunidades"}/${event.slug}`} tabIndex={0} style={{ outline: "none" }}>
         <div
           ref={cardRef}
           className="event-card relative overflow-hidden rounded-xl border-2 border-transparent group transition-all duration-300 cursor-pointer bg-white shadow-md"
@@ -289,7 +291,7 @@ export function EventCard({
           />
         </>
       )}
-      <Card className="bg-transparent shadow-none border-0">
+      <Card className="bg-white shadow-md hover:shadow-xl rounded-xl p-6 transition-shadow w-full max-w-full">
         <div className="relative">
           <Image
             src={event.image || "/dummy-women.jpg.jpeg"}
@@ -346,6 +348,39 @@ export function EventCard({
             showOrganizer={false}
           />
         </CardContent>
+        {isDashboard && (
+          <div className="flex flex-col md:flex-row md:items-center gap-4 mt-4">
+            <button
+              onClick={e => { e.preventDefault(); onEdit?.(event); }}
+              className="flex items-center gap-1 text-[#8B5CF6] bg-gray-50 rounded px-3 py-1.5 hover:bg-[#ede9fe] transition focus:outline-none focus:ring-2"
+              tabIndex={0}
+              aria-label="Editar"
+            >
+              <Pencil className="h-4 w-4" />
+              Editar
+            </button>
+            <button
+              onClick={e => { e.preventDefault(); onDelete?.(event); }}
+              className="flex items-center gap-1 text-[#EF4444] bg-gray-50 rounded px-3 py-1.5 hover:bg-red-100 transition focus:outline-none focus:ring-2"
+              tabIndex={0}
+              aria-label="Eliminar"
+            >
+              <X className="h-4 w-4" />
+              Eliminar
+            </button>
+            <a
+              href={`/${type === "event" ? "eventos" : "oportunidades"}/${event.slug}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1 text-[#8B5CF6] bg-gray-50 rounded px-3 py-1.5 hover:bg-[#ede9fe] transition focus:outline-none focus:ring-2"
+              tabIndex={0}
+              aria-label={type === "event" ? "Ir al evento" : "Ir a la oportunidad"}
+            >
+              <Eye className="h-4 w-4" />
+              {type === "event" ? "Ir al evento" : "Ir a la oportunidad"}
+            </a>
+          </div>
+        )}
       </Card>
     </div>
   );

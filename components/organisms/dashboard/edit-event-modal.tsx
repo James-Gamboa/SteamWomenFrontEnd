@@ -60,6 +60,8 @@ export function EditEventModal({ event, open, onOpenChange, onEventUpdated }: Ed
   const [formData, setFormData] = useState<Event>(event);
   const toastShown = useRef(false);
 
+  const dateRegex = /^(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-(\d{4})$/;
+
   useEffect(() => {
     if (!open) {
       setCurrentStep(1);
@@ -93,6 +95,19 @@ export function EditEventModal({ event, open, onOpenChange, onEventUpdated }: Ed
   const handleArrayInputChange = (name: string, value: string) => {
     const items = value.split('\n').filter(item => item.trim());
     setFormData(prev => ({ ...prev, [name]: items }));
+  };
+
+  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let value = e.target.value.replace(/[^0-9-]/g, "");
+    if (value.length === 2 || value.length === 5) value += "-";
+    setFormData(prev => ({ ...prev, date: value }));
+  };
+
+  const handleDateBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    if (!dateRegex.test(value)) {
+      toast.error("La fecha debe tener el formato dd-mm-aaaa");
+    }
   };
 
   const handleSubmit = async () => {
@@ -278,12 +293,12 @@ export function EditEventModal({ event, open, onOpenChange, onEventUpdated }: Ed
                 name="date"
                 type="text"
                 value={formData.date}
-                onChange={handleInputChange}
+                onChange={handleDateChange}
+                onBlur={handleDateBlur}
                 required
-                placeholder="dd-mm-aaaa (ej: 08-11-2000)"
+                placeholder="dd-mm-aaaa"
                 className="h-12"
               />
-              <span className="text-xs text-gray-500">Ejemplo: 08-11-2000</span>
             </div>
 
             <div>

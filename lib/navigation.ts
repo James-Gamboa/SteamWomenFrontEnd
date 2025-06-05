@@ -3,107 +3,108 @@ import {
   Calendar,
   Briefcase,
   User,
-  Home,
   Users,
   FileText,
-  Building2,
-  GraduationCap,
-  BarChart3,
   ClipboardList,
-  Lightbulb,
-  Settings,
+  Home,
 } from "lucide-react";
+import { title } from "process";
 
 export const navigationByRole = {
   company: [
     {
-      name: "Dashboard",
+      title: "Dashboard",
       href: "/dashboard",
       icon: LayoutDashboard,
     },
     {
-      name: "Mis Oportunidades",
-      href: "/dashboard/oportunidades",
-      icon: Briefcase,
-    },
-    {
-      name: "Crear Oportunidad",
-      href: "/dashboard/oportunidades/crear",
-      icon: FileText,
-    },
-    {
-      name: "Candidatos Postulados",
-      href: "/dashboard/oportunidades-aplicadas",
-      icon: Users,
-    },
-    {
-      name: "Mis Eventos",
+      title: "Mis Eventos",
       href: "/dashboard/eventos",
       icon: Calendar,
     },
     {
-      name: "Estadísticas",
-      href: "/dashboard/estadisticas",
-      icon: BarChart3,
+      title: "Mis Oportunidades",
+      href: "/dashboard/oportunidades",
+      icon: Briefcase,
     },
     {
-      name: "Perfil",
+      title: "Ver Candidatos",
+      href: "/dashboard/postulaciones-aplicadas",
+      icon: FileText,
+    },
+    {
+      title: "Mi Perfil",
       href: "/dashboard/perfil",
       icon: User,
+    },
+    {
+      title: "Volver al inicio",
+      href: "/",
+      icon: Home,
     },
   ],
   student: [
     {
-      name: "Dashboard",
+      title: "Dashboard",
       href: "/dashboard",
       icon: LayoutDashboard,
     },
     {
-      name: "Mis Postulaciones",
+      title: "Mis Postulaciones",
       href: "/dashboard/oportunidades-aplicadas",
       icon: ClipboardList,
     },
     {
-      name: "Eventos Inscritos",
+      title: "Eventos Inscritos",
       href: "/dashboard/eventos-inscritos",
       icon: Calendar,
     },
     {
-      name: "Perfil",
+      title: "Perfil",
       href: "/dashboard/perfil",
       icon: User,
+    },
+    {
+      title: "Volver al inicio",
+      href: "/",
+      icon: Home,
     },
   ],
   admin: [
     {
-      name: "Dashboard",
+      title: "Dashboard",
       href: "/dashboard",
       icon: LayoutDashboard,
     },
     {
-      name: "Usuarios",
+      title: "Usuarios",
       href: "/dashboard/usuarios",
       icon: Users,
     },
     {
-      name: "Oportunidades",
-      href: "/dashboard/oportunidades",
-      icon: Briefcase,
-    },
-    {
-      name: "Eventos",
+      title: "Eventos",
       href: "/dashboard/eventos",
       icon: Calendar,
     },
     {
-      name: "Postulaciones",
-      href: "/dashboard/postulaciones",
-      icon: ClipboardList,
+      title: "Oportunidades",
+      href: "/dashboard/oportunidades",
+      icon: Briefcase,
     },
     {
-      name: "Configuración",
-      href: "/dashboard/configuracion",
-      icon: Settings,
+      title: "Postulaciones",
+      href: "/dashboard/postulaciones",
+      icon: FileText,
+    },
+    {
+      title: "Mi Perfil",
+      href: "/dashboard/perfil",
+      icon: User,
+    },
+    {
+      title: "Volver al inicio",
+      href: "/",
+      icon: Home,
     },
   ],
 }; 

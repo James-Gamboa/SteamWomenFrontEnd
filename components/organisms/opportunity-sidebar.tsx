@@ -51,20 +51,20 @@ export function OpportunitySidebar({ opportunity }: { opportunity: any }) {
       <CardHeader>
         {user?.role === "student" && (
           <>
-            <Button
-              className="w-full mb-4 py-6 text-lg shadow-md transform transition-transform hover:scale-[1.02] active:scale-[0.98]"
-              style={{
-                backgroundColor: "#8B5CF6",
-                color: "#FFFFFF",
-                fontFamily: "DM Sans, sans-serif",
-                fontSize: "16px",
-                fontWeight: "600",
-                borderRadius: "8px",
-              }}
+        <Button
+          className="w-full mb-4 py-6 text-lg shadow-md transform transition-transform hover:scale-[1.02] active:scale-[0.98]"
+          style={{
+            backgroundColor: "#8B5CF6",
+            color: "#FFFFFF",
+            fontFamily: "DM Sans, sans-serif",
+            fontSize: "16px",
+            fontWeight: "600",
+            borderRadius: "8px",
+          }}
               onClick={handleApplyClick}
-            >
-              Aplicar ahora
-            </Button>
+        >
+          Aplicar ahora
+        </Button>
             <Dialog open={modalOpen} onOpenChange={setModalOpen}>
               <DialogContent>
                 <DialogHeader>

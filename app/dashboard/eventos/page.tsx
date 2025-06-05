@@ -119,15 +119,15 @@ export default function EventsPage() {
     };
 
     switch (category.toLowerCase()) {
-      case "networking":
+      case "conferencia":
         return { backgroundColor: "#F1F0FB", color: "#8B5CF6" };
       case "taller":
         return { backgroundColor: "#F0FDF4", color: "#22C55E" };
-      case "webinar":
+      case "networking":
         return { backgroundColor: "#FEF2F2", color: "#EF4444" };
-      case "conferencia":
-        return { backgroundColor: "#FEF3C7", color: "#D97706" };
       case "hackathon":
+        return { backgroundColor: "#FEF3C7", color: "#D97706" };
+      case "otro":
         return { backgroundColor: "#E0E7FF", color: "#6366F1" };
       default:
         return styles;
@@ -169,6 +169,7 @@ export default function EventsPage() {
             isDashboard={true}
             onEdit={handleEdit}
             onDelete={handleDelete}
+            type="event"
           />
         ))}
       </div>

@@ -10,29 +10,40 @@ import {
   Home,
   ChevronLeft,
   ChevronRight,
+  LayoutDashboard,
+  Calendar,
+  Briefcase,
+  User,
+  Users,
+  FileText,
+  Building2,
+  GraduationCap,
+  BarChart3,
+  ClipboardList,
+  Lightbulb,
+  Settings,
+  Plus,
 } from "lucide-react";
 import { Dispatch, SetStateAction, useState } from "react";
 import { useAuth } from "@/lib/context/auth-context";
 import { toast } from "sonner";
-import { navigationByRole } from "@/lib/navigation";
 import { getRoleLabel } from "@/utils/role-label";
+import { navigationByRole } from "@/lib/navigation";
 
 interface SidebarProps {
-  open: boolean;
-  setOpen: (open: boolean) => void;
-  onLogout: () => void;
+  open?: boolean;
+  setOpen?: (open: boolean) => void;
+  onLogout?: () => void;
 }
 
 export function Sidebar({ open, setOpen, onLogout }: SidebarProps) {
-  const pathname = usePathname();
+  const { user, logout } = useAuth();
   const router = useRouter();
-  const { user } = useAuth();
+  const pathname = usePathname();
   const [collapsed, setCollapsed] = useState(false);
 
-  const handleNavClick = () => setOpen(false);
-
   const handleLogout = () => {
-    onLogout();
+    logout();
     toast.success("¡Sesión cerrada exitosamente!", {
       style: {
         backgroundColor: "#F1F0FB",
@@ -43,12 +54,12 @@ export function Sidebar({ open, setOpen, onLogout }: SidebarProps) {
         fontWeight: "500",
       },
     });
-    setTimeout(() => {
       router.push("/");
-    }, 100);
   };
 
-  const navigation = user?.role ? navigationByRole[user.role as keyof typeof navigationByRole] : [];
+  if (!user) return null;
+
+  const navigation = navigationByRole[user.role] || [];
 
   const Drawer = (
     <div className={cn(
@@ -60,7 +71,7 @@ export function Sidebar({ open, setOpen, onLogout }: SidebarProps) {
           "fixed inset-0 bg-black/40 transition-opacity",
           open ? "opacity-100" : "opacity-0"
         )}
-        onClick={() => setOpen(false)}
+        onClick={() => setOpen?.(false)}
         aria-label="Cerrar menú"
         tabIndex={open ? 0 : -1}
       />
@@ -74,7 +85,7 @@ export function Sidebar({ open, setOpen, onLogout }: SidebarProps) {
           <span className="text-2xl font-extrabold text-[#8B5CF6] tracking-wide">STEAMWomen</span>
           <button
             className="md:hidden p-2 rounded hover:bg-[#ede9fe]"
-            onClick={() => setOpen(false)}
+            onClick={() => setOpen?.(false)}
             aria-label="Cerrar menú"
           >
             <X className="h-6 w-6" />
@@ -85,9 +96,12 @@ export function Sidebar({ open, setOpen, onLogout }: SidebarProps) {
             const isActive = pathname === item.href;
             return (
               <Link
-                key={item.name}
+                key={item.title}
                 href={item.href}
-                onClick={handleNavClick}
+                onClick={() => {
+                  router.push(item.href);
+                  if (setOpen) setOpen(false);
+                }}
                 className={cn(
                   "flex items-center gap-3 px-4 py-2 rounded-lg font-medium transition-colors",
                   isActive
@@ -96,7 +110,7 @@ export function Sidebar({ open, setOpen, onLogout }: SidebarProps) {
                 )}
               >
                 <item.icon className="h-5 w-5" />
-                {item.name}
+                {item.title}
               </Link>
             );
           })}
@@ -105,7 +119,10 @@ export function Sidebar({ open, setOpen, onLogout }: SidebarProps) {
           <Link
             href="/"
             className="flex items-center gap-2 text-[#8B5CF6] font-bold text-lg py-2"
-            onClick={handleNavClick}
+            onClick={() => {
+              router.push("/");
+              if (setOpen) setOpen(false);
+            }}
           >
             <Home className="h-5 w-5" />
             Volver al Home
@@ -113,10 +130,7 @@ export function Sidebar({ open, setOpen, onLogout }: SidebarProps) {
           <Button
             variant="ghost"
             className="flex items-center gap-2 text-[#8B5CF6] hover:bg-[#ede9fe] py-2"
-            onClick={() => {
-              setOpen(false);
-              handleLogout();
-            }}
+            onClick={handleLogout}
           >
             <LogOut className="h-5 w-5" />
             Cerrar sesión
@@ -154,7 +168,7 @@ export function Sidebar({ open, setOpen, onLogout }: SidebarProps) {
           const isActive = pathname === item.href;
           return (
             <Link
-              key={item.name}
+              key={item.title}
               href={item.href}
               className={cn(
                 "flex items-center gap-3 px-4 py-2 rounded-lg font-medium transition-colors",
@@ -164,22 +178,10 @@ export function Sidebar({ open, setOpen, onLogout }: SidebarProps) {
               )}
             >
               <item.icon className="h-5 w-5" />
-              {!collapsed && <span>{item.name}</span>}
+              {!collapsed && <span>{item.title}</span>}
             </Link>
           );
         })}
-        <Link
-          href="/"
-          className={cn(
-            "flex items-center gap-3 px-4 py-2 rounded-lg font-medium transition-colors mt-2",
-            pathname === "/"
-              ? "bg-[#8B5CF6] text-white shadow"
-              : "text-[#1A1F2C] dark:text-[#C8C8C9] hover:bg-[#ede9fe] dark:hover:bg-[#2a2342]"
-          )}
-        >
-          <Home className="h-5 w-5" />
-          {!collapsed && <span>Volver al inicio</span>}
-        </Link>
       </nav>
       <div className="mt-auto px-4 py-4 border-t border-gray-100 dark:border-gray-800">
         <Button

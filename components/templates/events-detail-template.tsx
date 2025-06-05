@@ -10,20 +10,20 @@ import { EventDetailSimilar } from "@/components/organisms/event-detail-similar"
 
 interface EventsDetailTemplateProps {
   event: {
-    id: number;
-    title: string;
-    description: string;
-    location: string;
-    date: string;
-    time: string;
-    category: string;
-    organizer: string;
-    website: string;
-    slug: string;
-    image: string;
-    fullDescription: string;
-    requirements: string[];
-    benefits: string[];
+  id: number;
+  title: string;
+  description: string;
+  location: string;
+  date: string;
+  time: string;
+  category: string;
+  organizer: string;
+  website: string;
+  slug: string;
+  image: string;
+  fullDescription: string;
+  requirements: string[];
+  benefits: string[];
     applicationProcess?: string;
   };
 }
@@ -139,12 +139,11 @@ export function EventsDetailTemplate({ event }: EventsDetailTemplateProps) {
             </div>
           </div>
         </div>
-        {/* Opcional: puedes ajustar cómo se obtienen los similares si lo deseas */}
-        {/* <EventDetailSimilar
+        <EventDetailSimilar
           similarEvents={similarEvents}
           getCategoryStyles={getCategoryStyles}
           formatDate={formatDateObject}
-        /> */}
+        /> 
       </div>
     </div>
   );

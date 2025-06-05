@@ -79,7 +79,7 @@ export default function DashboardPage() {
               Crea y administra tus ofertas
             </p>
             <Button asChild className="mt-4 w-full bg-[#8B5CF6] hover:bg-[#7C3AED]">
-              <Link href="/dashboard/oportunidades">Ver Oportunidades</Link>
+              <Link href="/dashboard/oportunidades">Ver Mis Oportunidades</Link>
             </Button>
           </CardContent>
         </Card>
@@ -95,7 +95,7 @@ export default function DashboardPage() {
               Gestiona las postulaciones recibidas
             </p>
             <Button asChild className="mt-4 w-full bg-[#8B5CF6] hover:bg-[#7C3AED]">
-              <Link href="/dashboard/oportunidades-aplicadas">Ver Candidatos</Link>
+              <Link href="/dashboard/oportunidades-aplicadas">Ver Mis Candidatos</Link>
             </Button>
           </CardContent>
         </Card>
@@ -111,7 +111,7 @@ export default function DashboardPage() {
               Crea y gestiona tus eventos
             </p>
             <Button asChild className="mt-4 w-full bg-[#8B5CF6] hover:bg-[#7C3AED]">
-              <Link href="/dashboard/eventos">Ver Eventos</Link>
+              <Link href="/dashboard/eventos">Ver Mis Eventos</Link>
             </Button>
           </CardContent>
         </Card>
