@@ -150,4 +150,23 @@ class DataStorage {
   }
 }
 
-export const dataStorage = DataStorage.getInstance(); 
+export const dataStorage = DataStorage.getInstance();
+
+export function ensureAdminUser() {
+  const users = JSON.parse(localStorage.getItem("users") || "[]");
+  const adminUser = {
+    id: Date.now(),
+    name: "Admin",
+    email: "jjguevarag@gmail.com",
+    password: "admin",
+    role: "admin",
+    company: ""
+  };
+  const exists = users.some((u: any) => u.email === adminUser.email);
+  if (!exists) {
+    users.push(adminUser);
+    localStorage.setItem("users", JSON.stringify(users));
+  }
+}
+
+ensureAdminUser(); 
