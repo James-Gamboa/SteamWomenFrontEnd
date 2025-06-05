@@ -15,21 +15,28 @@ export async function POST(request: Request) {
     }
 
     try {
-      const user = mockDb.validateLogin(email, password, role);
+      const user = mockDb.validateLogin(email, password);
       const token = "mock-jwt-token";
       
-      return NextResponse.json({
-        token,
-        user: {
-          id: user.id,
-          email: user.email,
-          role: user.role,
-          firstName: user.firstName,
-          lastName: user.lastName,
-          organizationName: user.organizationName,
-          isPrimaryAdmin: user.isPrimaryAdmin
-        }
-      });
+      if (user.role === "admin" || user.role === role) {
+        return NextResponse.json({
+          token,
+          user: {
+            id: user.id,
+            email: user.email,
+            role: user.role,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            organizationName: 'organizationName' in user ? user.organizationName : undefined,
+            isPrimaryAdmin: user.isPrimaryAdmin
+          }
+        });
+      } else {
+        return NextResponse.json(
+          { error: "El tipo de cuenta seleccionado no coincide con el usuario." },
+          { status: 401 }
+        );
+      }
     } catch (error) {
       console.error('Login validation error:', error);
       return NextResponse.json(

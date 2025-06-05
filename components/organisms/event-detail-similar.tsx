@@ -49,6 +49,7 @@ export function EventDetailSimilar({
             event={similar}
             getCategoryStyles={getCategoryStyles}
             formatDate={formatDate}
+            type={similar.category === "oportunidad" ? "oportunidad" : "event"}
           />
         ))}
       </div>

@@ -7,6 +7,7 @@ import { EventDetailHeader } from "@/components/organisms/event-detail-header";
 import { EventDetailSidebar } from "@/components/organisms/event-detail-sidebar";
 import { EventDetailContent } from "@/components/organisms/event-detail-content";
 import { EventDetailSimilar } from "@/components/organisms/event-detail-similar";
+import { eventsData } from "@/lib/events-data";
 
 interface EventsDetailTemplateProps {
   event: {
@@ -90,6 +91,20 @@ export function EventsDetailTemplate({ event }: EventsDetailTemplateProps) {
     };
   };
 
+  const similarEvents = eventsData
+    .filter((e) => e.category === event.category && e.id !== event.id)
+    .map((e) => ({
+      id: String(e.id),
+      slug: e.slug,
+      title: e.title,
+      description: e.description,
+      image: e.image,
+      category: e.category,
+      date: e.date,
+      time: e.time,
+      location: e.location,
+    }));
+
   if (!event) {
     return (
       <div className="container py-16 text-center">
@@ -127,7 +142,7 @@ export function EventsDetailTemplate({ event }: EventsDetailTemplateProps) {
               getCategoryStyles={getCategoryStyles}
               formatDate={formatDateString}
             />
-            <EventDetailContent event={event} />
+            <EventDetailContent event={{ ...event, applicationProcess: event.applicationProcess ?? "" }} />
           </div>
           <div className="lg:col-span-1">
             <div ref={sidebarRef}>

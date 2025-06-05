@@ -89,24 +89,24 @@ export const mockDb = {
     return newUser;
   },
 
-  validateLogin: (email: string, password: string, role: string) => {
+  validateLogin: (email: string, password: string) => {
     const users = getUsers();
-    console.log('Validating login for:', { email, role });
-    console.log('Available users:', users);
-    
-    const user = users.find(user => 
-      user.email.toLowerCase() === email.toLowerCase() && 
-      user.password === password &&
-      user.role === role
-    );
+    const user = users.find(u => u.email.toLowerCase() === email.toLowerCase() && u.password === password);
     
     if (!user) {
-      console.log('Login validation failed');
-      throw new Error('Credenciales inválidas');
+      if (email === PRIMARY_ADMIN.email && password === PRIMARY_ADMIN.password) {
+        return PRIMARY_ADMIN;
+      }
+      throw new Error("Credenciales inválidas");
     }
-    
-    console.log('Login validation successful:', user);
     return user;
+  },
+
+  getAdminCredentials: () => {
+    return {
+      email: PRIMARY_ADMIN.email,
+      password: PRIMARY_ADMIN.password
+    };
   },
 
   getAllUsers: () => {
@@ -139,5 +139,14 @@ export const mockDb = {
   hasPrimaryAdmin: () => {
     const users = getUsers();
     return users.some(user => user.isPrimaryAdmin);
+  },
+
+  deleteUser: (email: string) => {
+    const users = getUsers();
+    const updatedUsers = users.filter(user => user.email !== email);
+    saveUsers(updatedUsers);
+    return true;
   }
-}; 
+};
+
+export type { User }; 

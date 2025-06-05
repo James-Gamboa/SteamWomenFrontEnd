@@ -88,6 +88,7 @@ export function EventsList({
               event={event}
               getCategoryStyles={getCategoryStyles}
               formatDate={formatDate}
+              type="event"
               isDashboard={false}
             />
           ))}

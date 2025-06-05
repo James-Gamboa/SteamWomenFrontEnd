@@ -8,7 +8,6 @@ import {
   ClipboardList,
   Home,
 } from "lucide-react";
-import { title } from "process";
 
 export const navigationByRole = {
   company: [
@@ -77,28 +76,18 @@ export const navigationByRole = {
       icon: LayoutDashboard,
     },
     {
-      title: "Usuarios",
-      href: "/dashboard/usuarios",
+      title: "Gestión de Usuarios",
+      href: "/dashboard/admin/usuarios",
       icon: Users,
     },
     {
-      title: "Eventos",
-      href: "/dashboard/eventos",
-      icon: Calendar,
+      title: "Estadísticas",
+      href: "/dashboard/admin/estadisticas",
+      icon: ClipboardList,
     },
     {
-      title: "Oportunidades",
-      href: "/dashboard/oportunidades",
-      icon: Briefcase,
-    },
-    {
-      title: "Postulaciones",
-      href: "/dashboard/postulaciones",
-      icon: FileText,
-    },
-    {
-      title: "Mi Perfil",
-      href: "/dashboard/perfil",
+      title: "Configuración",
+      href: "/dashboard/admin/configuracion",
       icon: User,
     },
     {

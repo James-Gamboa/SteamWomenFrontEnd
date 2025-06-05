@@ -3,10 +3,32 @@
 import { useState, useEffect } from "react";
 import { Sidebar } from "@/components/organisms/dashboard/sidebar";
 import { useAuth } from "@/lib/context/auth-context";
-import { redirect } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+
+const AdminRouteGuard = ({ children }: { children: React.ReactNode }) => {
+  const { user, isLoading } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!isLoading && user && user.role !== "admin") {
+      alert("Acceso denegado: No tienes permisos para ver este panel.");
+      router.replace("/home");
+    }
+  }, [user, isLoading, router]);
+
+  if (isLoading) return null;
+  if (!user || user.role !== "admin") {
+    return (
+      <div className="flex flex-col items-center justify-center h-screen">
+        <span className="text-xl font-bold text-red-600">Acceso denegado: No tienes permisos para ver este panel.</span>
+      </div>
+    );
+  }
+  return <>{children}</>;
+};
 
 export default function DashboardLayout({
   children,
@@ -15,6 +37,7 @@ export default function DashboardLayout({
 }) {
   const { user } = useAuth();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     if (!user) {
@@ -23,6 +46,9 @@ export default function DashboardLayout({
   }, [user]);
 
   if (!user) return null;
+
+  const pathname = typeof window !== 'undefined' ? window.location.pathname : '';
+  const isAdminRoute = pathname.startsWith('/dashboard/admin');
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -49,7 +75,13 @@ export default function DashboardLayout({
           </header>
 
           <main className="flex-1 overflow-y-auto p-4 md:p-6">
-            <div className="mx-auto max-w-7xl">{children}</div>
+            <div className="mx-auto max-w-7xl">
+              {isAdminRoute ? (
+                <AdminRouteGuard>{children}</AdminRouteGuard>
+              ) : (
+                children
+              )}
+            </div>
           </main>
         </div>
       </div>
