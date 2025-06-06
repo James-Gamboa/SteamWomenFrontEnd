@@ -1,3 +1,47 @@
+/**
+ * Event Service
+ * 
+ * Este servicio maneja todas las operaciones relacionadas con eventos usando GraphQL.
+ * 
+ * Ejemplo de uso en componentes:
+ * ```typescript
+ * // En un componente
+ * import { eventService } from '@/lib/services/event-service';
+ * 
+ * // Obtener eventos
+ * const events = await eventService.getEvents();
+ * 
+ * // Obtener un evento específico
+ * const event = await eventService.getEvent(id);
+ * 
+ * // Crear evento
+ * const newEvent = await eventService.createEvent({
+ *   title: 'Taller de React',
+ *   description: 'Aprende React desde cero',
+ *   date: '2024-03-20',
+ *   time: '15:00',
+ *   location: 'San José',
+ *   category: 'taller',
+ *   organizer: 'SteamWomen',
+ *   website: 'https://google.com',
+ *   image: 'dummy.jpg',
+ *   fullDescription: 'Descripción detallada...',
+ *   requirements: ['Conocimientos básicos de JavaScript'],
+ *   benefits: ['Certificado de participación'],
+ *   applicationProcess: 'Enviar CV'
+ * });
+ * 
+ * // Actualizar evento
+ * const updatedEvent = await eventService.updateEvent(id, {
+ *   title: 'Nuevo título',
+ *   description: 'Nueva descripción'
+ * });
+ * 
+ * // Eliminar evento
+ * await eventService.deleteEvent(id);
+ * ```
+ */
+
 // TODO: Reemplazar con conexión a Django
 
 import { client } from '@/backend-integration/api';

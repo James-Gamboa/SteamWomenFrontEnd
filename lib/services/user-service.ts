@@ -1,3 +1,35 @@
+/**
+ * User Service
+ * 
+ * Este servicio maneja todas las operaciones relacionadas con usuarios usando GraphQL.
+ * 
+ * Ejemplo de uso en componentes:
+ * ```typescript
+ * // En un componente
+ * import { userService } from '@/lib/services/user-service';
+ * 
+ * // Obtener usuarios
+ * const users = await userService.getUsers();
+ * 
+ * // Crear usuario
+ * const newUser = await userService.createUser({
+ *   email: 'usuario@gmail.com',
+ *   password: '123456',
+ *   firstName: 'James',
+ *   lastName: 'Guevara'
+ * });
+ * 
+ * // Actualizar usuario
+ * const updatedUser = await userService.updateUser(id, {
+ *   firstName: 'Juan',
+ *   lastName: 'Pérez'
+ * });
+ * 
+ * // Eliminar usuario
+ * await userService.deleteUser(id);
+ * ```
+ */
+
 // TODO: Reemplazar con conexión a Django
 
 import { client } from '@/backend-integration/api';

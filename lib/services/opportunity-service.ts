@@ -1,3 +1,48 @@
+/**
+ * Opportunity Service
+ * 
+ * Este servicio maneja todas las operaciones relacionadas con oportunidades usando GraphQL.
+ * 
+ * Ejemplo de uso en componentes:
+ * ```typescript
+ * // En un componente
+ * import { opportunityService } from '@/lib/services/opportunity-service';
+ * 
+ * // Obtener oportunidades
+ * const opportunities = await opportunityService.getOpportunities();
+ * 
+ * // Obtener una oportunidad específica
+ * const opportunity = await opportunityService.getOpportunity(id);
+ * 
+ * // Crear oportunidad
+ * const newOpportunity = await opportunityService.createOpportunity({
+ *   title: 'Desarrollador Frontend',
+ *   description: 'Buscamos desarrollador React',
+ *   date: '2024-03-20',
+ *   time: '09:00',
+ *   location: 'San José',
+ *   category: 'tiempo completo',
+ *   organizer: 'Empresa XYZ',
+ *   website: 'https://google.com',
+ *   slug: 'desarrollador-frontend',
+ *   image: 'dummy.jpg',
+ *   fullDescription: 'Descripción detallada...',
+ *   requirements: ['2 años de experiencia en React'],
+ *   benefits: ['Salario competitivo'],
+ *   applicationProcess: 'Enviar CV y portafolio'
+ * });
+ * 
+ * // Actualizar oportunidad
+ * const updatedOpportunity = await opportunityService.updateOpportunity(id, {
+ *   title: 'Nuevo título',
+ *   description: 'Nueva descripción'
+ * });
+ * 
+ * // Eliminar oportunidad
+ * await opportunityService.deleteOpportunity(id);
+ * ```
+ */
+
 // TODO: Reemplazar con conexión a Django
 
 import { client } from '@/backend-integration/api';
