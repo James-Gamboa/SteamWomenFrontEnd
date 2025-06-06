@@ -30,6 +30,8 @@ import { toast } from "sonner";
 import { getRoleLabel } from "@/utils/role-label";
 import { navigationByRole } from "@/lib/navigation";
 
+// TODO: Reemplazar con conexión a Django 
+
 interface SidebarProps {
   open?: boolean;
   setOpen?: (open: boolean) => void;
@@ -210,4 +212,4 @@ export function Sidebar({ open, setOpen, onLogout }: SidebarProps) {
       {FixedSidebar}
     </>
   );
-} 
+}

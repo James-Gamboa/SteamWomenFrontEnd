@@ -9,6 +9,8 @@ import { toast } from "sonner";
 import { BaseItem } from "@/lib/data-storage";
 import { Calendar, MapPin, Building2, Globe, FileText, Award, Send } from "lucide-react";
 
+// TODO: Reemplazar con conexión a Django 
+
 interface ItemDetailProps {
   id: string;
   type: "event" | "opportunity";
@@ -191,4 +193,4 @@ export function ItemDetail({ id, type, showActions = false, onItemDeleted, onIte
       </Card>
     </div>
   );
-} 
+}

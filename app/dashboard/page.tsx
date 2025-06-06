@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Briefcase, Calendar, Lightbulb, User } from "lucide-react";
 import Link from "next/link";
 
+// TODO: Reemplazar con conexión a Django
+
 export default function DashboardPage() {
   const { user } = useAuth();
 

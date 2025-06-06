@@ -66,6 +66,32 @@ export function AuthModal({
         toast.success("¡Bienvenido de nuevo!");
         onClose();
       } else {
+        if (!formData.email || !formData.password) {
+          setError("Por favor complete todos los campos requeridos");
+          return;
+        }
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(formData.email)) {
+          setError("Por favor ingrese un correo electrónico válido");
+          return;
+        }
+
+        if (formData.password.length < 6) {
+          setError("La contraseña debe tener al menos 6 caracteres");
+          return;
+        }
+
+        if (accountType === "company" && !formData.organizationName) {
+          setError("Por favor ingrese el nombre de la empresa");
+          return;
+        }
+
+        if (accountType === "student" && (!formData.firstName || !formData.lastName)) {
+          setError("Por favor ingrese su nombre y apellido");
+          return;
+        }
+
         await register({
           ...formData,
           role: accountType,
@@ -82,15 +108,17 @@ export function AuthModal({
         onModeChange("login");
       }
     } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "Error al procesar la solicitud";
+      
       if (mode === "register") {
-        const errorMessage = error instanceof Error ? error.message : "";
         if (errorMessage.toLowerCase().includes("email") || errorMessage.toLowerCase().includes("correo")) {
           setError("Este correo electrónico ya está registrado");
+        } else if (errorMessage.toLowerCase().includes("guardar")) {
+          setError("Error al guardar los datos. Por favor, intente nuevamente.");
         } else {
           setError(errorMessage || "Error al crear la cuenta");
         }
       } else {
-        const errorMessage = error instanceof Error ? error.message : "";
         if (errorMessage.toLowerCase().includes("email") || errorMessage.toLowerCase().includes("correo")) {
           setError("El correo electrónico no está registrado");
         } else if (errorMessage.toLowerCase().includes("password") || errorMessage.toLowerCase().includes("contraseña")) {

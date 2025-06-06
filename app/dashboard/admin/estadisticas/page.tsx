@@ -11,6 +11,8 @@ import { useAuth } from "@/lib/context/auth-context";
 import { toast } from "sonner";
 import { Card, CardContent } from "@/components/ui/card";
 
+// TODO: Reemplazar con conexión a Django
+
 const AdminEstadisticasPage = () => {
   const [stats, setStats] = useState({
     total: 0,

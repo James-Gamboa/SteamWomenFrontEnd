@@ -42,6 +42,8 @@ const locations = [
 
 type Location = typeof locations[number];
 
+// TODO: Reemplazar con conexión a Django
+
 export function ItemFilters({
   type,
   category,

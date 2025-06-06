@@ -3,6 +3,9 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
+import { toast } from "sonner";
+
+// TODO: Reemplazar con conexión a Django
 
 interface User {
   id: string;
@@ -40,19 +43,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const router = useRouter();
 
   useEffect(() => {
-    const storedToken = Cookies.get("token");
     const storedUser = localStorage.getItem("user");
+    const storedToken = Cookies.get("token");
     
-    console.log("Checking stored auth:", { storedToken, storedUser });
-    
-    if (storedToken && storedUser) {
+    if (storedUser && storedToken) {
       try {
-        setToken(storedToken);
         setUser(JSON.parse(storedUser));
+        setToken(storedToken);
       } catch (error) {
         console.error("Error parsing stored user:", error);
-        Cookies.remove("token");
         localStorage.removeItem("user");
+        Cookies.remove("token");
       }
     }
     setIsLoading(false);
@@ -60,7 +61,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const login = async (email: string, password: string, role: "student" | "company" | "admin") => {
     try {
-      console.log('Attempting login with:', { email, role });
       const response = await fetch("/api/auth/login", {
         method: "POST",
         headers: {
@@ -70,28 +70,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       });
 
       const data = await response.json();
-      console.log('Login response:', data);
 
       if (!response.ok) {
         throw new Error(data.error || "Error al iniciar sesión");
       }
 
-      Cookies.set("token", data.token, { expires: 7 });
-      localStorage.setItem("user", JSON.stringify(data.user));
-      
       setUser(data.user);
       setToken(data.token);
-      return data.user;
+      localStorage.setItem("user", JSON.stringify(data.user));
+      Cookies.set("token", data.token, { expires: 7 });
     } catch (error) {
-      console.error('Login error:', error);
+      console.error("Login error:", error);
       throw error;
     }
   };
 
   const register = async (userData: RegisterData) => {
     try {
-      console.log("Attempting registration with:", userData);
-      
       const response = await fetch("/api/auth/register", {
         method: "POST",
         headers: {
@@ -101,13 +96,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       });
 
       const data = await response.json();
-      console.log("Registration response:", data);
 
       if (!response.ok) {
-        throw new Error(data.error || "Registration failed");
+        throw new Error(data.error || "Error al registrar usuario");
       }
 
-      console.log("Registration successful");
+      toast.success("¡Cuenta creada exitosamente!");
       return data;
     } catch (error) {
       console.error("Registration error:", error);
@@ -117,8 +111,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const logout = () => {
     setUser(null);
+    setToken(null);
     localStorage.removeItem("user");
-    document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    Cookies.remove("token");
+    router.push("/");
   };
 
   return (

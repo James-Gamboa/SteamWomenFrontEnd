@@ -27,6 +27,8 @@ interface Opportunity {
   applicationProcess: string;
 }
 
+// TODO: Reemplazar con conexión a Django
+
 export default function OpportunitiesPage() {
   const [opportunities, setOpportunities] = useState<Opportunity[]>([]);
   const [selectedOpportunity, setSelectedOpportunity] = useState<Opportunity | null>(null);

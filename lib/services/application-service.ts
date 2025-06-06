@@ -7,7 +7,9 @@ export interface Application {
   created_at: string;
 }
 
-const STORAGE_KEY = "job_applications";
+// TODO: Reemplazar con conexión a Django
+
+const STORAGE_KEY = "applications";
 
 const getApplications = (): Application[] => {
   const stored = localStorage.getItem(STORAGE_KEY);

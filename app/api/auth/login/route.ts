@@ -4,50 +4,41 @@ import { mockDb } from "@/lib/mock-db";
 // TODO: Reemplazar con conexión a Django
 export async function POST(request: Request) {
   try {
-    const { email, password, role } = await request.json();
-    console.log('Login attempt:', { email, role });
+    const body = await request.json();
+    console.log("Login attempt:", body);
 
-    if (!email || !password || !role) {
+    if (!body.email || !body.password) {
       return NextResponse.json(
-        { error: "Faltan credenciales" },
+        { error: "Email y contraseña son requeridos" },
         { status: 400 }
       );
     }
 
     try {
-      const user = mockDb.validateLogin(email, password);
-      const token = "mock-jwt-token";
+      const user = mockDb.validateLogin(body.email, body.password);
+      console.log("Login successful for user:", user.email);
       
-      if (user.role === "admin" || user.role === role) {
-        return NextResponse.json({
-          token,
-          user: {
-            id: user.id,
-            email: user.email,
-            role: user.role,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            organizationName: 'organizationName' in user ? user.organizationName : undefined,
-            isPrimaryAdmin: user.isPrimaryAdmin
-          }
-        });
-      } else {
-        return NextResponse.json(
-          { error: "El tipo de cuenta seleccionado no coincide con el usuario." },
-          { status: 401 }
-        );
-      }
+      return NextResponse.json({
+        user: {
+          id: user.id,
+          email: user.email,
+          role: user.role,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          organizationName: user.organizationName
+        }
+      });
     } catch (error) {
-      console.error('Login validation error:', error);
+      console.error("Login validation error:", error);
       return NextResponse.json(
-        { error: error instanceof Error ? error.message : "Datos inválidos" },
+        { error: "Credenciales inválidas" },
         { status: 401 }
       );
     }
   } catch (error) {
-    console.error('Login error:', error);
+    console.error("Login error:", error);
     return NextResponse.json(
-      { error: "Error interno del servidor" },
+      { error: "Error al procesar la solicitud" },
       { status: 500 }
     );
   }

@@ -33,6 +33,38 @@ export interface Application {
   createdAt: string;
 }
 
+// TODO: Reemplazar con conexión a Django
+// Endpoints:
+// - GET /api/events/ - Listar eventos
+// - POST /api/events/ - Crear evento
+// - GET /api/opportunities/ - Listar oportunidades
+// - POST /api/opportunities/ - Crear oportunidad
+// - GET /api/events/{slug}/ - Detalle de evento
+// - GET /api/opportunities/{slug}/ - Detalle de oportunidad
+//
+// Estructura de datos en Django:
+// {
+//   id: number,              // ID en la base de datos
+//   title: string,           // título del evento/oportunidad
+//   description: string,     // descripción breve
+//   location: string,        // ciudad o provincia
+//   date: string,            // fecha con formato YYYY-MM-DD
+//   time: string,            // hora o rango horario
+//   category: string,        // categoría o tipo
+//   image: string,           // url de imagen representativa
+//   slug: string,            // ruta única (generado automáticamente)
+//   organizer: string,       // nombre de la empresa (relacionado con User)
+//   website: string,         // opcional, sitio web
+//   full_description: string, // descripción extendida
+//   requirements: string[],   // array con requisitos
+//   benefits: string[],      // array con beneficios (solo para oportunidades)
+//   application_process: string, // instrucciones para postulación/registro
+//   created_at: string,      // fecha de creación
+//   updated_at: string,      // fecha de actualización
+//   is_active: boolean,      // estado de publicación
+//   company: number          // ID de la empresa creadora
+// }
+
 class DataStorage {
   private static instance: DataStorage;
   private items: BaseItem[] = [];

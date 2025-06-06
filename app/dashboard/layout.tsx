@@ -50,6 +50,8 @@ export default function DashboardLayout({
   const pathname = typeof window !== 'undefined' ? window.location.pathname : '';
   const isAdminRoute = pathname.startsWith('/dashboard/admin');
 
+  // TODO: Reemplazar con conexión a Django
+
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="flex h-screen overflow-hidden">

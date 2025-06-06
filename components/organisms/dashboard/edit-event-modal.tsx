@@ -53,6 +53,8 @@ const provinces = [
   "Limón"
 ];
 
+// TODO: Reemplazar con conexión a Django
+
 export function EditEventModal({ event, open, onOpenChange, onEventUpdated }: EditEventModalProps) {
   const [loading, setLoading] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);

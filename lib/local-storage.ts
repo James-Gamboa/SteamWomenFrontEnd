@@ -1,5 +1,6 @@
 import type { User } from "./mock-db";
 
+// TODO: Reemplazar con conexión a Django
 const STORAGE_KEYS = {
   USERS: "steamWomenUsers",
   STATS: "steamWomenStats"

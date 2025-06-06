@@ -19,6 +19,8 @@ interface ItemListProps {
   onItemEdited?: () => void;
 }
 
+// TODO: Reemplazar con conexión a Django
+
 export function ItemList({ type, showActions = false, onItemDeleted, onItemEdited }: ItemListProps) {
   const { user } = useAuth();
   const [items, setItems] = useState<BaseItem[]>([]);

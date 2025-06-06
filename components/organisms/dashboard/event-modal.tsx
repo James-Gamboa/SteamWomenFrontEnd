@@ -36,6 +36,8 @@ type EventModalProps = {
   loading?: boolean;
 };
 
+// TODO: Reemplazar con conexión a Django
+
 export function EventModal({ mode, open, onOpenChange, onSubmit, initialData, loading = false }: EventModalProps) {
   const [currentStep, setCurrentStep] = useState(1);
   const toastShown = useRef(false);

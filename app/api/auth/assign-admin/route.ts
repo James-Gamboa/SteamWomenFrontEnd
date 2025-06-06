@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { mockDb } from "@/lib/mock-db";
 import { cookies } from "next/headers";
 
+// TODO: Reemplazar con conexión a Django
+
 export async function POST(request: Request) {
   try {
     const { email } = await request.json();

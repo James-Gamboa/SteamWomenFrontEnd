@@ -15,6 +15,8 @@ import type { User } from "@/lib/mock-db";
 import { storageUtils } from "@/lib/local-storage";
 import { useRouter } from "next/navigation";
 
+// TODO: Reemplazar con conexión a Django
+
 type ConfirmModalProps = {
   open: boolean;
   onConfirm: () => void;

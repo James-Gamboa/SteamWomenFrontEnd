@@ -27,6 +27,8 @@ interface Event {
   applicationProcess: string;
 }
 
+// TODO: Reemplazar con conexión a Django
+
 export default function EventsPage() {
   const [events, setEvents] = useState<Event[]>([]);
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
