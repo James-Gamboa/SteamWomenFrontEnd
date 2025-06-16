@@ -42,59 +42,61 @@
  * ```
  */
 
-// TODO: Reemplazar con conexión a Django
+import { Event, CreateEventInput, UpdateEventInput } from "@/backend-integration/types";
 
-import { client } from '@/backend-integration/api';
-import { Event, CreateEventInput, UpdateEventInput } from '@/backend-integration/types';
-import { GET_EVENTS, GET_EVENT } from '@/backend-integration/graphql/queries';
-import { CREATE_EVENT, UPDATE_EVENT, DELETE_EVENT } from '@/backend-integration/graphql/mutations';
+const API_BASE_URL = "http://127.0.0.1:8000/api/eventos/";
 
-export const getEvents = async (filter?: any): Promise<Event[]> => {
-  const { data } = await client.query({
-    query: GET_EVENTS,
-    variables: { filter },
-  });
+// Obtener todos los eventos
+export const getEvents = async (): Promise<Event[]> => {
+  const response = await fetch(API_BASE_URL);
 
-  if (data.errors) throw new Error(data.errors[0].message);
-  return data.data.events;
+  if (!response.ok) throw new Error("Error al obtener eventos");
+
+  return await response.json();
 };
 
+// Obtener un evento por ID
 export const getEvent = async (id: string): Promise<Event> => {
-  const { data } = await client.query({
-    query: GET_EVENT,
-    variables: { id },
-  });
+  const response = await fetch(`${API_BASE_URL}${id}/`);
 
-  if (data.errors) throw new Error(data.errors[0].message);
-  return data.data.event;
+  if (!response.ok) throw new Error("Error al obtener evento");
+
+  return await response.json();
 };
 
+// Crear un nuevo evento
 export const createEvent = async (input: CreateEventInput): Promise<Event> => {
-  const { data } = await client.mutate({
-    mutation: CREATE_EVENT,
-    variables: { input },
+  const response = await fetch(API_BASE_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(input),
   });
 
-  if (data.errors) throw new Error(data.errors[0].message);
-  return data.data.createEvent;
+  if (!response.ok) throw new Error("Error al crear evento");
+
+  return await response.json();
 };
 
+// Actualizar un evento existente
 export const updateEvent = async (id: string, input: UpdateEventInput): Promise<Event> => {
-  const { data } = await client.mutate({
-    mutation: UPDATE_EVENT,
-    variables: { id, input },
+  const response = await fetch(`${API_BASE_URL}${id}/`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(input),
   });
 
-  if (data.errors) throw new Error(data.errors[0].message);
-  return data.data.updateEvent;
+  if (!response.ok) throw new Error("Error al actualizar evento");
+
+  return await response.json();
 };
 
+// Eliminar un evento
 export const deleteEvent = async (id: string): Promise<boolean> => {
-  const { data } = await client.mutate({
-    mutation: DELETE_EVENT,
-    variables: { id },
+  const response = await fetch(`${API_BASE_URL}${id}/`, {
+    method: "DELETE",
   });
 
-  if (data.errors) throw new Error(data.errors[0].message);
-  return data.data.deleteEvent;
-}; 
+  if (!response.ok) throw new Error("Error al eliminar evento");
+
+  return true;
+};

@@ -1,12 +1,12 @@
 /**
  * Opportunity Service
  * 
- * Este servicio maneja todas las operaciones relacionadas con oportunidades usando GraphQL.
+ * Este servicio maneja todas las operaciones relacionadas con oportunidades usando la API REST de Django.
  * 
  * Ejemplo de uso en componentes:
  * ```typescript
- * // En un componente
- * import { opportunityService } from '@/lib/services/opportunity-service';
+ *  En un componente
+ import { opportunityService } from '@/lib/services/opportunity-service';
  * 
  * // Obtener oportunidades
  * const opportunities = await opportunityService.getOpportunities();
@@ -43,59 +43,69 @@
  * ```
  */
 
-// TODO: Reemplazar con conexión a Django
-
-import { client } from '@/backend-integration/api';
+/**
+ * Opportunity Service
+ * 
+ * Este servicio maneja todas las operaciones relacionadas con oportunidades usando la API REST de Django.
+ */
 import { Opportunity, CreateOpportunityInput, UpdateOpportunityInput } from '@/backend-integration/types';
-import { GET_OPPORTUNITIES, GET_OPPORTUNITY } from '@/backend-integration/graphql/queries';
-import { CREATE_OPPORTUNITY, UPDATE_OPPORTUNITY, DELETE_OPPORTUNITY } from '@/backend-integration/graphql/mutations';
 
-export const getOpportunities = async (filter?: any): Promise<Opportunity[]> => {
-  const { data } = await client.query({
-    query: GET_OPPORTUNITIES,
-    variables: { filter },
-  });
 
-  if (data.errors) throw new Error(data.errors[0].message);
-  return data.data.opportunities;
+const API_BASE_URL = 'http://127.0.0.1:8000/api/oportunidades/';
+
+// Obtener todas las oportunidades
+export const getOpportunities = async (): Promise<Opportunity[]> => {
+  const response = await fetch(API_BASE_URL);
+  
+  if (!response.ok) throw new Error('Error al obtener oportunidades');
+  
+  return await response.json();
 };
 
-export const getOpportunity = async (id: string): Promise<Opportunity> => {
-  const { data } = await client.query({
-    query: GET_OPPORTUNITY,
-    variables: { id },
-  });
-
-  if (data.errors) throw new Error(data.errors[0].message);
-  return data.data.opportunity;
+// Obtener una oportunidad por ID
+export const getOpportunity = async (id: number): Promise<Opportunity> => {
+  const response = await fetch(`${API_BASE_URL}${id}/`);
+  
+  if (!response.ok) throw new Error('Error al obtener oportunidad');
+  
+  return await response.json();
 };
 
+// Crear nueva oportunidad
 export const createOpportunity = async (input: CreateOpportunityInput): Promise<Opportunity> => {
-  const { data } = await client.mutate({
-    mutation: CREATE_OPPORTUNITY,
-    variables: { input },
+  const response = await fetch(API_BASE_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(input),
   });
 
-  if (data.errors) throw new Error(data.errors[0].message);
-  return data.data.createOpportunity;
+  if (!response.ok) throw new Error('Error al crear oportunidad');
+  
+  return await response.json();
 };
 
-export const updateOpportunity = async (id: string, input: UpdateOpportunityInput): Promise<Opportunity> => {
-  const { data } = await client.mutate({
-    mutation: UPDATE_OPPORTUNITY,
-    variables: { id, input },
+// Actualizar oportunidad existente
+export const updateOpportunity = async (id: number, input: UpdateOpportunityInput): Promise<Opportunity> => {
+  const response = await fetch(`${API_BASE_URL}${id}/`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(input),
   });
 
-  if (data.errors) throw new Error(data.errors[0].message);
-  return data.data.updateOpportunity;
+  if (!response.ok) throw new Error('Error al actualizar oportunidad');
+  
+  return await response.json();
 };
 
-export const deleteOpportunity = async (id: string): Promise<boolean> => {
-  const { data } = await client.mutate({
-    mutation: DELETE_OPPORTUNITY,
-    variables: { id },
+// Eliminar una oportunidad
+export const deleteOpportunity = async (id: number): Promise<boolean> => {
+  const response = await fetch(`${API_BASE_URL}${id}/`, {
+    method: 'DELETE',
   });
 
-  if (data.errors) throw new Error(data.errors[0].message);
-  return data.data.deleteOpportunity;
-}; 
+  if (!response.ok) throw new Error('Error al eliminar oportunidad');
+
+  return true;
+};
+getOpportunities().then(data => console.log("Oportunidades:", data));
+getOpportunity(1).then(data => console.log("Oportunidad específica:", data));

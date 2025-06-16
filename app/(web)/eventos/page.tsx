@@ -1,3 +1,4 @@
+
 import { EventsTemplate } from "@/components/templates/events-template";
 import type { Metadata } from "next";
 

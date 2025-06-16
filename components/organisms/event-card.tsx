@@ -15,6 +15,9 @@ import { EventMeta } from "./event-meta";
 import { ExternalLink, Pencil, Trash2, Eye, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 
+
+
+
 interface EventCardProps {
   event: {
     id: string | number;
@@ -50,6 +53,8 @@ export function EventCard({
   onEdit,
   onDelete,
   type,
+
+  
 }: EventCardProps) {
   const cardRef = useRef<HTMLDivElement>(null);
   const lightRef = useRef<HTMLSpanElement>(null);

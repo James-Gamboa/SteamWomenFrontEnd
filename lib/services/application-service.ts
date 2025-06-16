@@ -7,55 +7,66 @@ export interface Application {
   created_at: string;
 }
 
-// TODO: Reemplazar con conexión a Django
+const API_BASE_URL = "http://127.0.0.1:8000/api/applications/";
 
-const STORAGE_KEY = "applications";
+// Obtener todas las aplicaciones
+export const getApplications = async (): Promise<Application[]> => {
+  const response = await fetch(API_BASE_URL);
 
-const getApplications = (): Application[] => {
-  const stored = localStorage.getItem(STORAGE_KEY);
-  return stored ? JSON.parse(stored) : [];
+  if (!response.ok) throw new Error("Error al obtener aplicaciones");
+
+  return await response.json();
 };
 
-export const applicationService = {
-  async createApplication(jobId: string, userId: string, motivationLetter: string): Promise<Application> {
-    const applications = getApplications();
-    
-    const newApplication: Application = {
-      id: crypto.randomUUID(),
+// Crear una nueva aplicación
+export const createApplication = async (
+  jobId: string,
+  userId: string,
+  motivationLetter: string
+): Promise<Application> => {
+  const response = await fetch(API_BASE_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
       job_id: jobId,
       user_id: userId,
       motivation_letter: motivationLetter,
-      status: "pending",
-      created_at: new Date().toISOString(),
-    };
+      status: "pending", // Estado inicial
+    }),
+  });
 
-    applications.push(newApplication);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(applications));
-    
-    return newApplication;
-  },
+  if (!response.ok) throw new Error("Error al crear aplicación");
 
-  async getApplicationsByUser(userId: string): Promise<Application[]> {
-    const applications = getApplications();
-    return applications.filter(app => app.user_id === userId);
-  },
+  return await response.json();
+};
 
-  async getApplicationsByJob(jobId: string): Promise<Application[]> {
-    const applications = getApplications();
-    return applications.filter(app => app.job_id === jobId);
-  },
+// Obtener aplicaciones de un usuario
+export const getApplicationsByUser = async (userId: string): Promise<Application[]> => {
+  const response = await fetch(`${API_BASE_URL}?user_id=${userId}`);
 
-  async updateApplicationStatus(applicationId: string, status: "accepted" | "rejected"): Promise<Application> {
-    const applications = getApplications();
-    const index = applications.findIndex(app => app.id === applicationId);
-    
-    if (index === -1) {
-      throw new Error("Application not found");
-    }
+  if (!response.ok) throw new Error("Error al obtener aplicaciones por usuario");
 
-    applications[index].status = status;
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(applications));
-    
-    return applications[index];
-  }
-}; 
+  return await response.json();
+};
+
+// Obtener aplicaciones por oferta de trabajo
+export const getApplicationsByJob = async (jobId: string): Promise<Application[]> => {
+  const response = await fetch(`${API_BASE_URL}?job_id=${jobId}`);
+
+  if (!response.ok) throw new Error("Error al obtener aplicaciones por trabajo");
+
+  return await response.json();
+};
+
+// Actualizar el estado de una aplicación
+export const updateApplicationStatus = async (applicationId: string, status: "accepted" | "rejected"): Promise<Application> => {
+  const response = await fetch(`${API_BASE_URL}${applicationId}/`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ status }),
+  });
+
+  if (!response.ok) throw new Error("Error al actualizar estado de aplicación");
+
+  return await response.json();
+};

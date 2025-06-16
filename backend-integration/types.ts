@@ -78,6 +78,25 @@ export interface UpdateEventInput {
   imageUrl?: string
 }
 
+// export interface Opportunity {
+//   id: string
+//   title: string
+//   description: string
+//   requirements: string[]
+//   location: string
+//   type: string
+//   salary?: string
+//   deadline: string
+//   createdAt: string
+//   company: {
+//     id: string
+//     organizationName: string
+//     firstName: string
+//     lastName: string
+//   }
+// }
+
+
 export interface Opportunity {
   id: string
   title: string

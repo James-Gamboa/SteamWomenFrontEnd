@@ -30,58 +30,64 @@
  * ```
  */
 
-// TODO: Reemplazar con conexión a Django
 
-import { client } from '@/backend-integration/api';
-import { User, SignUpInput, UpdateUserInput } from '@/backend-integration/types';
-import { GET_USERS, GET_USER } from '@/backend-integration/graphql/queries';
-import { CREATE_USER, UPDATE_USER, DELETE_USER } from '@/backend-integration/graphql/mutations';
 
+import { User, SignUpInput, UpdateUserInput } from "@/backend-integration/types";
+
+
+const API_BASE_URL = "http://127.0.0.1:8000/api/usuarios/";
+
+// Obtener todos los usuarios
 export const getUsers = async (): Promise<User[]> => {
-  const { data } = await client.query({
-    query: GET_USERS,
-  });
+  const response = await fetch(API_BASE_URL);
 
-  if (data.errors) throw new Error(data.errors[0].message);
-  return data.data.users;
+  if (!response.ok) throw new Error("Error al obtener usuarios");
+
+  return await response.json();
 };
 
+// Obtener un usuario por ID
 export const getUser = async (id: string): Promise<User> => {
-  const { data } = await client.query({
-    query: GET_USER,
-    variables: { id },
-  });
+  const response = await fetch(`${API_BASE_URL}${id}/`);
 
-  if (data.errors) throw new Error(data.errors[0].message);
-  return data.data.user;
+  if (!response.ok) throw new Error("Error al obtener usuario");
+
+  return await response.json();
 };
 
+// Crear un nuevo usuario
 export const createUser = async (input: SignUpInput): Promise<User> => {
-  const { data } = await client.mutate({
-    mutation: CREATE_USER,
-    variables: { input },
+  const response = await fetch(API_BASE_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(input),
   });
 
-  if (data.errors) throw new Error(data.errors[0].message);
-  return data.data.signUp.user;
+  if (!response.ok) throw new Error("Error al crear usuario");
+
+  return await response.json();
 };
 
+// Actualizar un usuario existente
 export const updateUser = async (id: string, input: UpdateUserInput): Promise<User> => {
-  const { data } = await client.mutate({
-    mutation: UPDATE_USER,
-    variables: { id, input },
+  const response = await fetch(`${API_BASE_URL}${id}/`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(input),
   });
 
-  if (data.errors) throw new Error(data.errors[0].message);
-  return data.data.updateUser;
+  if (!response.ok) throw new Error("Error al actualizar usuario");
+
+  return await response.json();
 };
 
+// Eliminar un usuario
 export const deleteUser = async (id: string): Promise<boolean> => {
-  const { data } = await client.mutate({
-    mutation: DELETE_USER,
-    variables: { id },
+  const response = await fetch(`${API_BASE_URL}${id}/`, {
+    method: "DELETE",
   });
 
-  if (data.errors) throw new Error(data.errors[0].message);
-  return data.data.deleteUser;
-}; 
+  if (!response.ok) throw new Error("Error al eliminar usuario");
+
+  return true;
+};
