@@ -2,7 +2,7 @@ export const eventsData = [
   {
     id: 1,
     slug: "networking-mujeres-tecnologia",
-    title: "Networking para Mujeres en Tecnología",
+    title: "Networking para Mujeres en Tecnología AJIO AJIO",
     description:
       "Evento de networking para conectar a mujeres profesionales en el sector tecnológico y fomentar colaboraciones.",
     location: "San José, Costa Rica",

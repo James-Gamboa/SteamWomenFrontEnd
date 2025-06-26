@@ -46,12 +46,12 @@
 
 import { client } from '@/backend-integration/api';
 import { Event, CreateEventInput, UpdateEventInput } from '@/backend-integration/types';
-import { GET_EVENTS, GET_EVENT } from '@/backend-integration/graphql/queries';
+import { GET_EVENTS_QUERY } from '@/backend-integration/graphql/queries';
 import { CREATE_EVENT, UPDATE_EVENT, DELETE_EVENT } from '@/backend-integration/graphql/mutations';
 
 export const getEvents = async (filter?: any): Promise<Event[]> => {
   const { data } = await client.query({
-    query: GET_EVENTS,
+    query: GET_EVENTS_QUERY,
     variables: { filter },
   });
 
@@ -61,7 +61,7 @@ export const getEvents = async (filter?: any): Promise<Event[]> => {
 
 export const getEvent = async (id: string): Promise<Event> => {
   const { data } = await client.query({
-    query: GET_EVENT,
+    query: GET_EVENTS_QUERY,
     variables: { id },
   });
 

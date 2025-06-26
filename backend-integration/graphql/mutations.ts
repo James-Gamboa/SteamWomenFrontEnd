@@ -25,6 +25,25 @@
 
 import { gql } from '@apollo/client';
 
+export const UPDATE_EVENT_MUTATION = `
+  mutation UpdateEvent($id: ID!, $input: EventInput!) {
+    updateEvent(id: $id, input: $input) {
+      event {
+        id
+        title
+      }
+    }
+  }
+`;
+
+export const DELETE_EVENT_MUTATION = `
+  mutation DeleteEvent($id: ID!) {
+    deleteEvent(id: $id) {
+      ok
+    }
+  }
+`;
+
 export const LOGIN = gql`
   mutation Login($input: LoginInput!) {
     login(input: $input) {
