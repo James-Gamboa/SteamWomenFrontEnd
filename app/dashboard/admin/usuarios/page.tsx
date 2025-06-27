@@ -6,7 +6,7 @@ import {
   SelectTrigger,
   SelectValue,
   SelectContent,
-  SelectItem
+  SelectItem,
 } from "@/components/ui/select";
 import { toast } from "sonner";
 import { useAuth } from "@/lib/context/auth-context";
@@ -33,8 +33,12 @@ const ConfirmModal = ({ open, onConfirm, onCancel }: ConfirmModalProps) => {
         </CardHeader>
         <CardContent>
           <div className="flex justify-end space-x-4">
-            <Button variant="outline" onClick={onCancel}>Cancelar</Button>
-            <Button variant="destructive" onClick={onConfirm}>Eliminar</Button>
+            <Button variant="outline" onClick={onCancel}>
+              Cancelar
+            </Button>
+            <Button variant="destructive" onClick={onConfirm}>
+              Eliminar
+            </Button>
           </div>
         </CardContent>
       </Card>
@@ -70,10 +74,10 @@ const UserDetailModal = ({ user, open, onClose }: UserDetailModalProps) => {
       if (isNaN(date.getTime())) {
         return "Fecha no disponible";
       }
-      return date.toLocaleDateString('es-ES', {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric'
+      return date.toLocaleDateString("es-ES", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
       });
     } catch (error) {
       return "Fecha no disponible";
@@ -89,28 +93,41 @@ const UserDetailModal = ({ user, open, onClose }: UserDetailModalProps) => {
         <CardContent>
           <div className="space-y-2">
             <div>
-              <span className="font-semibold">Nombre:</span> {user.firstName ? `${user.firstName} ${user.lastName || ""}`.trim() : user.organizationName || "-"}
+              <span className="font-semibold">Nombre:</span>{" "}
+              {user.firstName
+                ? `${user.firstName} ${user.lastName || ""}`.trim()
+                : user.organizationName || "-"}
             </div>
             <div>
-              <span className="font-semibold">Correo electrónico:</span> {user.email}
+              <span className="font-semibold">Correo electrónico:</span>{" "}
+              {user.email}
             </div>
             <div>
               <span className="font-semibold">Rol:</span>
-              <span className={
-                user.role === "admin"
-                  ? "bg-purple-100 text-purple-700 px-2 py-1 rounded text-xs font-semibold"
-                  : user.role === "company"
-                  ? "bg-blue-100 text-blue-700 px-2 py-1 rounded text-xs font-semibold"
-                  : "bg-green-100 text-green-700 px-2 py-1 rounded text-xs font-semibold"
-              }>{getRoleLabel(user.role)}</span>
+              <span
+                className={
+                  user.role === "admin"
+                    ? "bg-purple-100 text-purple-700 px-2 py-1 rounded text-xs font-semibold"
+                    : user.role === "company"
+                      ? "bg-blue-100 text-blue-700 px-2 py-1 rounded text-xs font-semibold"
+                      : "bg-green-100 text-green-700 px-2 py-1 rounded text-xs font-semibold"
+                }
+              >
+                {getRoleLabel(user.role)}
+              </span>
             </div>
             <div>
-              <span className="font-semibold">Fecha de registro:</span> {formatDate(user.createdAt)}
+              <span className="font-semibold">Fecha de registro:</span>{" "}
+              {formatDate(user.createdAt)}
             </div>
-            {user.isPrimaryAdmin && <div className="text-xs text-purple-700 font-bold">Administrador principal</div>}
+            {user.isPrimaryAdmin && (
+              <div className="text-xs text-purple-700 font-bold">
+                Administrador principal
+              </div>
+            )}
           </div>
-          <Button 
-            className="mt-6 w-full bg-purple-600 hover:bg-purple-700 text-white" 
+          <Button
+            className="mt-6 w-full bg-purple-600 hover:bg-purple-700 text-white"
             onClick={onClose}
           >
             Cerrar
@@ -140,10 +157,10 @@ const AdminUsuariosPage = () => {
       if (isNaN(date.getTime())) {
         return "Fecha no disponible";
       }
-      return date.toLocaleDateString('es-ES', {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric'
+      return date.toLocaleDateString("es-ES", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
       });
     } catch (error) {
       return "Fecha no disponible";
@@ -187,7 +204,9 @@ const AdminUsuariosPage = () => {
       const storedUsers = storageUtils.getUsers();
       setUsers(storedUsers);
     } catch (error) {
-      toast.error("Error al cargar los usuarios. Por favor, revise los datos en localStorage.");
+      toast.error(
+        "Error al cargar los usuarios. Por favor, revise los datos en localStorage.",
+      );
     } finally {
       setLoading(false);
     }
@@ -200,7 +219,7 @@ const AdminUsuariosPage = () => {
   const handleSaveRole = (userId: string) => {
     if (!currentUser) return;
     const result = storageUtils.updateUserRole(userId, editedRoles[userId]);
-    
+
     if (result.success) {
       setUsers(storageUtils.getUsers());
       setEditedRoles((prev) => {
@@ -225,7 +244,7 @@ const AdminUsuariosPage = () => {
   const confirmDelete = () => {
     if (!userToDelete || !currentUser) return;
     const result = storageUtils.deleteUser(userToDelete.id);
-    
+
     if (result.success) {
       setUsers(storageUtils.getUsers());
       setConfirmOpen(false);
@@ -242,16 +261,24 @@ const AdminUsuariosPage = () => {
   };
 
   if (loading) {
-    return <div className="flex justify-center items-center h-96">Cargando usuarios...</div>;
+    return (
+      <div className="flex justify-center items-center h-96">
+        Cargando usuarios...
+      </div>
+    );
   }
 
   if (users.length === 0) {
     return (
       <div className="container py-8">
-        <h1 className="text-3xl font-bold mb-6 text-center">Gestión de Usuarios</h1>
+        <h1 className="text-3xl font-bold mb-6 text-center">
+          Gestión de Usuarios
+        </h1>
         <Card>
           <CardContent className="py-8">
-            <p className="text-center text-gray-500">No se encontraron usuarios registrados.</p>
+            <p className="text-center text-gray-500">
+              No se encontraron usuarios registrados.
+            </p>
           </CardContent>
         </Card>
       </div>
@@ -260,7 +287,9 @@ const AdminUsuariosPage = () => {
 
   return (
     <div className="container py-8">
-      <h1 className="text-3xl font-bold mb-6 text-center">Gestión de Usuarios</h1>
+      <h1 className="text-3xl font-bold mb-6 text-center">
+        Gestión de Usuarios
+      </h1>
       <div className="hidden custom1123:block">
         <Card>
           <CardContent>
@@ -268,11 +297,19 @@ const AdminUsuariosPage = () => {
               <table className="min-w-full text-sm md:text-base divide-y divide-gray-200">
                 <thead className="bg-gray-50">
                   <tr>
-                    <th className="px-6 py-3 text-left font-semibold">Nombre</th>
-                    <th className="px-6 py-3 text-left font-semibold">Correo electrónico</th>
+                    <th className="px-6 py-3 text-left font-semibold">
+                      Nombre
+                    </th>
+                    <th className="px-6 py-3 text-left font-semibold">
+                      Correo electrónico
+                    </th>
                     <th className="px-6 py-3 text-left font-semibold">Rol</th>
-                    <th className="px-6 py-3 text-left font-semibold">Fecha de registro</th>
-                    <th className="px-6 py-3 text-left font-semibold">Acciones</th>
+                    <th className="px-6 py-3 text-left font-semibold">
+                      Fecha de registro
+                    </th>
+                    <th className="px-6 py-3 text-left font-semibold">
+                      Acciones
+                    </th>
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
@@ -283,34 +320,50 @@ const AdminUsuariosPage = () => {
                     return (
                       <tr key={user.id} className="hover:bg-gray-50 transition">
                         <td className="px-6 py-4 break-words max-w-xs">
-                          {user.firstName ? `${user.firstName} ${user.lastName || ""}`.trim() : user.organizationName || "-"}
+                          {user.firstName
+                            ? `${user.firstName} ${user.lastName || ""}`.trim()
+                            : user.organizationName || "-"}
                         </td>
-                        <td className="px-6 py-4 break-words max-w-xs">{user.email}</td>
+                        <td className="px-6 py-4 break-words max-w-xs">
+                          {user.email}
+                        </td>
                         <td className="px-6 py-4">
                           <span className={getRoleStyle(editedRole)}>
                             {getRoleLabel(editedRole)}
                           </span>
                         </td>
-                        <td className="px-6 py-4">{formatDate(user.createdAt)}</td>
+                        <td className="px-6 py-4">
+                          {formatDate(user.createdAt)}
+                        </td>
                         <td className="px-6 py-4 flex flex-wrap gap-2">
                           <Select
                             value={editedRole}
-                            onValueChange={(value: User["role"]) => handleRoleChange(user.id, value)}
+                            onValueChange={(value: User["role"]) =>
+                              handleRoleChange(user.id, value)
+                            }
                             disabled={!!isPrimary || !!isSelf}
                           >
                             <SelectTrigger className="w-32">
                               <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
-                              <SelectItem value="student">Estudiante</SelectItem>
+                              <SelectItem value="student">
+                                Estudiante
+                              </SelectItem>
                               <SelectItem value="company">Empresa</SelectItem>
-                              <SelectItem value="admin">Administrador</SelectItem>
+                              <SelectItem value="admin">
+                                Administrador
+                              </SelectItem>
                             </SelectContent>
                           </Select>
                           <Button
                             size="sm"
                             className="bg-purple-600 hover:bg-purple-700 disabled:bg-gray-200 disabled:text-gray-400"
-                            disabled={!!isPrimary || !!isSelf || editedRole === user.role}
+                            disabled={
+                              !!isPrimary ||
+                              !!isSelf ||
+                              editedRole === user.role
+                            }
                             onClick={() => handleSaveRole(user.id)}
                           >
                             Guardar
@@ -324,9 +377,9 @@ const AdminUsuariosPage = () => {
                           >
                             Eliminar
                           </Button>
-                          <Button 
-                            size="sm" 
-                            className="bg-purple-600 hover:bg-purple-700 text-white" 
+                          <Button
+                            size="sm"
+                            className="bg-purple-600 hover:bg-purple-700 text-white"
                             onClick={() => handleViewUser(user)}
                           >
                             Ver
@@ -350,10 +403,13 @@ const AdminUsuariosPage = () => {
             <Card key={user.id} className="max-w-xl mx-auto p-6">
               <div className="mb-2">
                 <span className="font-semibold">Nombre: </span>
-                {user.firstName ? `${user.firstName} ${user.lastName || ""}`.trim() : user.organizationName || "-"}
+                {user.firstName
+                  ? `${user.firstName} ${user.lastName || ""}`.trim()
+                  : user.organizationName || "-"}
               </div>
               <div className="mb-2">
-                <span className="font-semibold">Correo: </span>{user.email}
+                <span className="font-semibold">Correo: </span>
+                {user.email}
               </div>
               <div className="mb-2">
                 <span className="font-semibold">Rol: </span>
@@ -362,12 +418,15 @@ const AdminUsuariosPage = () => {
                 </span>
               </div>
               <div className="mb-2">
-                <span className="font-semibold">Fecha: </span>{formatDate(user.createdAt)}
+                <span className="font-semibold">Fecha: </span>
+                {formatDate(user.createdAt)}
               </div>
               <div className="flex flex-wrap gap-2 mt-2">
                 <Select
                   value={editedRole}
-                  onValueChange={(value: User["role"]) => handleRoleChange(user.id, value)}
+                  onValueChange={(value: User["role"]) =>
+                    handleRoleChange(user.id, value)
+                  }
                   disabled={!!isPrimary || !!isSelf}
                 >
                   <SelectTrigger className="w-32">
@@ -396,7 +455,11 @@ const AdminUsuariosPage = () => {
                 >
                   Eliminar
                 </Button>
-                <Button size="sm" variant="secondary" onClick={() => handleViewUser(user)}>
+                <Button
+                  size="sm"
+                  variant="secondary"
+                  onClick={() => handleViewUser(user)}
+                >
                   Ver
                 </Button>
               </div>
@@ -404,12 +467,24 @@ const AdminUsuariosPage = () => {
           );
         })}
       </div>
-      <UserDetailModal user={selectedUser} open={modalOpen} onClose={() => setModalOpen(false)} />
-      <ConfirmModal open={confirmOpen} onConfirm={confirmDelete} onCancel={() => setConfirmOpen(false)} />
+      <UserDetailModal
+        user={selectedUser}
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+      />
+      <ConfirmModal
+        open={confirmOpen}
+        onConfirm={confirmDelete}
+        onCancel={() => setConfirmOpen(false)}
+      />
       <style jsx>{`
         @media (min-width: 1123px) {
-          .custom1123\\:block { display: block !important; }
-          .custom1123\\:hidden { display: none !important; }
+          .custom1123\\:block {
+            display: block !important;
+          }
+          .custom1123\\:hidden {
+            display: none !important;
+          }
         }
       `}</style>
     </div>

@@ -22,7 +22,9 @@ export default function OportunidadesAplicadasPage() {
 
   useEffect(() => {
     if (user && user.role === "student") {
-      const all = JSON.parse(localStorage.getItem("student_applications") || "[]");
+      const all = JSON.parse(
+        localStorage.getItem("student_applications") || "[]",
+      );
       setApplications(all.filter((app: Application) => app.userId === user.id));
     }
   }, [user]);
@@ -41,8 +43,7 @@ export default function OportunidadesAplicadasPage() {
         <p className="text-[#C8C8C9] mt-2">
           {isCompany
             ? "Gestiona las postulaciones a tus oportunidades"
-            : "Sigue el estado de tus postulaciones"
-          }
+            : "Sigue el estado de tus postulaciones"}
         </p>
       </div>
 
@@ -84,15 +85,28 @@ export default function OportunidadesAplicadasPage() {
               ) : (
                 <div className="space-y-4">
                   {applications.map((app) => (
-                    <div key={app.opportunityId} className="flex items-center justify-between p-4 border rounded-lg">
+                    <div
+                      key={app.opportunityId}
+                      className="flex items-center justify-between p-4 border rounded-lg"
+                    >
                       <div className="space-y-1">
                         <p className="font-medium">{app.opportunityTitle}</p>
                         <p className="text-sm text-[#C8C8C9]">{app.company}</p>
                         <div className="flex gap-2 mt-1">
-                          {app.provincia && <span className="text-xs bg-[#F1F0FB] text-[#8B5CF6] px-2 py-0.5 rounded">{app.provincia}</span>}
-                          {app.categoria && <span className="text-xs bg-[#F1F0FB] text-[#F97316] px-2 py-0.5 rounded">{app.categoria}</span>}
+                          {app.provincia && (
+                            <span className="text-xs bg-[#F1F0FB] text-[#8B5CF6] px-2 py-0.5 rounded">
+                              {app.provincia}
+                            </span>
+                          )}
+                          {app.categoria && (
+                            <span className="text-xs bg-[#F1F0FB] text-[#F97316] px-2 py-0.5 rounded">
+                              {app.categoria}
+                            </span>
+                          )}
                         </div>
-                        <p className="text-xs text-[#8E9196]">{new Date(app.fechaPostulacion).toLocaleDateString()}</p>
+                        <p className="text-xs text-[#8E9196]">
+                          {new Date(app.fechaPostulacion).toLocaleDateString()}
+                        </p>
                       </div>
                       <Badge variant="secondary">Pendiente</Badge>
                     </div>
@@ -105,4 +119,4 @@ export default function OportunidadesAplicadasPage() {
       </div>
     </div>
   );
-} 
+}

@@ -36,9 +36,13 @@ const AdminConfiguracionPage = () => {
     if (!user) return;
     try {
       const updatedUser = { ...user, ...form };
-      const users = mockDb.getAllUsers().map((u: any) =>
-        u.id === user.id ? { ...u, ...form, password: form.password || u.password } : u
-      );
+      const users = mockDb
+        .getAllUsers()
+        .map((u: any) =>
+          u.id === user.id
+            ? { ...u, ...form, password: form.password || u.password }
+            : u,
+        );
       localStorage.setItem("mockUsers", JSON.stringify(users));
       toast.success("Perfil actualizado correctamente");
     } catch {
@@ -47,7 +51,9 @@ const AdminConfiguracionPage = () => {
   };
 
   if (loading) {
-    return <div className="flex justify-center items-center h-96">Cargando...</div>;
+    return (
+      <div className="flex justify-center items-center h-96">Cargando...</div>
+    );
   }
 
   return (
@@ -96,10 +102,12 @@ const AdminConfiguracionPage = () => {
             autoComplete="new-password"
           />
         </div>
-        <Button className="w-full mt-4" onClick={handleSave}>Guardar cambios</Button>
+        <Button className="w-full mt-4" onClick={handleSave}>
+          Guardar cambios
+        </Button>
       </div>
     </div>
   );
 };
 
-export default AdminConfiguracionPage; 
+export default AdminConfiguracionPage;

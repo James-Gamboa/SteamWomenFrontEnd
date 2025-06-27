@@ -20,7 +20,12 @@ export default function NotFound() {
           className="hidden sm:block"
         >
           <circle cx="40" cy="40" r="40" fill="#F1F0FB" />
-          <path d="M40 22V46" stroke="#8B5CF6" strokeWidth="6" strokeLinecap="round" />
+          <path
+            d="M40 22V46"
+            stroke="#8B5CF6"
+            strokeWidth="6"
+            strokeLinecap="round"
+          />
           <circle cx="40" cy="58" r="4" fill="#8B5CF6" />
         </svg>
       </div>
@@ -32,9 +37,14 @@ export default function NotFound() {
       </h2>
       <p
         className="mb-10 text-xl sm:text-2xl md:text-3xl text-center"
-        style={{ color: "#8E9196", fontFamily: "DM Sans, sans-serif", maxWidth: 600 }}
+        style={{
+          color: "#8E9196",
+          fontFamily: "DM Sans, sans-serif",
+          maxWidth: 600,
+        }}
       >
-        Lo sentimos, la página que buscas no existe o ha sido removida. Por favor, verifica la URL o regresa al inicio.
+        Lo sentimos, la página que buscas no existe o ha sido removida. Por
+        favor, verifica la URL o regresa al inicio.
       </p>
       <a
         href="/"
@@ -50,4 +60,4 @@ export default function NotFound() {
       </a>
     </div>
   );
-} 
+}

@@ -23,11 +23,12 @@ export function HeroSection() {
               lineHeight: "1.6",
             }}
           >
-            Conoce más sobre STEAMWomen, nuestra misión, visión y el equipo detrás de esta iniciativa para potenciar el
-            talento femenino en áreas STEAM.
+            Conoce más sobre STEAMWomen, nuestra misión, visión y el equipo
+            detrás de esta iniciativa para potenciar el talento femenino en
+            áreas STEAM.
           </p>
         </div>
       </div>
     </section>
-  )
+  );
 }

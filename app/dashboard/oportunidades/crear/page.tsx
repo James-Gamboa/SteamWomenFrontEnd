@@ -18,4 +18,4 @@ export default function CreateOpportunityPage() {
       </Card>
     </div>
   );
-} 
+}

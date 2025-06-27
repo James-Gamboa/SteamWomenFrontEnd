@@ -8,6 +8,7 @@ import { EventModal } from "@/components/organisms/dashboard/event-modal";
 import { DeleteEventModal } from "@/components/organisms/dashboard/delete-event-modal";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
+import { getLocalOpportunities, createItem } from "@/lib/data-storage";
 
 interface Opportunity {
   id: number;
@@ -31,14 +32,15 @@ interface Opportunity {
 
 export default function OpportunitiesPage() {
   const [opportunities, setOpportunities] = useState<Opportunity[]>([]);
-  const [selectedOpportunity, setSelectedOpportunity] = useState<Opportunity | null>(null);
+  const [selectedOpportunity, setSelectedOpportunity] =
+    useState<Opportunity | null>(null);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const router = useRouter();
 
   const loadOpportunities = () => {
-    const storedOpportunities = JSON.parse(localStorage.getItem("opportunities") || "[]");
+    const storedOpportunities = getLocalOpportunities?.() || [];
     setOpportunities(storedOpportunities);
   };
 
@@ -62,9 +64,19 @@ export default function OpportunitiesPage() {
 
   const handleDeleteConfirm = () => {
     if (!selectedOpportunity) return;
-    const updatedOpportunities = opportunities.filter((o) => o.id !== selectedOpportunity.id);
-    localStorage.setItem("opportunities", JSON.stringify(updatedOpportunities));
-    setOpportunities(updatedOpportunities);
+    const storedOpportunities = getLocalOpportunities?.() || [];
+    const updatedOpportunities = storedOpportunities.filter(
+      (o: Opportunity) => o.id !== selectedOpportunity.id,
+    );
+    localStorage.setItem("items", JSON.stringify(updatedOpportunities));
+    let legacyOpportunities = JSON.parse(
+      localStorage.getItem("opportunities") || "[]",
+    );
+    legacyOpportunities = legacyOpportunities.filter(
+      (o: Opportunity) => o.id !== selectedOpportunity.id,
+    );
+    localStorage.setItem("opportunities", JSON.stringify(legacyOpportunities));
+    loadOpportunities();
     setIsDeleteModalOpen(false);
     setSelectedOpportunity(null);
     toast.success("Oportunidad eliminada exitosamente", {
@@ -80,9 +92,13 @@ export default function OpportunitiesPage() {
   };
 
   const handleCreateSubmit = (opportunityData: Opportunity) => {
-    const updatedOpportunities = [...opportunities, opportunityData];
-    localStorage.setItem("opportunities", JSON.stringify(updatedOpportunities));
-    setOpportunities(updatedOpportunities);
+    createItem({ ...opportunityData, type: "opportunity" });
+    const legacyOpportunities = JSON.parse(
+      localStorage.getItem("opportunities") || "[]",
+    );
+    legacyOpportunities.push(opportunityData);
+    localStorage.setItem("opportunities", JSON.stringify(legacyOpportunities));
+    loadOpportunities();
     setIsCreateModalOpen(false);
     toast.success("Oportunidad creada exitosamente", {
       style: {
@@ -97,9 +113,19 @@ export default function OpportunitiesPage() {
   };
 
   const handleEditSubmit = (opportunityData: Opportunity) => {
-    const updatedOpportunities = opportunities.map((o) => (o.id === opportunityData.id ? opportunityData : o));
-    localStorage.setItem("opportunities", JSON.stringify(updatedOpportunities));
-    setOpportunities(updatedOpportunities);
+    const storedOpportunities = getLocalOpportunities?.() || [];
+    const updatedOpportunities = storedOpportunities.map((o: Opportunity) =>
+      o.id === opportunityData.id ? opportunityData : o,
+    );
+    localStorage.setItem("items", JSON.stringify(updatedOpportunities));
+    let legacyOpportunities = JSON.parse(
+      localStorage.getItem("opportunities") || "[]",
+    );
+    legacyOpportunities = legacyOpportunities.map((o: Opportunity) =>
+      o.id === opportunityData.id ? opportunityData : o,
+    );
+    localStorage.setItem("opportunities", JSON.stringify(legacyOpportunities));
+    loadOpportunities();
     setIsEditModalOpen(false);
     setSelectedOpportunity(null);
     toast.success("Oportunidad actualizada exitosamente", {
@@ -140,8 +166,8 @@ export default function OpportunitiesPage() {
     const date = new Date(dateString);
     return {
       day: date.getDate(),
-      month: date.toLocaleString('es-ES', { month: 'long' }),
-      year: date.getFullYear()
+      month: date.toLocaleString("es-ES", { month: "long" }),
+      year: date.getFullYear(),
     };
   };
 
@@ -156,7 +182,10 @@ export default function OpportunitiesPage() {
             Gestiona tus oportunidades publicadas
           </p>
         </div>
-        <Button onClick={handleCreate} className="bg-[#8B5CF6] hover:bg-[#7C3AED] text-white font-semibold px-6 py-2 rounded-lg">
+        <Button
+          onClick={handleCreate}
+          className="bg-[#8B5CF6] hover:bg-[#7C3AED] text-white font-semibold px-6 py-2 rounded-lg"
+        >
           <Plus className="w-4 h-4 mr-2" /> Crear Oportunidad
         </Button>
       </div>
@@ -201,4 +230,4 @@ export default function OpportunitiesPage() {
       )}
     </div>
   );
-} 
+}

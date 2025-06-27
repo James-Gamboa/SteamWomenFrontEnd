@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
 export function JoinMissionSection() {
@@ -26,8 +26,9 @@ export function JoinMissionSection() {
               lineHeight: "1.6",
             }}
           >
-            Hay muchas formas de colaborar con STEAMWomen y ser parte del cambio. Ya sea como voluntaria, mentora,
-            aliada o participando, tu contribución es valiosa.
+            Hay muchas formas de colaborar con STEAMWomen y ser parte del
+            cambio. Ya sea como voluntaria, mentora, aliada o participando, tu
+            contribución es valiosa.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <Link href="/oportunidades" passHref legacyBehavior>
@@ -49,5 +50,5 @@ export function JoinMissionSection() {
         </div>
       </div>
     </section>
-  )
+  );
 }

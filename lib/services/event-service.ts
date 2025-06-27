@@ -1,19 +1,19 @@
 /**
  * Event Service
- * 
+ *
  * Este servicio maneja todas las operaciones relacionadas con eventos usando GraphQL.
- * 
+ *
  * Ejemplo de uso en componentes:
  * ```typescript
  * // En un componente
  * import { eventService } from '@/lib/services/event-service';
- * 
+ *
  * // Obtener eventos
  * const events = await eventService.getEvents();
- * 
+ *
  * // Obtener un evento específico
  * const event = await eventService.getEvent(id);
- * 
+ *
  * // Crear evento
  * const newEvent = await eventService.createEvent({
  *   title: 'Taller de React',
@@ -30,13 +30,13 @@
  *   benefits: ['Certificado de participación'],
  *   applicationProcess: 'Enviar CV'
  * });
- * 
+ *
  * // Actualizar evento
  * const updatedEvent = await eventService.updateEvent(id, {
  *   title: 'Nuevo título',
  *   description: 'Nueva descripción'
  * });
- * 
+ *
  * // Eliminar evento
  * await eventService.deleteEvent(id);
  * ```
@@ -44,10 +44,18 @@
 
 // TODO: Reemplazar con conexión a Django
 
-import { client } from '@/backend-integration/api';
-import { Event, CreateEventInput, UpdateEventInput } from '@/backend-integration/types';
-import { GET_EVENTS_QUERY } from '@/backend-integration/graphql/queries';
-import { CREATE_EVENT, UPDATE_EVENT, DELETE_EVENT } from '@/backend-integration/graphql/mutations';
+import { client } from "@/backend-integration/api";
+import {
+  Event,
+  CreateEventInput,
+  UpdateEventInput,
+} from "@/backend-integration/types";
+import { GET_EVENTS_QUERY } from "@/backend-integration/graphql/queries";
+import {
+  CREATE_EVENT,
+  UPDATE_EVENT,
+  DELETE_EVENT,
+} from "@/backend-integration/graphql/mutations";
 
 export const getEvents = async (filter?: any): Promise<Event[]> => {
   const { data } = await client.query({
@@ -79,7 +87,10 @@ export const createEvent = async (input: CreateEventInput): Promise<Event> => {
   return data.data.createEvent;
 };
 
-export const updateEvent = async (id: string, input: UpdateEventInput): Promise<Event> => {
+export const updateEvent = async (
+  id: string,
+  input: UpdateEventInput,
+): Promise<Event> => {
   const { data } = await client.mutate({
     mutation: UPDATE_EVENT,
     variables: { id, input },
@@ -97,4 +108,4 @@ export const deleteEvent = async (id: string): Promise<boolean> => {
 
   if (data.errors) throw new Error(data.errors[0].message);
   return data.data.deleteEvent;
-}; 
+};

@@ -1,16 +1,17 @@
 /**
  * GraphQL Mutations
- * 
+ *
  * Flujo de operaciones:
  * 1. Los componentes llaman a los servicios (lib/services/*)
  * 2. Los servicios usan estas mutations para modificar datos
  * 3. Las mutations se ejecutan a través del cliente Apollo (backend-integration/api.ts)
- * 
+ *
  * Tipos de operaciones:
  * - CREATE_*: Crear nuevos registros
  * - UPDATE_*: Modificar registros existentes
  * - DELETE_*: Eliminar registros
- * 
+ *
+ *
  * Ejemplo de uso en servicios:
  * ```typescript
  * const createUser = async (input: SignUpInput) => {
@@ -23,7 +24,7 @@
  * ```
  */
 
-import { gql } from '@apollo/client';
+import { gql } from "@apollo/client";
 
 export const UPDATE_EVENT_MUTATION = `
   mutation UpdateEvent($id: ID!, $input: EventInput!) {

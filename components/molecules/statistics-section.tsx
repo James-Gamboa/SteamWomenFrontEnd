@@ -1,64 +1,69 @@
-"use client"
+"use client";
 
-import { useEffect, useState, useRef } from "react"
+import { useEffect, useState, useRef } from "react";
 
 interface CounterProps {
-  end: number
-  duration?: number
-  suffix?: string
-  prefix?: string
+  end: number;
+  duration?: number;
+  suffix?: string;
+  prefix?: string;
 }
 
-function Counter({ end, duration = 2000, suffix = "", prefix = "" }: CounterProps) {
-  const [count, setCount] = useState(0)
-  const [isVisible, setIsVisible] = useState(false)
-  const counterRef = useRef<HTMLDivElement>(null)
+function Counter({
+  end,
+  duration = 2000,
+  suffix = "",
+  prefix = "",
+}: CounterProps) {
+  const [count, setCount] = useState(0);
+  const [isVisible, setIsVisible] = useState(false);
+  const counterRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting && !isVisible) {
-          setIsVisible(true)
+          setIsVisible(true);
         }
       },
       { threshold: 0.1 },
-    )
+    );
 
     if (counterRef.current) {
-      observer.observe(counterRef.current)
+      observer.observe(counterRef.current);
     }
 
-    return () => observer.disconnect()
-  }, [isVisible])
+    return () => observer.disconnect();
+  }, [isVisible]);
 
   useEffect(() => {
-    if (!isVisible) return
+    if (!isVisible) return;
 
-    let startTime: number
-    let animationFrame: number
+    let startTime: number;
+    let animationFrame: number;
 
     const animate = (currentTime: number) => {
-      if (!startTime) startTime = currentTime
-      const progress = Math.min((currentTime - startTime) / duration, 1)
+      if (!startTime) startTime = currentTime;
+      const progress = Math.min((currentTime - startTime) / duration, 1);
 
-      const easeOutQuart = 1 - Math.pow(1 - progress, 4)
-      const currentCount = Math.floor(easeOutQuart * end)
+      const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+      const currentCount = Math.floor(easeOutQuart * end);
 
-      setCount(currentCount)
+      setCount(currentCount);
 
       if (progress < 1) {
-        animationFrame = requestAnimationFrame(animate)
+        animationFrame = requestAnimationFrame(animate);
       }
-    }
+    };
 
-    animationFrame = requestAnimationFrame(animate)
+    animationFrame = requestAnimationFrame(animate);
 
     return () => {
       if (animationFrame) {
-        cancelAnimationFrame(animationFrame)
+        cancelAnimationFrame(animationFrame);
       }
-    }
-  }, [isVisible, end, duration])
+    };
+  }, [isVisible, end, duration]);
 
   return (
     <div ref={counterRef} className="text-center">
@@ -75,7 +80,7 @@ function Counter({ end, duration = 2000, suffix = "", prefix = "" }: CounterProp
         {suffix}
       </div>
     </div>
-  )
+  );
 }
 
 export function StatisticsSection() {
@@ -104,7 +109,7 @@ export function StatisticsSection() {
       label: "Tasa de participación",
       description: "Tasa de participación en eventos y oportunidades",
     },
-  ]
+  ];
 
   return (
     <section className="py-12 lg:py-20" style={{ backgroundColor: "#F1F0FB" }}>
@@ -130,7 +135,8 @@ export function StatisticsSection() {
               lineHeight: "1.6",
             }}
           >
-            Datos que reflejan el crecimiento y el impacto de nuestra comunidad en el ecosistema STEAM
+            Datos que reflejan el crecimiento y el impacto de nuestra comunidad
+            en el ecosistema STEAM
           </p>
         </div>
 
@@ -144,7 +150,11 @@ export function StatisticsSection() {
                 borderColor: "#C8C8C9",
               }}
             >
-              <Counter end={stat.number} suffix={stat.suffix} duration={3500 + index * 200} />
+              <Counter
+                end={stat.number}
+                suffix={stat.suffix}
+                duration={3500 + index * 200}
+              />
               <h3
                 className="mb-2 font-bold text-center text-lg lg:text-xl"
                 style={{
@@ -172,5 +182,5 @@ export function StatisticsSection() {
         </div>
       </div>
     </section>
-  )
+  );
 }

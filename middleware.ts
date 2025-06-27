@@ -14,7 +14,7 @@ const publicRoutes = [
   "/api/auth/login",
   "/api/auth/register",
   "/api/auth/create-first-admin",
-  "/api/auth/assign-admin"
+  "/api/auth/assign-admin",
 ];
 
 export async function middleware(request: NextRequest) {
@@ -22,7 +22,7 @@ export async function middleware(request: NextRequest) {
   const token = request.cookies.get("token")?.value;
   const userRole = request.cookies.get("userRole")?.value;
 
-  if (publicRoutes.some(route => path.startsWith(route))) {
+  if (publicRoutes.some((route) => path.startsWith(route))) {
     return NextResponse.next();
   }
 
@@ -45,16 +45,20 @@ export async function middleware(request: NextRequest) {
       return NextResponse.redirect(new URL("/login", request.url));
     }
 
-    if (path.startsWith("/dashboard/usuarios") || 
-        path.startsWith("/dashboard/postulaciones") || 
-        path.startsWith("/dashboard/configuracion")) {
+    if (
+      path.startsWith("/dashboard/usuarios") ||
+      path.startsWith("/dashboard/postulaciones") ||
+      path.startsWith("/dashboard/configuracion")
+    ) {
       if (userRole !== "admin") {
         return NextResponse.redirect(new URL("/dashboard", request.url));
       }
     }
 
-    if (path.startsWith("/dashboard/oportunidades/crear") || 
-        path.startsWith("/dashboard/estadisticas")) {
+    if (
+      path.startsWith("/dashboard/oportunidades/crear") ||
+      path.startsWith("/dashboard/estadisticas")
+    ) {
       if (userRole !== "company") {
         return NextResponse.redirect(new URL("/dashboard", request.url));
       }
@@ -72,4 +76,4 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: ["/dashboard/:path*", "/login", "/signup"],
-}; 
+};

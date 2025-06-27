@@ -27,10 +27,12 @@ export default function MyApplicationsPage() {
         </section>
 
         <section>
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">Oportunidades</h2>
+          <h2 className="text-xl font-semibold text-gray-900 mb-4">
+            Oportunidades
+          </h2>
           <ApplicationsList type="opportunity" studentId={user.id} />
         </section>
       </div>
     </div>
   );
-} 
+}

@@ -12,7 +12,11 @@ import { toast } from "sonner";
 export default function PerfilPage() {
   const { user } = useAuth();
   const [form, setForm] = useState<any>({});
-  const [passwords, setPasswords] = useState({ password: "", newPassword: "", confirmPassword: "" });
+  const [passwords, setPasswords] = useState({
+    password: "",
+    newPassword: "",
+    confirmPassword: "",
+  });
 
   useEffect(() => {
     if (user) {
@@ -70,7 +74,11 @@ export default function PerfilPage() {
     const stored = localStorage.getItem("user");
     if (!stored) return;
     const prev = JSON.parse(stored);
-    if (!passwords.password || !passwords.newPassword || !passwords.confirmPassword) {
+    if (
+      !passwords.password ||
+      !passwords.newPassword ||
+      !passwords.confirmPassword
+    ) {
       toast.error("Completa todos los campos de contraseña.");
       return;
     }
@@ -121,18 +129,34 @@ export default function PerfilPage() {
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="firstName">Nombre</Label>
-                  <Input id="firstName" value={form.firstName || ""} onChange={handleChange} />
+                  <Input
+                    id="firstName"
+                    value={form.firstName || ""}
+                    onChange={handleChange}
+                  />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="lastName">Apellido</Label>
-                  <Input id="lastName" value={form.lastName || ""} onChange={handleChange} />
+                  <Input
+                    id="lastName"
+                    value={form.lastName || ""}
+                    onChange={handleChange}
+                  />
                 </div>
               </div>
               <div className="space-y-2">
                 <Label htmlFor="email">Correo Electrónico</Label>
-                <Input id="email" type="email" value={form.email || ""} disabled />
+                <Input
+                  id="email"
+                  type="email"
+                  value={form.email || ""}
+                  disabled
+                />
               </div>
-              <Button className="bg-[#8B5CF6] hover:bg-[#7C3AED]" onClick={handleSave}>
+              <Button
+                className="bg-[#8B5CF6] hover:bg-[#7C3AED]"
+                onClick={handleSave}
+              >
                 Guardar Cambios
               </Button>
             </CardContent>
@@ -147,17 +171,38 @@ export default function PerfilPage() {
             <CardContent className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="portfolio">Enlace al Portafolio</Label>
-                <Input id="portfolio" type="url" value={form.portfolio || ""} onChange={handleChange} placeholder="https://tu-portafolio.com" />
+                <Input
+                  id="portfolio"
+                  type="url"
+                  value={form.portfolio || ""}
+                  onChange={handleChange}
+                  placeholder="https://tu-portafolio.com"
+                />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="cv">Enlace al CV</Label>
-                <Input id="cv" type="url" value={form.cv || ""} onChange={handleChange} placeholder="https://tu-cv.com" />
+                <Input
+                  id="cv"
+                  type="url"
+                  value={form.cv || ""}
+                  onChange={handleChange}
+                  placeholder="https://tu-cv.com"
+                />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="linkedin">Enlace a LinkedIn</Label>
-                <Input id="linkedin" type="url" value={form.linkedin || ""} onChange={handleChange} placeholder="https://linkedin.com/in/tu-perfil" />
+                <Input
+                  id="linkedin"
+                  type="url"
+                  value={form.linkedin || ""}
+                  onChange={handleChange}
+                  placeholder="https://linkedin.com/in/tu-perfil"
+                />
               </div>
-              <Button className="bg-[#8B5CF6] hover:bg-[#7C3AED]" onClick={handleLinksSave}>
+              <Button
+                className="bg-[#8B5CF6] hover:bg-[#7C3AED]"
+                onClick={handleLinksSave}
+              >
                 Guardar Enlaces
               </Button>
             </CardContent>
@@ -172,17 +217,37 @@ export default function PerfilPage() {
             <CardContent className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="password">Contraseña Actual</Label>
-                <Input id="password" type="password" value={passwords.password} onChange={handlePasswordChange} />
+                <Input
+                  id="password"
+                  type="password"
+                  value={passwords.password}
+                  onChange={handlePasswordChange}
+                />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="newPassword">Nueva Contraseña</Label>
-                <Input id="newPassword" type="password" value={passwords.newPassword} onChange={handlePasswordChange} />
+                <Input
+                  id="newPassword"
+                  type="password"
+                  value={passwords.newPassword}
+                  onChange={handlePasswordChange}
+                />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="confirmPassword">Confirmar Nueva Contraseña</Label>
-                <Input id="confirmPassword" type="password" value={passwords.confirmPassword} onChange={handlePasswordChange} />
+                <Label htmlFor="confirmPassword">
+                  Confirmar Nueva Contraseña
+                </Label>
+                <Input
+                  id="confirmPassword"
+                  type="password"
+                  value={passwords.confirmPassword}
+                  onChange={handlePasswordChange}
+                />
               </div>
-              <Button className="bg-[#8B5CF6] hover:bg-[#7C3AED]" onClick={handleChangePassword}>
+              <Button
+                className="bg-[#8B5CF6] hover:bg-[#7C3AED]"
+                onClick={handleChangePassword}
+              >
                 Cambiar Contraseña
               </Button>
             </CardContent>
@@ -205,7 +270,9 @@ export default function PerfilPage() {
 
       <Tabs defaultValue="informacion" className="space-y-4">
         <TabsList>
-          <TabsTrigger value="informacion">Información de la Empresa</TabsTrigger>
+          <TabsTrigger value="informacion">
+            Información de la Empresa
+          </TabsTrigger>
           <TabsTrigger value="seguridad">Seguridad</TabsTrigger>
         </TabsList>
 
@@ -217,17 +284,33 @@ export default function PerfilPage() {
             <CardContent className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="organizationName">Nombre de la Empresa</Label>
-                <Input id="organizationName" value={form.organizationName || ""} onChange={handleChange} />
+                <Input
+                  id="organizationName"
+                  value={form.organizationName || ""}
+                  onChange={handleChange}
+                />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="descripcion">Descripción</Label>
-                <Input id="descripcion" value={form.descripcion || ""} onChange={handleChange} />
+                <Input
+                  id="descripcion"
+                  value={form.descripcion || ""}
+                  onChange={handleChange}
+                />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="email">Correo Electrónico</Label>
-                <Input id="email" type="email" value={form.email || ""} disabled />
+                <Input
+                  id="email"
+                  type="email"
+                  value={form.email || ""}
+                  disabled
+                />
               </div>
-              <Button className="bg-[#8B5CF6] hover:bg-[#7C3AED]" onClick={handleSave}>
+              <Button
+                className="bg-[#8B5CF6] hover:bg-[#7C3AED]"
+                onClick={handleSave}
+              >
                 Guardar Cambios
               </Button>
             </CardContent>
@@ -242,17 +325,37 @@ export default function PerfilPage() {
             <CardContent className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="password">Contraseña Actual</Label>
-                <Input id="password" type="password" value={passwords.password} onChange={handlePasswordChange} />
+                <Input
+                  id="password"
+                  type="password"
+                  value={passwords.password}
+                  onChange={handlePasswordChange}
+                />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="newPassword">Nueva Contraseña</Label>
-                <Input id="newPassword" type="password" value={passwords.newPassword} onChange={handlePasswordChange} />
+                <Input
+                  id="newPassword"
+                  type="password"
+                  value={passwords.newPassword}
+                  onChange={handlePasswordChange}
+                />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="confirmPassword">Confirmar Nueva Contraseña</Label>
-                <Input id="confirmPassword" type="password" value={passwords.confirmPassword} onChange={handlePasswordChange} />
+                <Label htmlFor="confirmPassword">
+                  Confirmar Nueva Contraseña
+                </Label>
+                <Input
+                  id="confirmPassword"
+                  type="password"
+                  value={passwords.confirmPassword}
+                  onChange={handlePasswordChange}
+                />
               </div>
-              <Button className="bg-[#8B5CF6] hover:bg-[#7C3AED]" onClick={handleChangePassword}>
+              <Button
+                className="bg-[#8B5CF6] hover:bg-[#7C3AED]"
+                onClick={handleChangePassword}
+              >
                 Cambiar Contraseña
               </Button>
             </CardContent>
@@ -288,18 +391,34 @@ export default function PerfilPage() {
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="firstName">Nombre</Label>
-                  <Input id="firstName" value={form.firstName || ""} onChange={handleChange} />
+                  <Input
+                    id="firstName"
+                    value={form.firstName || ""}
+                    onChange={handleChange}
+                  />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="lastName">Apellido</Label>
-                  <Input id="lastName" value={form.lastName || ""} onChange={handleChange} />
+                  <Input
+                    id="lastName"
+                    value={form.lastName || ""}
+                    onChange={handleChange}
+                  />
                 </div>
               </div>
               <div className="space-y-2">
                 <Label htmlFor="email">Correo Electrónico</Label>
-                <Input id="email" type="email" value={form.email || ""} disabled />
+                <Input
+                  id="email"
+                  type="email"
+                  value={form.email || ""}
+                  disabled
+                />
               </div>
-              <Button className="bg-[#8B5CF6] hover:bg-[#7C3AED]" onClick={handleSave}>
+              <Button
+                className="bg-[#8B5CF6] hover:bg-[#7C3AED]"
+                onClick={handleSave}
+              >
                 Guardar Cambios
               </Button>
             </CardContent>
@@ -314,17 +433,37 @@ export default function PerfilPage() {
             <CardContent className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="password">Contraseña Actual</Label>
-                <Input id="password" type="password" value={passwords.password} onChange={handlePasswordChange} />
+                <Input
+                  id="password"
+                  type="password"
+                  value={passwords.password}
+                  onChange={handlePasswordChange}
+                />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="newPassword">Nueva Contraseña</Label>
-                <Input id="newPassword" type="password" value={passwords.newPassword} onChange={handlePasswordChange} />
+                <Input
+                  id="newPassword"
+                  type="password"
+                  value={passwords.newPassword}
+                  onChange={handlePasswordChange}
+                />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="confirmPassword">Confirmar Nueva Contraseña</Label>
-                <Input id="confirmPassword" type="password" value={passwords.confirmPassword} onChange={handlePasswordChange} />
+                <Label htmlFor="confirmPassword">
+                  Confirmar Nueva Contraseña
+                </Label>
+                <Input
+                  id="confirmPassword"
+                  type="password"
+                  value={passwords.confirmPassword}
+                  onChange={handlePasswordChange}
+                />
               </div>
-              <Button className="bg-[#8B5CF6] hover:bg-[#7C3AED]" onClick={handleChangePassword}>
+              <Button
+                className="bg-[#8B5CF6] hover:bg-[#7C3AED]"
+                onClick={handleChangePassword}
+              >
                 Cambiar Contraseña
               </Button>
             </CardContent>
@@ -346,4 +485,4 @@ export default function PerfilPage() {
     default:
       return null;
   }
-} 
+}

@@ -4,7 +4,13 @@ import { useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { dataStorage } from "@/lib/data-storage";
 import { useAuth } from "@/lib/context/auth-context";
 import { toast } from "sonner";
@@ -21,7 +27,12 @@ interface ItemListProps {
 
 // TODO: Reemplazar con conexión a Django
 
-export function ItemList({ type, showActions = false, onItemDeleted, onItemEdited }: ItemListProps) {
+export function ItemList({
+  type,
+  showActions = false,
+  onItemDeleted,
+  onItemEdited,
+}: ItemListProps) {
   const { user } = useAuth();
   const [items, setItems] = useState<BaseItem[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -64,7 +75,12 @@ export function ItemList({ type, showActions = false, onItemDeleted, onItemEdite
       return;
     }
 
-    const success = dataStorage.createApplication(id, type, user.id, user.email);
+    const success = dataStorage.createApplication(
+      id,
+      type,
+      user.id,
+      user.email,
+    );
     if (success) {
       toast.success("¡Postulación exitosa!");
     } else {
@@ -73,7 +89,8 @@ export function ItemList({ type, showActions = false, onItemDeleted, onItemEdite
   };
 
   const filteredItems = items.filter((item) => {
-    const matchesSearch = item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    const matchesSearch =
+      item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       item.description.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = !category || item.category === category;
     const matchesLocation = !location || item.location === location;
@@ -143,7 +160,8 @@ export function ItemList({ type, showActions = false, onItemDeleted, onItemEdite
             <p className="text-sm text-gray-500 mt-1">{item.description}</p>
             <div className="mt-4 space-y-2">
               <p className="text-sm">
-                <span className="font-medium">Fecha:</span> {new Date(item.date).toLocaleDateString()}
+                <span className="font-medium">Fecha:</span>{" "}
+                {new Date(item.date).toLocaleDateString()}
               </p>
               <p className="text-sm">
                 <span className="font-medium">Ubicación:</span> {item.location}
@@ -167,10 +185,7 @@ export function ItemList({ type, showActions = false, onItemDeleted, onItemEdite
                 </div>
               )}
               {!showActions && user?.role === "student" && (
-                <Button
-                  className="w-full"
-                  onClick={() => handleApply(item.id)}
-                >
+                <Button className="w-full" onClick={() => handleApply(item.id)}>
                   Postularme
                 </Button>
               )}
@@ -180,4 +195,4 @@ export function ItemList({ type, showActions = false, onItemDeleted, onItemEdite
       </div>
     </div>
   );
-} 
+}

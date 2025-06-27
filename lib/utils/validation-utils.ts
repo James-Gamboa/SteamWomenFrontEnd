@@ -12,7 +12,10 @@ export const validateEvent = (event: any): ValidationError[] => {
   }
 
   if (!event.description?.trim()) {
-    errors.push({ field: "description", message: "La descripción es requerida" });
+    errors.push({
+      field: "description",
+      message: "La descripción es requerida",
+    });
   }
 
   if (!event.location?.trim()) {
@@ -22,7 +25,10 @@ export const validateEvent = (event: any): ValidationError[] => {
   if (!event.date?.trim()) {
     errors.push({ field: "date", message: "La fecha es requerida" });
   } else if (!isValidDate(event.date)) {
-    errors.push({ field: "date", message: "Formato de fecha inválido (YYYY-MM-DD)" });
+    errors.push({
+      field: "date",
+      message: "Formato de fecha inválido (YYYY-MM-DD)",
+    });
   }
 
   if (!event.time?.trim()) {
@@ -48,7 +54,10 @@ export const validateOpportunity = (opportunity: any): ValidationError[] => {
   }
 
   if (!opportunity.description?.trim()) {
-    errors.push({ field: "description", message: "La descripción es requerida" });
+    errors.push({
+      field: "description",
+      message: "La descripción es requerida",
+    });
   }
 
   if (!opportunity.location?.trim()) {
@@ -58,7 +67,10 @@ export const validateOpportunity = (opportunity: any): ValidationError[] => {
   if (!opportunity.date?.trim()) {
     errors.push({ field: "date", message: "La fecha es requerida" });
   } else if (!isValidDate(opportunity.date)) {
-    errors.push({ field: "date", message: "Formato de fecha inválido (YYYY-MM-DD)" });
+    errors.push({
+      field: "date",
+      message: "Formato de fecha inválido (YYYY-MM-DD)",
+    });
   }
 
   if (!opportunity.category?.trim()) {
@@ -70,15 +82,24 @@ export const validateOpportunity = (opportunity: any): ValidationError[] => {
   }
 
   if (!opportunity.requirements?.length) {
-    errors.push({ field: "requirements", message: "Los requisitos son requeridos" });
+    errors.push({
+      field: "requirements",
+      message: "Los requisitos son requeridos",
+    });
   }
 
   if (!opportunity.benefits?.length) {
-    errors.push({ field: "benefits", message: "Los beneficios son requeridos" });
+    errors.push({
+      field: "benefits",
+      message: "Los beneficios son requeridos",
+    });
   }
 
   if (!opportunity.applicationProcess?.trim()) {
-    errors.push({ field: "applicationProcess", message: "El proceso de aplicación es requerido" });
+    errors.push({
+      field: "applicationProcess",
+      message: "El proceso de aplicación es requerido",
+    });
   }
 
   return errors;

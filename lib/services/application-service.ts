@@ -17,9 +17,13 @@ const getApplications = (): Application[] => {
 };
 
 export const applicationService = {
-  async createApplication(jobId: string, userId: string, motivationLetter: string): Promise<Application> {
+  async createApplication(
+    jobId: string,
+    userId: string,
+    motivationLetter: string,
+  ): Promise<Application> {
     const applications = getApplications();
-    
+
     const newApplication: Application = {
       id: crypto.randomUUID(),
       job_id: jobId,
@@ -31,31 +35,34 @@ export const applicationService = {
 
     applications.push(newApplication);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(applications));
-    
+
     return newApplication;
   },
 
   async getApplicationsByUser(userId: string): Promise<Application[]> {
     const applications = getApplications();
-    return applications.filter(app => app.user_id === userId);
+    return applications.filter((app) => app.user_id === userId);
   },
 
   async getApplicationsByJob(jobId: string): Promise<Application[]> {
     const applications = getApplications();
-    return applications.filter(app => app.job_id === jobId);
+    return applications.filter((app) => app.job_id === jobId);
   },
 
-  async updateApplicationStatus(applicationId: string, status: "accepted" | "rejected"): Promise<Application> {
+  async updateApplicationStatus(
+    applicationId: string,
+    status: "accepted" | "rejected",
+  ): Promise<Application> {
     const applications = getApplications();
-    const index = applications.findIndex(app => app.id === applicationId);
-    
+    const index = applications.findIndex((app) => app.id === applicationId);
+
     if (index === -1) {
       throw new Error("Application not found");
     }
 
     applications[index].status = status;
     localStorage.setItem(STORAGE_KEY, JSON.stringify(applications));
-    
+
     return applications[index];
-  }
-}; 
+  },
+};

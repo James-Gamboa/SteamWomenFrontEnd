@@ -2,7 +2,13 @@
 
 import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Search, Calendar, ArrowUpDown } from "lucide-react";
 import { BaseItem, ItemType } from "@/lib/data-storage";
 
@@ -15,20 +21,14 @@ interface ItemFiltersProps {
 }
 
 const categories: Record<"event" | "opportunity", string[]> = {
-  event: [
-    "Conferencia",
-    "Taller",
-    "Networking",
-    "Hackathon",
-    "Otro"
-  ],
+  event: ["Conferencia", "Taller", "Networking", "Hackathon", "Otro"],
   opportunity: [
     "Tiempo completo",
     "Medio tiempo",
     "Freelance",
     "Práctica",
-    "Otro"
-  ]
+    "Otro",
+  ],
 };
 
 const locations = [
@@ -37,10 +37,10 @@ const locations = [
   "Cartago",
   "Limón",
   "Puntarenas",
-  "Otro"
+  "Otro",
 ] as const;
 
-type Location = typeof locations[number];
+type Location = (typeof locations)[number];
 
 // TODO: Reemplazar con conexión a Django
 
@@ -49,7 +49,7 @@ export function ItemFilters({
   category,
   location,
   onCategoryChange,
-  onLocationChange
+  onLocationChange,
 }: ItemFiltersProps) {
   const [search, setSearch] = useState("");
   const [sortBy, setSortBy] = useState<"date" | "relevance">("date");
@@ -60,7 +60,11 @@ export function ItemFilters({
     if (items) {
       const parsedItems: BaseItem[] = JSON.parse(items);
       const uniqueCategories = Array.from(
-        new Set(parsedItems.filter(item => item.type === type).map(item => item.category))
+        new Set(
+          parsedItems
+            .filter((item) => item.type === type)
+            .map((item) => item.category),
+        ),
       );
       setCustomCategories(uniqueCategories);
     }
@@ -106,7 +110,10 @@ export function ItemFilters({
         </SelectContent>
       </Select>
 
-      <Select value={sortBy} onValueChange={(value: "date" | "relevance") => setSortBy(value)}>
+      <Select
+        value={sortBy}
+        onValueChange={(value: "date" | "relevance") => setSortBy(value)}
+      >
         <SelectTrigger>
           <SelectValue placeholder="Ordenar por" />
         </SelectTrigger>
@@ -127,4 +134,4 @@ export function ItemFilters({
       </Select>
     </div>
   );
-} 
+}

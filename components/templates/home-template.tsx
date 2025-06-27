@@ -7,7 +7,6 @@ import { JoinCommunitySection } from "@/components/organisms/join-community-sect
 import { ParallaxSections } from "@/components/organisms/parallax-sections";
 
 export function HomeTemplate() {
-
   return (
     <div>
       <ParallaxSections />

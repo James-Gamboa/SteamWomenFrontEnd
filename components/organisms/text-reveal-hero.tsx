@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
@@ -21,7 +21,7 @@ export function TextRevealHero() {
 
   return (
     <ParallaxHero>
-      <h1 
+      <h1
         ref={titleRef}
         className="mb-6 font-bold text-[38px] lg:text-[90px] text-white"
         style={{
@@ -32,7 +32,7 @@ export function TextRevealHero() {
       >
         STEAMWOMEN
       </h1>
-      <h2 
+      <h2
         ref={subtitleRef}
         className="mb-4 font-medium text-white"
         style={{

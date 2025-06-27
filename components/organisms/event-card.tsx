@@ -33,7 +33,11 @@ interface EventCardProps {
     backgroundColor: string;
     color: string;
   };
-  formatDate: (dateString: string) => { day: number; month: string; year: number };
+  formatDate: (dateString: string) => {
+    day: number;
+    month: string;
+    year: number;
+  };
   variant?: "list" | "calendar";
   isDashboard?: boolean;
   onEdit?: (event: any) => void;
@@ -57,8 +61,8 @@ export function EventCard({
 
   const formatDateISO = (dateString: string) => {
     const date = new Date(dateString);
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
     const year = date.getFullYear();
     return `${day}-${month}-${year}`;
   };
@@ -90,7 +94,8 @@ export function EventCard({
     const card = cardRef.current;
     const light = lightRef.current;
     if (!card || !light) return;
-    card.style.transform = "perspective(900px) rotateX(0deg) rotateY(0deg) scale(1)";
+    card.style.transform =
+      "perspective(900px) rotateX(0deg) rotateY(0deg) scale(1)";
     card.style.opacity = "1";
     card.style.display = "block";
     light.style.opacity = "0";
@@ -98,8 +103,10 @@ export function EventCard({
 
   const handleVisitSite = (e: React.MouseEvent) => {
     e.preventDefault();
-    const url = event.website?.startsWith('http') ? event.website : `https://${event.website}`;
-    window.open(url, '_blank');
+    const url = event.website?.startsWith("http")
+      ? event.website
+      : `https://${event.website}`;
+    window.open(url, "_blank");
   };
 
   const handleEdit = (e: React.MouseEvent) => {
@@ -114,12 +121,17 @@ export function EventCard({
 
   const handleViewPublic = (e: React.MouseEvent) => {
     e.preventDefault();
-    router.push(`/${type === "event" ? "eventos" : "oportunidades"}/${event.slug}`);
+    router.push(
+      `/${type === "event" ? "eventos" : "oportunidades"}/${event.slug}`,
+    );
   };
 
   if (variant === "calendar") {
     return (
-      <Link href={`/${type === "event" ? "eventos" : "oportunidades"}/${event.slug}`} className="block">
+      <Link
+        href={`/${type === "event" ? "eventos" : "oportunidades"}/${event.slug}`}
+        className="block"
+      >
         <Card
           className="overflow-hidden flex hover:shadow-lg border-0 shadow-sm cursor-pointer transition-all hover:scale-[1.01]"
           style={{ backgroundColor: "#FFFFFF" }}
@@ -180,7 +192,11 @@ export function EventCard({
 
   if (!isDashboard) {
     return (
-      <Link href={`/${type === "event" ? "eventos" : "oportunidades"}/${event.slug}`} tabIndex={0} style={{ outline: "none" }}>
+      <Link
+        href={`/${type === "event" ? "eventos" : "oportunidades"}/${event.slug}`}
+        tabIndex={0}
+        style={{ outline: "none" }}
+      >
         <div
           ref={cardRef}
           className="event-card relative overflow-hidden rounded-xl border-2 border-transparent group transition-all duration-300 cursor-pointer bg-white shadow-md"
@@ -351,7 +367,10 @@ export function EventCard({
         {isDashboard && (
           <div className="flex flex-col md:flex-row md:items-center gap-4 mt-4">
             <button
-              onClick={e => { e.preventDefault(); onEdit?.(event); }}
+              onClick={(e) => {
+                e.preventDefault();
+                onEdit?.(event);
+              }}
               className="flex items-center gap-1 text-[#8B5CF6] bg-gray-50 rounded px-3 py-1.5 hover:bg-[#ede9fe] transition focus:outline-none focus:ring-2"
               tabIndex={0}
               aria-label="Editar"
@@ -360,7 +379,10 @@ export function EventCard({
               Editar
             </button>
             <button
-              onClick={e => { e.preventDefault(); onDelete?.(event); }}
+              onClick={(e) => {
+                e.preventDefault();
+                onDelete?.(event);
+              }}
               className="flex items-center gap-1 text-[#EF4444] bg-gray-50 rounded px-3 py-1.5 hover:bg-red-100 transition focus:outline-none focus:ring-2"
               tabIndex={0}
               aria-label="Eliminar"

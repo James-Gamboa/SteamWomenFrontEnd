@@ -97,7 +97,9 @@ export default function EventsPage() {
   };
 
   const handleEditSubmit = (eventData: Event) => {
-    const updatedEvents = events.map((e) => (e.id === eventData.id ? eventData : e));
+    const updatedEvents = events.map((e) =>
+      e.id === eventData.id ? eventData : e,
+    );
     localStorage.setItem("events", JSON.stringify(updatedEvents));
     setEvents(updatedEvents);
     setIsEditModalOpen(false);
@@ -140,8 +142,8 @@ export default function EventsPage() {
     const date = new Date(dateString);
     return {
       day: date.getDate(),
-      month: date.toLocaleString('es-ES', { month: 'long' }),
-      year: date.getFullYear()
+      month: date.toLocaleString("es-ES", { month: "long" }),
+      year: date.getFullYear(),
     };
   };
 
@@ -156,7 +158,10 @@ export default function EventsPage() {
             Gestiona tus eventos publicados
           </p>
         </div>
-        <Button onClick={handleCreate} className="bg-[#8B5CF6] hover:bg-[#7C3AED] text-white font-semibold px-6 py-2 rounded-lg">
+        <Button
+          onClick={handleCreate}
+          className="bg-[#8B5CF6] hover:bg-[#7C3AED] text-white font-semibold px-6 py-2 rounded-lg"
+        >
           <Plus className="w-4 h-4 mr-2" /> Crear Evento
         </Button>
       </div>
@@ -201,4 +206,4 @@ export default function EventsPage() {
       )}
     </div>
   );
-} 
+}

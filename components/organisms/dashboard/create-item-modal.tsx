@@ -1,14 +1,26 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Plus, X, ChevronRight, Upload, Image as ImageIcon } from "lucide-react";
+import {
+  Plus,
+  X,
+  ChevronRight,
+  Upload,
+  Image as ImageIcon,
+} from "lucide-react";
 import { toast } from "sonner";
-import { dataStorage, BaseItem, ItemType } from "@/lib/data-storage";
+import { createItem, BaseItem, ItemType } from "@/lib/data-storage";
 
 interface CreateItemModalProps {
   type: ItemType;
@@ -100,12 +112,18 @@ export function CreateItemModal({ type, onItemCreated }: CreateItemModalProps) {
     }
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleArrayInputChange = (index: number, value: string, field: "requirements" | "benefits") => {
+  const handleArrayInputChange = (
+    index: number,
+    value: string,
+    field: "requirements" | "benefits",
+  ) => {
     setFormData((prev) => ({
       ...prev,
       [field]: prev[field].map((item, i) => (i === index ? value : item)),
@@ -119,7 +137,10 @@ export function CreateItemModal({ type, onItemCreated }: CreateItemModalProps) {
     }));
   };
 
-  const removeArrayItem = (index: number, field: "requirements" | "benefits") => {
+  const removeArrayItem = (
+    index: number,
+    field: "requirements" | "benefits",
+  ) => {
     setFormData((prev) => ({
       ...prev,
       [field]: prev[field].filter((_, i) => i !== index),
@@ -147,39 +168,51 @@ export function CreateItemModal({ type, onItemCreated }: CreateItemModalProps) {
     setLoading(true);
 
     try {
+      const tempId = crypto.randomUUID
+        ? crypto.randomUUID()
+        : Math.random().toString(36).substring(2, 15);
       const newItem = {
         ...formData,
         type,
-        slug: formData.title.toLowerCase().replace(/\s+/g, "-"),
-        image: formData.image || "https://images.unsplash.com/photo-1573167243872-43c6433b9d40?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+        slug: formData.title.toLowerCase().replace(/\s+/g, "-") + "-" + tempId,
+        image:
+          formData.image ||
+          "https://images.unsplash.com/photo-1573167243872-43c6433b9d40?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+        id: tempId,
       };
 
-      dataStorage.createItem(newItem);
+      createItem(newItem);
 
-      toast.success(`${type === 'event' ? 'Evento' : 'Oportunidad'} creado exitosamente`, {
-        style: {
-          backgroundColor: "#F1F0FB",
-          color: "#1A1F2C",
-          fontFamily: "DM Sans, sans-serif",
-          fontSize: "14px",
-          lineHeight: "18px",
-          fontWeight: "500",
+      toast.success(
+        `${type === "event" ? "Evento" : "Oportunidad"} creado exitosamente`,
+        {
+          style: {
+            backgroundColor: "#F1F0FB",
+            color: "#1A1F2C",
+            fontFamily: "DM Sans, sans-serif",
+            fontSize: "14px",
+            lineHeight: "18px",
+            fontWeight: "500",
+          },
         },
-      });
+      );
 
       setOpen(false);
       onItemCreated();
     } catch (error) {
-      toast.error(`Error al crear ${type === 'event' ? 'el evento' : 'la oportunidad'}`, {
-        style: {
-          backgroundColor: "#FEE2E2",
-          color: "#991B1B",
-          fontFamily: "DM Sans, sans-serif",
-          fontSize: "14px",
-          lineHeight: "18px",
-          fontWeight: "500",
+      toast.error(
+        `Error al crear ${type === "event" ? "el evento" : "la oportunidad"}`,
+        {
+          style: {
+            backgroundColor: "#FEE2E2",
+            color: "#991B1B",
+            fontFamily: "DM Sans, sans-serif",
+            fontSize: "14px",
+            lineHeight: "18px",
+            fontWeight: "500",
+          },
         },
-      });
+      );
     } finally {
       setLoading(false);
       setTimeout(() => {
@@ -209,7 +242,7 @@ export function CreateItemModal({ type, onItemCreated }: CreateItemModalProps) {
                 value={formData.title}
                 onChange={handleInputChange}
                 required
-                placeholder={`Ej: ${type === 'event' ? 'Workshop de Diseño UX' : 'Desarrollador Frontend'}`}
+                placeholder={`Ej: ${type === "event" ? "Workshop de Diseño UX" : "Desarrollador Frontend"}`}
                 className="h-12"
               />
             </div>
@@ -221,7 +254,7 @@ export function CreateItemModal({ type, onItemCreated }: CreateItemModalProps) {
                 value={formData.category}
                 onChange={handleInputChange}
                 required
-                placeholder={`Ej: ${type === 'event' ? 'Taller, Conferencia, Webinar' : 'Desarrollo, Diseño, Marketing'}`}
+                placeholder={`Ej: ${type === "event" ? "Taller, Conferencia, Webinar" : "Desarrollo, Diseño, Marketing"}`}
                 className="h-12"
               />
             </div>
@@ -255,9 +288,14 @@ export function CreateItemModal({ type, onItemCreated }: CreateItemModalProps) {
                       <>
                         <Upload className="w-8 h-8 mb-2 text-gray-500" />
                         <p className="mb-2 text-sm text-gray-500">
-                          <span className="font-semibold">Haz clic para subir</span> o arrastra y suelta
+                          <span className="font-semibold">
+                            Haz clic para subir
+                          </span>{" "}
+                          o arrastra y suelta
                         </p>
-                        <p className="text-xs text-gray-500">PNG, JPG o WEBP (MAX. 5MB)</p>
+                        <p className="text-xs text-gray-500">
+                          PNG, JPG o WEBP (MAX. 5MB)
+                        </p>
                       </>
                     )}
                   </div>
@@ -361,7 +399,13 @@ export function CreateItemModal({ type, onItemCreated }: CreateItemModalProps) {
                 <div key={index} className="flex gap-2">
                   <Input
                     value={req}
-                    onChange={(e) => handleArrayInputChange(index, e.target.value, "requirements")}
+                    onChange={(e) =>
+                      handleArrayInputChange(
+                        index,
+                        e.target.value,
+                        "requirements",
+                      )
+                    }
                     placeholder={`Requisito ${index + 1}`}
                     className="h-12"
                   />
@@ -392,7 +436,9 @@ export function CreateItemModal({ type, onItemCreated }: CreateItemModalProps) {
                 <div key={index} className="flex gap-2">
                   <Input
                     value={benefit}
-                    onChange={(e) => handleArrayInputChange(index, e.target.value, "benefits")}
+                    onChange={(e) =>
+                      handleArrayInputChange(index, e.target.value, "benefits")
+                    }
                     placeholder={`Beneficio ${index + 1}`}
                     className="h-12"
                   />
@@ -441,12 +487,14 @@ export function CreateItemModal({ type, onItemCreated }: CreateItemModalProps) {
       <DialogTrigger asChild>
         <Button className="w-full">
           <Plus className="h-4 w-4 mr-2" />
-          Crear {type === 'event' ? 'Evento' : 'Oportunidad'}
+          Crear {type === "event" ? "Evento" : "Oportunidad"}
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[600px]">
         <DialogHeader>
-          <DialogTitle>Crear {type === 'event' ? 'Evento' : 'Oportunidad'}</DialogTitle>
+          <DialogTitle>
+            Crear {type === "event" ? "Evento" : "Oportunidad"}
+          </DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-6">
           {renderStep()}
@@ -471,4 +519,4 @@ export function CreateItemModal({ type, onItemCreated }: CreateItemModalProps) {
       </DialogContent>
     </Dialog>
   );
-} 
+}

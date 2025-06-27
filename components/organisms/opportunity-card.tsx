@@ -37,14 +37,17 @@ export function OpportunityCard({ opportunity }: { opportunity: any }) {
     const card = cardRef.current;
     const light = lightRef.current;
     if (!card || !light) return;
-    card.style.transform = "perspective(900px) rotateX(0deg) rotateY(0deg) scale(1)";
+    card.style.transform =
+      "perspective(900px) rotateX(0deg) rotateY(0deg) scale(1)";
     card.style.opacity = "1";
     card.style.display = "block";
     light.style.opacity = "0";
   };
 
   const formatDateISO = (dateString: string) => {
+    if (!dateString) return "";
     const date = new Date(dateString);
+    if (isNaN(date.getTime())) return "";
     return date.toISOString().split("T")[0];
   };
 

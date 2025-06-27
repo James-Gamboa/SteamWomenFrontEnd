@@ -9,7 +9,7 @@ export function ContactFormSection() {
     e.preventDefault();
     setIsLoading(true);
     try {
-      await new Promise(res => setTimeout(res, 1200));
+      await new Promise((res) => setTimeout(res, 1200));
       toast.success("¡Mensaje enviado con éxito!");
     } catch (err) {
       toast.error("Hubo un error, intenta de nuevo.");
@@ -25,4 +25,4 @@ export function ContactFormSection() {
       </Button>
     </form>
   );
-} 
+}

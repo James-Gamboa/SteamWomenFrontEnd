@@ -12,7 +12,7 @@ export async function POST(request: Request) {
     if (!refreshToken) {
       return NextResponse.json(
         { error: "No refresh token provided" },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
@@ -35,15 +35,12 @@ export async function POST(request: Request) {
     // const data = await response.json();
     // return NextResponse.json({ token: data.access });
 
-    return NextResponse.json(
-      { error: "Not implemented" },
-      { status: 501 }
-    );
+    return NextResponse.json({ error: "Not implemented" }, { status: 501 });
   } catch (error) {
     console.error("Error refreshing token:", error);
     return NextResponse.json(
       { error: "Error refreshing token" },
-      { status: 500 }
+      { status: 500 },
     );
   }
-} 
+}

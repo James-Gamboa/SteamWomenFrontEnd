@@ -30,7 +30,7 @@ import { toast } from "sonner";
 import { getRoleLabel } from "@/utils/role-label";
 import { navigationByRole } from "@/lib/navigation";
 
-// TODO: Reemplazar con conexión a Django 
+// TODO: Reemplazar con conexión a Django
 
 interface SidebarProps {
   open?: boolean;
@@ -56,7 +56,7 @@ export function Sidebar({ open, setOpen, onLogout }: SidebarProps) {
         fontWeight: "500",
       },
     });
-      router.push("/");
+    router.push("/");
   };
 
   if (!user) return null;
@@ -64,14 +64,16 @@ export function Sidebar({ open, setOpen, onLogout }: SidebarProps) {
   const navigation = navigationByRole[user.role] || [];
 
   const Drawer = (
-    <div className={cn(
-      "fixed inset-0 z-40 flex md:hidden transition-all",
-      open ? "" : "pointer-events-none"
-    )}>
+    <div
+      className={cn(
+        "fixed inset-0 z-40 flex md:hidden transition-all",
+        open ? "" : "pointer-events-none",
+      )}
+    >
       <div
         className={cn(
           "fixed inset-0 bg-black/40 transition-opacity",
-          open ? "opacity-100" : "opacity-0"
+          open ? "opacity-100" : "opacity-0",
         )}
         onClick={() => setOpen?.(false)}
         aria-label="Cerrar menú"
@@ -80,11 +82,13 @@ export function Sidebar({ open, setOpen, onLogout }: SidebarProps) {
       <aside
         className={cn(
           "relative w-64 bg-white dark:bg-[#1A1F2C] border-r border-gray-100 dark:border-gray-800 shadow-md flex flex-col py-6 px-2 min-h-full transform transition-transform duration-200",
-          open ? "translate-x-0" : "-translate-x-full"
+          open ? "translate-x-0" : "-translate-x-full",
         )}
       >
         <div className="flex items-center mb-8 px-4 pt-8 justify-between">
-          <span className="text-2xl font-extrabold text-[#8B5CF6] tracking-wide">STEAMWomen</span>
+          <span className="text-2xl font-extrabold text-[#8B5CF6] tracking-wide">
+            STEAMWomen
+          </span>
           <button
             className="md:hidden p-2 rounded hover:bg-[#ede9fe]"
             onClick={() => setOpen?.(false)}
@@ -108,7 +112,7 @@ export function Sidebar({ open, setOpen, onLogout }: SidebarProps) {
                   "flex items-center gap-3 px-4 py-2 rounded-lg font-medium transition-colors",
                   isActive
                     ? "bg-[#8B5CF6] text-white shadow"
-                    : "text-[#1A1F2C] dark:text-[#C8C8C9] hover:bg-[#ede9fe] dark:hover:bg-[#2a2342]"
+                    : "text-[#1A1F2C] dark:text-[#C8C8C9] hover:bg-[#ede9fe] dark:hover:bg-[#2a2342]",
                 )}
               >
                 <item.icon className="h-5 w-5" />
@@ -143,24 +147,37 @@ export function Sidebar({ open, setOpen, onLogout }: SidebarProps) {
   );
 
   const FixedSidebar = (
-    <aside className={cn(
-      "hidden md:flex bg-white dark:bg-[#1A1F2C] border-r border-gray-100 dark:border-gray-800 shadow-md flex-col py-0 min-h-screen transition-all duration-300",
-      collapsed ? "w-20" : "w-64"
-    )}>
+    <aside
+      className={cn(
+        "hidden md:flex bg-white dark:bg-[#1A1F2C] border-r border-gray-100 dark:border-gray-800 shadow-md flex-col py-0 min-h-screen transition-all duration-300",
+        collapsed ? "w-20" : "w-64",
+      )}
+    >
       <div className="flex flex-col items-center gap-2 py-8 px-4 bg-[#F1F0FB] dark:bg-[#232347] border-b border-gray-100 dark:border-gray-800">
-        <span className={cn(
-          "font-extrabold text-[#8B5CF6] tracking-wide transition-all duration-300",
-          collapsed ? "text-xl" : "text-3xl"
-        )}>SW</span>
+        <span
+          className={cn(
+            "font-extrabold text-[#8B5CF6] tracking-wide transition-all duration-300",
+            collapsed ? "text-xl" : "text-3xl",
+          )}
+        >
+          SW
+        </span>
         {user && !collapsed && (
           <div className="flex flex-col items-center mt-2">
             <div className="w-12 h-12 rounded-full bg-[#8B5CF6] flex items-center justify-center text-white text-xl font-bold mb-1">
-              {(user.firstName ? user.firstName[0] : user.email[0]).toUpperCase()}
+              {(user.firstName
+                ? user.firstName[0]
+                : user.email[0]
+              ).toUpperCase()}
             </div>
             <span className="text-base font-semibold text-[#1A1F2C] dark:text-white">
-              {user.firstName ? `${user.firstName} ${user.lastName || ""}`.trim() : user.email}
+              {user.firstName
+                ? `${user.firstName} ${user.lastName || ""}`.trim()
+                : user.email}
             </span>
-            <span className="text-xs text-[#8B5CF6] font-medium capitalize">{getRoleLabel(user.role)}</span>
+            <span className="text-xs text-[#8B5CF6] font-medium capitalize">
+              {getRoleLabel(user.role)}
+            </span>
           </div>
         )}
       </div>
@@ -176,7 +193,7 @@ export function Sidebar({ open, setOpen, onLogout }: SidebarProps) {
                 "flex items-center gap-3 px-4 py-2 rounded-lg font-medium transition-colors",
                 isActive
                   ? "bg-[#8B5CF6] text-white shadow"
-                  : "text-[#1A1F2C] dark:text-[#C8C8C9] hover:bg-[#ede9fe] dark:hover:bg-[#2a2342]"
+                  : "text-[#1A1F2C] dark:text-[#C8C8C9] hover:bg-[#ede9fe] dark:hover:bg-[#2a2342]",
               )}
             >
               <item.icon className="h-5 w-5" />
@@ -191,7 +208,11 @@ export function Sidebar({ open, setOpen, onLogout }: SidebarProps) {
           className="w-full flex items-center justify-center gap-2 text-[#8B5CF6] hover:bg-[#ede9fe] py-2"
           onClick={() => setCollapsed(!collapsed)}
         >
-          {collapsed ? <ChevronRight className="h-5 w-5" /> : <ChevronLeft className="h-5 w-5" />}
+          {collapsed ? (
+            <ChevronRight className="h-5 w-5" />
+          ) : (
+            <ChevronLeft className="h-5 w-5" />
+          )}
           {!collapsed && <span>Colapsar</span>}
         </Button>
         <Button

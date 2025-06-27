@@ -1,13 +1,24 @@
 "use client";
 
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { useState, useEffect, useRef } from "react";
 import { toast } from "sonner";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface Event {
   id: number;
@@ -40,7 +51,7 @@ const categories = [
   "Webinar",
   "Conferencia",
   "Hackathon",
-  "Otro"
+  "Otro",
 ];
 
 const provinces = [
@@ -50,12 +61,17 @@ const provinces = [
   "Heredia",
   "Guanacaste",
   "Puntarenas",
-  "Limón"
+  "Limón",
 ];
 
 // TODO: Reemplazar con conexión a Django
 
-export function EditEventModal({ event, open, onOpenChange, onEventUpdated }: EditEventModalProps) {
+export function EditEventModal({
+  event,
+  open,
+  onOpenChange,
+  onEventUpdated,
+}: EditEventModalProps) {
   const [loading, setLoading] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
   const [imagePreview, setImagePreview] = useState<string>(event.image);
@@ -79,30 +95,32 @@ export function EditEventModal({ event, open, onOpenChange, onEventUpdated }: Ed
       const reader = new FileReader();
       reader.onloadend = () => {
         setImagePreview(reader.result as string);
-        setFormData(prev => ({ ...prev, image: reader.result as string }));
+        setFormData((prev) => ({ ...prev, image: reader.result as string }));
       };
       reader.readAsDataURL(file);
     }
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSelectChange = (name: string, value: string) => {
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleArrayInputChange = (name: string, value: string) => {
-    const items = value.split('\n').filter(item => item.trim());
-    setFormData(prev => ({ ...prev, [name]: items }));
+    const items = value.split("\n").filter((item) => item.trim());
+    setFormData((prev) => ({ ...prev, [name]: items }));
   };
 
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let value = e.target.value.replace(/[^0-9-]/g, "");
     if (value.length === 2 || value.length === 5) value += "-";
-    setFormData(prev => ({ ...prev, date: value }));
+    setFormData((prev) => ({ ...prev, date: value }));
   };
 
   const handleDateBlur = (e: React.FocusEvent<HTMLInputElement>) => {
@@ -132,11 +150,11 @@ export function EditEventModal({ event, open, onOpenChange, onEventUpdated }: Ed
     setLoading(true);
     try {
       const events = JSON.parse(localStorage.getItem("events") || "[]");
-      const updatedEvents = events.map((e: Event) => 
-        e.id === event.id ? { ...formData, date: formData.date } : e
+      const updatedEvents = events.map((e: Event) =>
+        e.id === event.id ? { ...formData, date: formData.date } : e,
       );
       localStorage.setItem("events", JSON.stringify(updatedEvents));
-      
+
       toast.success("Evento actualizado exitosamente", {
         style: {
           backgroundColor: "#F1F0FB",
@@ -147,7 +165,7 @@ export function EditEventModal({ event, open, onOpenChange, onEventUpdated }: Ed
           fontWeight: "500",
         },
       });
-      
+
       onEventUpdated();
       onOpenChange(false);
     } catch (error) {
@@ -174,14 +192,14 @@ export function EditEventModal({ event, open, onOpenChange, onEventUpdated }: Ed
       <DialogContent className="max-w-2xl">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold text-[#1A1F2C]">
-            Editar Evento
+            Editar
           </DialogTitle>
         </DialogHeader>
 
         {currentStep === 1 && (
           <div className="space-y-4">
             <div>
-              <Label htmlFor="title">Título del evento</Label>
+              <Label htmlFor="title">Título</Label>
               <Input
                 id="title"
                 name="title"
@@ -237,11 +255,29 @@ export function EditEventModal({ event, open, onOpenChange, onEventUpdated }: Ed
                       />
                     ) : (
                       <>
-                        <svg className="w-8 h-8 mb-2 text-gray-500" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5-5m0 0l5 5m-5-5v12"></path></svg>
+                        <svg
+                          className="w-8 h-8 mb-2 text-gray-500"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5-5m0 0l5 5m-5-5v12"
+                          ></path>
+                        </svg>
                         <p className="mb-2 text-sm text-gray-500">
-                          <span className="font-semibold">Haz clic para subir</span> o arrastra y suelta
+                          <span className="font-semibold">
+                            Haz clic para subir
+                          </span>{" "}
+                          o arrastra y suelta
                         </p>
-                        <p className="text-xs text-gray-500">PNG, JPG o WEBP (MAX. 5MB)</p>
+                        <p className="text-xs text-gray-500">
+                          PNG, JPG o WEBP (MAX. 5MB)
+                        </p>
                       </>
                     )}
                   </div>
@@ -337,10 +373,7 @@ export function EditEventModal({ event, open, onOpenChange, onEventUpdated }: Ed
             </div>
 
             <div className="flex justify-between">
-              <Button
-                onClick={() => setCurrentStep(1)}
-                variant="outline"
-              >
+              <Button onClick={() => setCurrentStep(1)} variant="outline">
                 Anterior
               </Button>
               <Button
@@ -370,8 +403,10 @@ export function EditEventModal({ event, open, onOpenChange, onEventUpdated }: Ed
               <Label htmlFor="requirements">Requisitos (uno por línea)</Label>
               <Textarea
                 id="requirements"
-                value={formData.requirements.join('\n')}
-                onChange={(e) => handleArrayInputChange("requirements", e.target.value)}
+                value={formData.requirements.join("\n")}
+                onChange={(e) =>
+                  handleArrayInputChange("requirements", e.target.value)
+                }
                 placeholder="Ingresa los requisitos del evento"
               />
             </div>
@@ -380,8 +415,10 @@ export function EditEventModal({ event, open, onOpenChange, onEventUpdated }: Ed
               <Label htmlFor="benefits">Beneficios (uno por línea)</Label>
               <Textarea
                 id="benefits"
-                value={formData.benefits.join('\n')}
-                onChange={(e) => handleArrayInputChange("benefits", e.target.value)}
+                value={formData.benefits.join("\n")}
+                onChange={(e) =>
+                  handleArrayInputChange("benefits", e.target.value)
+                }
                 placeholder="Ingresa los beneficios del evento"
               />
             </div>
@@ -398,10 +435,7 @@ export function EditEventModal({ event, open, onOpenChange, onEventUpdated }: Ed
             </div>
 
             <div className="flex justify-between">
-              <Button
-                onClick={() => setCurrentStep(2)}
-                variant="outline"
-              >
+              <Button onClick={() => setCurrentStep(2)} variant="outline">
                 Anterior
               </Button>
               <Button
@@ -417,4 +451,4 @@ export function EditEventModal({ event, open, onOpenChange, onEventUpdated }: Ed
       </DialogContent>
     </Dialog>
   );
-} 
+}

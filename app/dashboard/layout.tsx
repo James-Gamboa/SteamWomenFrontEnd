@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { useState, useEffect } from "react";
 import { Sidebar } from "@/components/organisms/dashboard/sidebar";
@@ -23,7 +23,9 @@ const AdminRouteGuard = ({ children }: { children: React.ReactNode }) => {
   if (!user || user.role !== "admin") {
     return (
       <div className="flex flex-col items-center justify-center h-screen">
-        <span className="text-xl font-bold text-red-600">Acceso denegado: No tienes permisos para ver este panel.</span>
+        <span className="text-xl font-bold text-red-600">
+          Acceso denegado: No tienes permisos para ver este panel.
+        </span>
       </div>
     );
   }
@@ -41,14 +43,15 @@ export default function DashboardLayout({
 
   useEffect(() => {
     if (!user) {
-      redirect("/login");
+      redirect("/");
     }
   }, [user]);
 
   if (!user) return null;
 
-  const pathname = typeof window !== 'undefined' ? window.location.pathname : '';
-  const isAdminRoute = pathname.startsWith('/dashboard/admin');
+  const pathname =
+    typeof window !== "undefined" ? window.location.pathname : "";
+  const isAdminRoute = pathname.startsWith("/dashboard/admin");
 
   // TODO: Reemplazar con conexión a Django
 

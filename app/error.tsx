@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 export default function Error500({ reset }: { reset: () => void }) {
   return (
@@ -22,7 +22,12 @@ export default function Error500({ reset }: { reset: () => void }) {
           className="hidden sm:block"
         >
           <circle cx="40" cy="40" r="40" fill="#F1F0FB" />
-          <path d="M40 22V46" stroke="#8B5CF6" strokeWidth="6" strokeLinecap="round" />
+          <path
+            d="M40 22V46"
+            stroke="#8B5CF6"
+            strokeWidth="6"
+            strokeLinecap="round"
+          />
           <circle cx="40" cy="58" r="4" fill="#8B5CF6" />
         </svg>
       </div>
@@ -34,9 +39,14 @@ export default function Error500({ reset }: { reset: () => void }) {
       </h2>
       <p
         className="mb-10 text-xl sm:text-2xl md:text-3xl text-center"
-        style={{ color: "#8E9196", fontFamily: "DM Sans, sans-serif", maxWidth: 600 }}
+        style={{
+          color: "#8E9196",
+          fontFamily: "DM Sans, sans-serif",
+          maxWidth: 600,
+        }}
       >
-        Ha ocurrido un error inesperado en el servidor. Por favor, intenta de nuevo más tarde o regresa al inicio.
+        Ha ocurrido un error inesperado en el servidor. Por favor, intenta de
+        nuevo más tarde o regresa al inicio.
       </p>
       <div className="flex flex-col sm:flex-row gap-4">
         <button
@@ -66,4 +76,4 @@ export default function Error500({ reset }: { reset: () => void }) {
       </div>
     </div>
   );
-} 
+}

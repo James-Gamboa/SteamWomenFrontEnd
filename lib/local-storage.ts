@@ -3,7 +3,7 @@ import type { User } from "./mock-db";
 // TODO: Reemplazar con conexión a Django
 const STORAGE_KEYS = {
   USERS: "steamWomenUsers",
-  STATS: "steamWomenStats"
+  STATS: "steamWomenStats",
 } as const;
 
 interface UserStats {
@@ -15,16 +15,16 @@ interface UserStats {
 
 const calculateStats = (users: User[]): UserStats => ({
   total: users.length,
-  admins: users.filter(u => u.role === "admin").length,
-  companies: users.filter(u => u.role === "company").length,
-  students: users.filter(u => u.role === "student").length
+  admins: users.filter((u) => u.role === "admin").length,
+  companies: users.filter((u) => u.role === "company").length,
+  students: users.filter((u) => u.role === "student").length,
 });
 
 const ensureUserHasCreatedAt = (user: User): User => {
   if (!user.createdAt) {
     return {
       ...user,
-      createdAt: new Date().toISOString()
+      createdAt: new Date().toISOString(),
     };
   }
   return user;
@@ -36,14 +36,20 @@ export const storageUtils = {
       const users = localStorage.getItem(STORAGE_KEYS.USERS);
       if (!users) {
         localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify([]));
-        localStorage.setItem(STORAGE_KEYS.STATS, JSON.stringify(calculateStats([])));
+        localStorage.setItem(
+          STORAGE_KEYS.STATS,
+          JSON.stringify(calculateStats([])),
+        );
       }
     } catch (error) {
       console.error("Error initializing storage:", error);
       localStorage.removeItem(STORAGE_KEYS.USERS);
       localStorage.removeItem(STORAGE_KEYS.STATS);
       localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify([]));
-      localStorage.setItem(STORAGE_KEYS.STATS, JSON.stringify(calculateStats([])));
+      localStorage.setItem(
+        STORAGE_KEYS.STATS,
+        JSON.stringify(calculateStats([])),
+      );
     }
   },
 
@@ -55,7 +61,6 @@ export const storageUtils = {
         return [];
       }
       const parsedUsers = JSON.parse(users);
-      // Ensure all users have createdAt
       const updatedUsers = parsedUsers.map(ensureUserHasCreatedAt);
       if (JSON.stringify(parsedUsers) !== JSON.stringify(updatedUsers)) {
         localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(updatedUsers));
@@ -100,41 +105,53 @@ export const storageUtils = {
     }
   },
 
-  updateUserRole: (userId: string, newRole: User["role"]): { success: boolean; error?: string } => {
+  updateUserRole: (
+    userId: string,
+    newRole: User["role"],
+  ): { success: boolean; error?: string } => {
     try {
       const users = storageUtils.getUsers();
-      const userIndex = users.findIndex(u => u.id === userId);
-      
+      const userIndex = users.findIndex((u) => u.id === userId);
+
       if (userIndex === -1) {
         return { success: false, error: "Usuario no encontrado" };
       }
 
       if (users[userIndex].isPrimaryAdmin) {
-        return { success: false, error: "No se puede cambiar el rol del administrador principal" };
+        return {
+          success: false,
+          error: "No se puede cambiar el rol del administrador principal",
+        };
       }
 
       users[userIndex].role = newRole;
       return storageUtils.updateUsers(users);
     } catch (error) {
       console.error("Error updating user role:", error);
-      return { success: false, error: "Error al actualizar el rol del usuario" };
+      return {
+        success: false,
+        error: "Error al actualizar el rol del usuario",
+      };
     }
   },
 
   deleteUser: (userId: string): { success: boolean; error?: string } => {
     try {
       const users = storageUtils.getUsers();
-      const userToDelete = users.find(u => u.id === userId);
-      
+      const userToDelete = users.find((u) => u.id === userId);
+
       if (!userToDelete) {
         return { success: false, error: "Usuario no encontrado" };
       }
 
       if (userToDelete.isPrimaryAdmin) {
-        return { success: false, error: "No se puede eliminar al administrador principal" };
+        return {
+          success: false,
+          error: "No se puede eliminar al administrador principal",
+        };
       }
 
-      const updatedUsers = users.filter(u => u.id !== userId);
+      const updatedUsers = users.filter((u) => u.id !== userId);
       return storageUtils.updateUsers(updatedUsers);
     } catch (error) {
       console.error("Error deleting user:", error);
@@ -142,13 +159,15 @@ export const storageUtils = {
     }
   },
 
-  addUser: (user: Omit<User, "id" | "createdAt">): { success: boolean; error?: string } => {
+  addUser: (
+    user: Omit<User, "id" | "createdAt">,
+  ): { success: boolean; error?: string } => {
     try {
       const users = storageUtils.getUsers();
       const newUser = {
         ...user,
         id: Date.now().toString(),
-        createdAt: new Date().toISOString()
+        createdAt: new Date().toISOString(),
       };
       const updatedUsers = [...users, newUser];
       return storageUtils.updateUsers(updatedUsers);
@@ -156,5 +175,5 @@ export const storageUtils = {
       console.error("Error adding user:", error);
       return { success: false, error: "Error al agregar el usuario" };
     }
-  }
-}; 
+  },
+};

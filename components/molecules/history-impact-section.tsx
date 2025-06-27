@@ -18,7 +18,7 @@ export function HistoryImpactSection() {
       description:
         "Lanzamos nuestra plataforma digital para conectar a mujeres con oportunidades en áreas STEAM a nivel global.",
     },
-  ]
+  ];
 
   return (
     <section className="py-12 lg:py-20">
@@ -109,5 +109,5 @@ export function HistoryImpactSection() {
         </div>
       </div>
     </section>
-  )
+  );
 }

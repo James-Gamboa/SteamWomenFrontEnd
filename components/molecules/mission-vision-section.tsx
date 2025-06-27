@@ -1,4 +1,4 @@
-import Image from "next/image"
+import Image from "next/image";
 
 export function MissionVisionSection() {
   return (
@@ -36,8 +36,9 @@ export function MissionVisionSection() {
                   lineHeight: "1.6",
                 }}
               >
-                En STEAMWomen, nuestra misión es potenciar el talento femenino en áreas de Ciencia, Tecnología,
-                Ingeniería, Arte y Matemáticas (STEAM) a través de oportunidades educativas, profesionales y de
+                En STEAMWomen, nuestra misión es potenciar el talento femenino
+                en áreas de Ciencia, Tecnología, Ingeniería, Arte y Matemáticas
+                (STEAM) a través de oportunidades educativas, profesionales y de
                 networking que impulsen su desarrollo y liderazgo.
               </p>
               <p
@@ -49,9 +50,10 @@ export function MissionVisionSection() {
                   lineHeight: "1.6",
                 }}
               >
-                Trabajamos para reducir la brecha de género en estos campos, creando espacios inclusivos donde las
-                mujeres puedan desarrollar su potencial y contribuir con su talento a la innovación y el avance
-                científico-tecnológico.
+                Trabajamos para reducir la brecha de género en estos campos,
+                creando espacios inclusivos donde las mujeres puedan desarrollar
+                su potencial y contribuir con su talento a la innovación y el
+                avance científico-tecnológico.
               </p>
             </div>
 
@@ -76,14 +78,15 @@ export function MissionVisionSection() {
                   lineHeight: "1.6",
                 }}
               >
-                Aspiramos a un futuro donde la participación de las mujeres en áreas STEAM sea equitativa, diversa y
-                valorada, contribuyendo a la construcción de sociedades más innovadoras, inclusivas y sostenibles en
-                Latinoamérica y el mundo.
+                Aspiramos a un futuro donde la participación de las mujeres en
+                áreas STEAM sea equitativa, diversa y valorada, contribuyendo a
+                la construcción de sociedades más innovadoras, inclusivas y
+                sostenibles en Latinoamérica y el mundo.
               </p>
             </div>
           </div>
         </div>
       </div>
     </section>
-  )
+  );
 }

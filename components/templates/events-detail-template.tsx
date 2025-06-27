@@ -11,20 +11,20 @@ import { eventsData } from "@/lib/events-data";
 
 interface EventsDetailTemplateProps {
   event: {
-  id: number;
-  title: string;
-  description: string;
-  location: string;
-  date: string;
-  time: string;
-  category: string;
-  organizer: string;
-  website: string;
-  slug: string;
-  image: string;
-  fullDescription: string;
-  requirements: string[];
-  benefits: string[];
+    id: number;
+    title: string;
+    description: string;
+    location: string;
+    date: string;
+    time: string;
+    category: string;
+    organizer: string;
+    website: string;
+    slug: string;
+    image: string;
+    fullDescription: string;
+    requirements: string[];
+    benefits: string[];
     applicationProcess?: string;
   };
 }
@@ -86,8 +86,10 @@ export function EventsDetailTemplate({ event }: EventsDetailTemplateProps) {
     const date = new Date(dateString);
     return {
       day: date.getDate(),
-      month: date.toLocaleDateString("es-ES", { month: "short" }).replace(".", ""),
-      year: date.getFullYear()
+      month: date
+        .toLocaleDateString("es-ES", { month: "short" })
+        .replace(".", ""),
+      year: date.getFullYear(),
     };
   };
 
@@ -142,7 +144,12 @@ export function EventsDetailTemplate({ event }: EventsDetailTemplateProps) {
               getCategoryStyles={getCategoryStyles}
               formatDate={formatDateString}
             />
-            <EventDetailContent event={{ ...event, applicationProcess: event.applicationProcess ?? "" }} />
+            <EventDetailContent
+              event={{
+                ...event,
+                applicationProcess: event.applicationProcess ?? "",
+              }}
+            />
           </div>
           <div className="lg:col-span-1">
             <div ref={sidebarRef}>
@@ -158,7 +165,7 @@ export function EventsDetailTemplate({ event }: EventsDetailTemplateProps) {
           similarEvents={similarEvents}
           getCategoryStyles={getCategoryStyles}
           formatDate={formatDateObject}
-        /> 
+        />
       </div>
     </div>
   );

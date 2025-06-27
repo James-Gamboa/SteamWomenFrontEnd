@@ -6,7 +6,13 @@ import { Heart, Share } from "lucide-react";
 import { useState } from "react";
 import { useAuth } from "@/lib/context/auth-context";
 import { toast } from "sonner";
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 interface Opportunity {
   id: string;
@@ -32,12 +38,12 @@ export function OpportunitySidebar({
   const { user } = useAuth();
 
   const formatDate = (dateString: string) => {
-    const options: Intl.DateTimeFormatOptions = { 
-      year: 'numeric', 
-      month: 'long', 
-      day: 'numeric' 
+    const options: Intl.DateTimeFormatOptions = {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
     };
-    return new Date(dateString).toLocaleDateString('es-ES', options);
+    return new Date(dateString).toLocaleDateString("es-ES", options);
   };
 
   const handleApplyClick = () => {
@@ -49,9 +55,12 @@ export function OpportunitySidebar({
       toast.error("Solo los estudiantes pueden postularse a oportunidades.");
       return;
     }
-    const applications = JSON.parse(localStorage.getItem("student_applications") || "[]");
+    const applications = JSON.parse(
+      localStorage.getItem("student_applications") || "[]",
+    );
     const alreadyApplied = applications.some(
-      (app: any) => app.userId === user.id && app.opportunityId === opportunity.id
+      (app: any) =>
+        app.userId === user.id && app.opportunityId === opportunity.id,
     );
     if (alreadyApplied) {
       toast.error("Ya te has postulado a esta oportunidad.");
@@ -62,9 +71,11 @@ export function OpportunitySidebar({
 
   const handleConfirm = () => {
     if (!user) return;
-    
+
     if (user.role === "student") {
-      const applications = JSON.parse(localStorage.getItem("student_applications") || "[]");
+      const applications = JSON.parse(
+        localStorage.getItem("student_applications") || "[]",
+      );
       const province = opportunity.location.split(",")[0].trim();
       applications.push({
         userId: user.id,
@@ -75,12 +86,17 @@ export function OpportunitySidebar({
         fechaAplicacion: new Date().toISOString(),
         provincia: province,
         categoria: opportunity.category,
-        estado: "Pendiente"
+        estado: "Pendiente",
       });
-      localStorage.setItem("student_applications", JSON.stringify(applications));
+      localStorage.setItem(
+        "student_applications",
+        JSON.stringify(applications),
+      );
     }
 
-    const companyApplications = JSON.parse(localStorage.getItem("company_applications") || "[]");
+    const companyApplications = JSON.parse(
+      localStorage.getItem("company_applications") || "[]",
+    );
     companyApplications.push({
       opportunityId: opportunity.id,
       opportunityTitle: opportunity.title,
@@ -89,9 +105,12 @@ export function OpportunitySidebar({
       applicantName: `${user.firstName} ${user.lastName}`,
       applicantEmail: user.email,
       fechaAplicacion: new Date().toISOString(),
-      estado: "Pendiente"
+      estado: "Pendiente",
     });
-    localStorage.setItem("company_applications", JSON.stringify(companyApplications));
+    localStorage.setItem(
+      "company_applications",
+      JSON.stringify(companyApplications),
+    );
 
     setModalOpen(false);
     toast.success("¡Postulación enviada con éxito!");
@@ -119,27 +138,34 @@ export function OpportunitySidebar({
             Aplicar ahora
           </Button>
         }
-          <Dialog open={modalOpen} onOpenChange={setModalOpen}>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>¿Deseas postularte a esta oportunidad?</DialogTitle>
-              </DialogHeader>
-              <div className="mb-4">
-                <p className="font-semibold">{opportunity.title}</p>
-                <p className="text-sm text-[#8E9196]">{opportunity.company}</p>
-                <p className="text-xs text-[#8E9196]">{formatDate(opportunity.date)}</p>
-                <p className="text-xs text-[#8E9196] mt-2">Categoría: {opportunity.category}</p>
-              </div>
-              <DialogFooter>
-                <Button variant="outline" onClick={() => setModalOpen(false)}>
-                  Cancelar
-                </Button>
-                <Button className="bg-[#8B5CF6] hover:bg-[#7C3AED]" onClick={handleConfirm}>
-                  Confirmar postulación
-                </Button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
+        <Dialog open={modalOpen} onOpenChange={setModalOpen}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>¿Deseas postularte a esta oportunidad?</DialogTitle>
+            </DialogHeader>
+            <div className="mb-4">
+              <p className="font-semibold">{opportunity.title}</p>
+              <p className="text-sm text-[#8E9196]">{opportunity.company}</p>
+              <p className="text-xs text-[#8E9196]">
+                {formatDate(opportunity.date)}
+              </p>
+              <p className="text-xs text-[#8E9196] mt-2">
+                Categoría: {opportunity.category}
+              </p>
+            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setModalOpen(false)}>
+                Cancelar
+              </Button>
+              <Button
+                className="bg-[#8B5CF6] hover:bg-[#7C3AED]"
+                onClick={handleConfirm}
+              >
+                Confirmar postulación
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
         <div className="flex gap-2">
           <Button
             variant="outline"

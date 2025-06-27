@@ -24,7 +24,7 @@ export function ValuesSection() {
       description:
         "Trabajamos para empoderar a las mujeres, brindándoles herramientas, conocimientos y confianza para alcanzar su máximo potencial.",
     },
-  ]
+  ];
 
   return (
     <section className="py-12 lg:py-20" style={{ backgroundColor: "#F1F0FB" }}>
@@ -94,5 +94,5 @@ export function ValuesSection() {
         </div>
       </div>
     </section>
-  )
+  );
 }

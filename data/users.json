@@ -27,5 +27,25 @@
     "lastName": "Guevara",
     "organizationName": "Steam Women",
     "createdAt": "2025-06-05T22:11:07.109Z"
+  },
+  {
+    "email": "maria.gonzalez@ejemplo.com",
+    "password": "123456",
+    "role": "student",
+    "firstName": "James",
+    "lastName": "Guevara Gamboa",
+    "organizationName": "",
+    "id": "1751042163402",
+    "createdAt": "2025-06-27T16:36:03.402Z"
+  },
+  {
+    "email": "cookie@gmail.com",
+    "password": "123456",
+    "role": "company",
+    "firstName": "",
+    "lastName": "",
+    "organizationName": "cookie",
+    "id": "1751042456256",
+    "createdAt": "2025-06-27T16:40:56.256Z"
   }
 ]

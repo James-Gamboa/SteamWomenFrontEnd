@@ -26,7 +26,9 @@ export default function EstadisticasPage() {
           </CardHeader>
           <CardContent>
             <p className="text-3xl font-bold text-[#8B5CF6]">0</p>
-            <p className="text-[#C8C8C9] text-sm">Total de candidatos postulados</p>
+            <p className="text-[#C8C8C9] text-sm">
+              Total de candidatos postulados
+            </p>
           </CardContent>
         </Card>
 
@@ -46,10 +48,12 @@ export default function EstadisticasPage() {
           </CardHeader>
           <CardContent>
             <p className="text-3xl font-bold text-[#8B5CF6]">0</p>
-            <p className="text-[#C8C8C9] text-sm">Visualizaciones de tus oportunidades</p>
+            <p className="text-[#C8C8C9] text-sm">
+              Visualizaciones de tus oportunidades
+            </p>
           </CardContent>
         </Card>
       </div>
     </div>
   );
-} 
+}

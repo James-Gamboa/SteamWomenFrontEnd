@@ -1,11 +1,11 @@
 /**
  * GraphQL Queries
- * 
+ *
  * Flujo de datos:
  * 1. Los componentes llaman a los servicios (lib/services/*)
  * 2. Los servicios usan estas queries para obtener datos del backend
  * 3. Las queries se ejecutan a través del cliente Apollo (backend-integration/api.ts)
- * 
+ *
  * Estructura de archivos:
  * - backend-integration/
  *   ├── api.ts (Configuración del cliente Apollo)
@@ -13,14 +13,14 @@
  *   │   ├── queries.ts (Este archivo - Queries para obtener datos)
  *   │   └── mutations.ts (Operaciones de escritura)
  *   └── types.ts (Tipos compartidos)
- * 
+ *
  * - lib/services/
  *   ├── user-service.ts (Servicios de usuario)
  *   ├── event-service.ts (Servicios de eventos)
  *   └── opportunity-service.ts (Servicios de oportunidades)
  */
 
-import { gql } from '@apollo/client'
+import { gql } from "@apollo/client";
 
 export const GET_EVENTS_QUERY = gql`
   query {
@@ -34,7 +34,7 @@ export const GET_EVENTS_QUERY = gql`
       }
     }
   }
-`
+`;
 
 export const GET_CURRENT_USER = gql`
   query GetCurrentUser {
@@ -49,7 +49,7 @@ export const GET_CURRENT_USER = gql`
       createdAt
     }
   }
-`
+`;
 
 export const GET_DASHBOARD_STATS = gql`
   query GetDashboardStats {
@@ -66,7 +66,7 @@ export const GET_DASHBOARD_STATS = gql`
       }
     }
   }
-`
+`;
 
 export const GET_EVENTS = gql`
   query GetEvents($filter: EventFilterInput) {
@@ -94,7 +94,7 @@ export const GET_EVENTS = gql`
       }
     }
   }
-`
+`;
 
 export const GET_EVENT = gql`
   query GetEvent($id: ID!) {
@@ -122,7 +122,7 @@ export const GET_EVENT = gql`
       }
     }
   }
-`
+`;
 
 export const GET_OPPORTUNITIES = gql`
   query GetOpportunities($filter: OpportunityFilterInput) {
@@ -151,7 +151,7 @@ export const GET_OPPORTUNITIES = gql`
       }
     }
   }
-`
+`;
 
 export const GET_OPPORTUNITY = gql`
   query GetOpportunity($id: ID!) {
@@ -180,7 +180,7 @@ export const GET_OPPORTUNITY = gql`
       }
     }
   }
-`
+`;
 
 export const GET_COMPANY_PROFILE = gql`
   query GetCompanyProfile {
@@ -196,7 +196,7 @@ export const GET_COMPANY_PROFILE = gql`
       logo
     }
   }
-`
+`;
 
 export const GET_STUDENT_PROFILE = gql`
   query GetStudentProfile {
@@ -215,7 +215,7 @@ export const GET_STUDENT_PROFILE = gql`
       portfolio
     }
   }
-`
+`;
 
 export const GET_STUDENT_APPLICATIONS = gql`
   query GetStudentApplications {
@@ -232,7 +232,7 @@ export const GET_STUDENT_APPLICATIONS = gql`
       }
     }
   }
-`
+`;
 
 export const GET_COMPANY_APPLICATIONS = gql`
   query GetCompanyApplications {
@@ -253,7 +253,7 @@ export const GET_COMPANY_APPLICATIONS = gql`
       }
     }
   }
-`
+`;
 
 export const GET_USER = gql`
   query GetUser($id: ID!) {
@@ -268,7 +268,7 @@ export const GET_USER = gql`
       createdAt
     }
   }
-`
+`;
 
 export const GET_USERS = gql`
   query GetUsers {
@@ -283,4 +283,4 @@ export const GET_USERS = gql`
       createdAt
     }
   }
-`
+`;

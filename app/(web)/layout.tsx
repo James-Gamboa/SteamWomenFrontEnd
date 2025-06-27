@@ -4,7 +4,7 @@ import { Toaster } from "@/components/ui/toaster";
 import WhatsAppButton from "@/components/molecules/whatsapp-button";
 import { Header } from "@/components/organisms/header";
 import { Footer } from "@/components/organisms/footer";
-import NextTopLoader from 'nextjs-toploader';
+import NextTopLoader from "nextjs-toploader";
 import { SmoothScrollProvider } from "./providers/smooth-scroll-provider";
 import { ApolloWrapper } from "./providers/apollo-provider";
 import { GlobalToasts } from "./GlobalToasts";
@@ -14,13 +14,12 @@ const dmSans = DM_Sans({
   variable: "--font-dm-sans",
 });
 
-export default function WebLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function WebLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className={`${dmSans.variable} font-sans antialiased min-h-screen`} style={{ fontFamily: "DM Sans, sans-serif" }}>
+    <div
+      className={`${dmSans.variable} font-sans antialiased min-h-screen`}
+      style={{ fontFamily: "DM Sans, sans-serif" }}
+    >
       <NextTopLoader color="#8B5CF6" showSpinner={true} height={4} />
       <ApolloWrapper>
         <SmoothScrollProvider>

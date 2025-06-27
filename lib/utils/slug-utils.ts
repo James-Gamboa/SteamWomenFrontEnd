@@ -18,7 +18,7 @@ export const validateSlug = (slug: string): boolean => {
 
 export const ensureUniqueSlug = async (
   baseSlug: string,
-  existingSlugs: string[]
+  existingSlugs: string[],
 ): Promise<string> => {
   let slug = baseSlug;
   let counter = 1;
@@ -42,4 +42,4 @@ export const ensureUniqueSlug = async (
 //
 // class Opportunity(models.Model):
 //     title = models.CharField(max_length=200)
-//     slug = AutoSlugField(populate_from='title', unique=True) 
+//     slug = AutoSlugField(populate_from='title', unique=True)

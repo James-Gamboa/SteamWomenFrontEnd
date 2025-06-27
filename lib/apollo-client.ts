@@ -2,7 +2,7 @@
 import { ApolloClient, InMemoryCache, HttpLink } from "@apollo/client";
 
 if (!process.env.NEXT_PUBLIC_GRAPHQL_URL) {
-  throw new Error('NEXT_PUBLIC_GRAPHQL_URL environment variable is not set');
+  throw new Error("NEXT_PUBLIC_GRAPHQL_URL environment variable is not set");
 }
 
 const httpLink = new HttpLink({
@@ -15,4 +15,4 @@ const client = new ApolloClient({
   ssrMode: typeof window === "undefined",
 });
 
-export default client; 
+export default client;

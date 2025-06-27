@@ -1,7 +1,12 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -38,10 +43,19 @@ type EventModalProps = {
 
 // TODO: Reemplazar con conexión a Django
 
-export function EventModal({ mode, open, onOpenChange, onSubmit, initialData, loading = false }: EventModalProps) {
+export function EventModal({
+  mode,
+  open,
+  onOpenChange,
+  onSubmit,
+  initialData,
+  loading = false,
+}: EventModalProps) {
   const [currentStep, setCurrentStep] = useState(1);
   const toastShown = useRef(false);
-  const [imagePreview, setImagePreview] = useState<string | null>(initialData?.image || null);
+  const [imagePreview, setImagePreview] = useState<string | null>(
+    initialData?.image || null,
+  );
   const [formData, setFormData] = useState<Event>({
     id: initialData?.id || Date.now(),
     title: initialData?.title || "",
@@ -125,12 +139,18 @@ export function EventModal({ mode, open, onOpenChange, onSubmit, initialData, lo
     }
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleArrayInputChange = (index: number, value: string, field: "requirements" | "benefits") => {
+  const handleArrayInputChange = (
+    index: number,
+    value: string,
+    field: "requirements" | "benefits",
+  ) => {
     setFormData((prev) => ({
       ...prev,
       [field]: prev[field].map((item, i) => (i === index ? value : item)),
@@ -144,7 +164,10 @@ export function EventModal({ mode, open, onOpenChange, onSubmit, initialData, lo
     }));
   };
 
-  const removeArrayItem = (index: number, field: "requirements" | "benefits") => {
+  const removeArrayItem = (
+    index: number,
+    field: "requirements" | "benefits",
+  ) => {
     setFormData((prev) => ({
       ...prev,
       [field]: prev[field].filter((_, i) => i !== index),
@@ -154,7 +177,7 @@ export function EventModal({ mode, open, onOpenChange, onSubmit, initialData, lo
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let value = e.target.value.replace(/[^0-9-]/g, "");
     if (value.length === 2 || value.length === 5) value += "-";
-    setFormData(prev => ({ ...prev, date: value }));
+    setFormData((prev) => ({ ...prev, date: value }));
   };
 
   const handleDateBlur = (e: React.FocusEvent<HTMLInputElement>) => {
@@ -198,7 +221,7 @@ export function EventModal({ mode, open, onOpenChange, onSubmit, initialData, lo
         return (
           <div className="space-y-6">
             <div className="space-y-2">
-              <Label htmlFor="title">Título del Evento</Label>
+              <Label htmlFor="title">Título</Label>
               <Input
                 id="title"
                 name="title"
@@ -234,7 +257,7 @@ export function EventModal({ mode, open, onOpenChange, onSubmit, initialData, lo
               />
             </div>
             <div className="space-y-2">
-              <Label>Imagen del Evento</Label>
+              <Label>Imagen</Label>
               <div className="flex flex-col items-center justify-center w-full">
                 <label
                   htmlFor="image-upload-unified"
@@ -249,11 +272,29 @@ export function EventModal({ mode, open, onOpenChange, onSubmit, initialData, lo
                       />
                     ) : (
                       <>
-                        <svg className="w-8 h-8 mb-2 text-gray-500" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5-5m0 0l5 5m-5-5v12"></path></svg>
+                        <svg
+                          className="w-8 h-8 mb-2 text-gray-500"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5-5m0 0l5 5m-5-5v12"
+                          ></path>
+                        </svg>
                         <p className="mb-2 text-sm text-gray-500">
-                          <span className="font-semibold">Haz clic para subir</span> o arrastra y suelta
+                          <span className="font-semibold">
+                            Haz clic para subir
+                          </span>{" "}
+                          o arrastra y suelta
                         </p>
-                        <p className="text-xs text-gray-500">PNG, JPG o WEBP (MAX. 5MB)</p>
+                        <p className="text-xs text-gray-500">
+                          PNG, JPG o WEBP (MAX. 5MB)
+                        </p>
                       </>
                     )}
                   </div>
@@ -350,11 +391,7 @@ export function EventModal({ mode, open, onOpenChange, onSubmit, initialData, lo
               />
             </div>
             <div className="flex justify-between">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={prevStep}
-              >
+              <Button type="button" variant="outline" onClick={prevStep}>
                 Anterior
               </Button>
               <Button
@@ -389,7 +426,13 @@ export function EventModal({ mode, open, onOpenChange, onSubmit, initialData, lo
                 <div key={index} className="flex gap-2">
                   <Input
                     value={req}
-                    onChange={(e) => handleArrayInputChange(index, e.target.value, "requirements")}
+                    onChange={(e) =>
+                      handleArrayInputChange(
+                        index,
+                        e.target.value,
+                        "requirements",
+                      )
+                    }
                     placeholder="Ej: Conocimientos básicos de programación"
                     required
                     className="h-12"
@@ -415,11 +458,7 @@ export function EventModal({ mode, open, onOpenChange, onSubmit, initialData, lo
               </Button>
             </div>
             <div className="flex justify-between">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={prevStep}
-              >
+              <Button type="button" variant="outline" onClick={prevStep}>
                 Anterior
               </Button>
               <Button
@@ -442,7 +481,9 @@ export function EventModal({ mode, open, onOpenChange, onSubmit, initialData, lo
                 <div key={index} className="flex gap-2">
                   <Input
                     value={benefit}
-                    onChange={(e) => handleArrayInputChange(index, e.target.value, "benefits")}
+                    onChange={(e) =>
+                      handleArrayInputChange(index, e.target.value, "benefits")
+                    }
                     placeholder="Ej: Certificado de participación"
                     required
                     className="h-12"
@@ -480,11 +521,7 @@ export function EventModal({ mode, open, onOpenChange, onSubmit, initialData, lo
               />
             </div>
             <div className="flex justify-between">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={prevStep}
-              >
+              <Button type="button" variant="outline" onClick={prevStep}>
                 Anterior
               </Button>
               <Button
@@ -492,7 +529,13 @@ export function EventModal({ mode, open, onOpenChange, onSubmit, initialData, lo
                 className="bg-[#8B5CF6] hover:bg-[#7C3AED] text-white"
                 disabled={loading}
               >
-                {mode === "edit" ? (loading ? "Guardando..." : "Guardar cambios") : (loading ? "Publicando..." : "Publicar evento")}
+                {mode === "edit"
+                  ? loading
+                    ? "Guardando..."
+                    : "Guardar cambios"
+                  : loading
+                    ? "Publicando..."
+                    : "Publicar"}
               </Button>
             </div>
           </div>
@@ -505,7 +548,7 @@ export function EventModal({ mode, open, onOpenChange, onSubmit, initialData, lo
       <DialogContent className="max-w-xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold text-[#8B5CF6]">
-            {mode === "edit" ? "Editar Evento" : "Crear Nuevo Evento"}
+            {mode === "edit" ? "Editar" : "Crear"}
           </DialogTitle>
           <div className="flex items-center justify-center space-x-2 mt-4">
             {[1, 2, 3, 4].map((step) => (
@@ -524,4 +567,4 @@ export function EventModal({ mode, open, onOpenChange, onSubmit, initialData, lo
       </DialogContent>
     </Dialog>
   );
-} 
+}

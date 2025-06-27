@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -43,8 +43,24 @@ export function OpportunityTemplate() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [selectedLocation, setSelectedLocation] = useState("all");
+  const [allOpportunities, setAllOpportunities] = useState(
+    opportunitiesEventsData,
+  );
 
-  const opportunities = opportunitiesEventsData;
+  useEffect(() => {
+    const storedOpportunities = JSON.parse(
+      localStorage.getItem("opportunities") || "[]",
+    );
+    const merged = [
+      ...storedOpportunities,
+      ...opportunitiesEventsData.filter(
+        (o) => !storedOpportunities.some((so) => so.id === o.id),
+      ),
+    ];
+    setAllOpportunities(merged);
+  }, []);
+
+  const opportunities = allOpportunities;
 
   const getCategoryStyles = (category: string) => {
     const styles = {

@@ -1,16 +1,18 @@
-import { NosotrasTemplate } from "@/components/templates/nosotras-template"
+import { NosotrasTemplate } from "@/components/templates/nosotras-template";
 import type { Metadata } from "next";
 
 export default function NosotrasPage() {
-  return <NosotrasTemplate />
+  return <NosotrasTemplate />;
 }
 
 export const generateMetadata = async (): Promise<Metadata> => ({
   title: "Sobre Nosotras | STEAMWomen",
-  description: "Conoce la historia, misión y equipo detrás de STEAMWomen, la comunidad que impulsa a mujeres en STEAM.",
+  description:
+    "Conoce la historia, misión y equipo detrás de STEAMWomen, la comunidad que impulsa a mujeres en STEAM.",
   openGraph: {
     title: "Sobre Nosotras | STEAMWomen",
-    description: "Conoce la historia, misión y equipo detrás de STEAMWomen, la comunidad que impulsa a mujeres en STEAM.",
+    description:
+      "Conoce la historia, misión y equipo detrás de STEAMWomen, la comunidad que impulsa a mujeres en STEAM.",
     url: "https://steam-women-front-end.vercel.app/nosotras",
     siteName: "STEAMWomen",
     images: [
@@ -27,7 +29,8 @@ export const generateMetadata = async (): Promise<Metadata> => ({
   twitter: {
     card: "summary_large_image",
     title: "Sobre Nosotras | STEAMWomen",
-    description: "Conoce la historia, misión y equipo detrás de STEAMWomen, la comunidad que impulsa a mujeres en STEAM.",
+    description:
+      "Conoce la historia, misión y equipo detrás de STEAMWomen, la comunidad que impulsa a mujeres en STEAM.",
     images: ["/img/dummy-women.jpg.jpeg"],
   },
 });

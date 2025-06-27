@@ -1,6 +1,12 @@
 "use client";
 
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-react";
 
@@ -29,21 +35,26 @@ interface DeleteEventModalProps {
   onConfirm: () => void;
 }
 
-export function DeleteEventModal({ event, open, onOpenChange, onConfirm }: DeleteEventModalProps) {
+export function DeleteEventModal({
+  event,
+  open,
+  onOpenChange,
+  onConfirm,
+}: DeleteEventModalProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-md">
         <DialogHeader>
-          <DialogTitle className="text-2xl font-bold text-red-600">Eliminar Evento</DialogTitle>
+          <DialogTitle className="text-2xl font-bold text-red-600">
+            Eliminar Evento
+          </DialogTitle>
           <DialogDescription className="text-gray-500 mt-2">
-            ¿Estás seguro de que deseas eliminar el evento "{event.title}"? Esta acción no se puede deshacer.
+            ¿Estás seguro de que deseas eliminar el evento "{event.title}"? Esta
+            acción no se puede deshacer.
           </DialogDescription>
         </DialogHeader>
         <div className="flex justify-end space-x-4 mt-6">
-          <Button
-            variant="outline"
-            onClick={() => onOpenChange(false)}
-          >
+          <Button variant="outline" onClick={() => onOpenChange(false)}>
             Cancelar
           </Button>
           <Button
@@ -58,4 +69,4 @@ export function DeleteEventModal({ event, open, onOpenChange, onConfirm }: Delet
       </DialogContent>
     </Dialog>
   );
-} 
+}

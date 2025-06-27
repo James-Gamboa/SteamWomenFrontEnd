@@ -39,7 +39,8 @@ export function Header() {
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollPos = window.scrollY;
-      const isVisible = prevScrollPos > currentScrollPos || currentScrollPos < 10;
+      const isVisible =
+        prevScrollPos > currentScrollPos || currentScrollPos < 10;
       setPrevScrollPos(currentScrollPos);
       setVisible(isVisible);
     };

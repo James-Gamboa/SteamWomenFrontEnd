@@ -14,13 +14,14 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRef, useEffect, useState } from "react";
 import { opportunitiesEventsData } from "@/lib/opportunities-events-data";
+import { getLocalOpportunities } from "@/lib/data-storage";
 import { OpportunityHeader } from "@/components/organisms/opportunity-header";
 import { OpportunityInfo } from "@/components/organisms/opportunity-info";
 import { OpportunitySidebar } from "@/components/organisms/opportunity-sidebar";
 import { OpportunitySimilar } from "@/components/organisms/opportunity-similar";
 
 interface OpportunityDetailTemplateProps {
-  slug: string;
+  opportunity: any;
 }
 
 const opportunitiesData = opportunitiesEventsData.reduce(
@@ -32,20 +33,30 @@ const opportunitiesData = opportunitiesEventsData.reduce(
 );
 
 export function OpportunityDetailTemplate({
-  slug,
+  opportunity,
 }: OpportunityDetailTemplateProps) {
   const [isSticky, setIsSticky] = useState(true);
   const applicationProcessRef = useRef<HTMLDivElement>(null);
   const sidebarRef = useRef<HTMLDivElement>(null);
+  const [similarOpportunities, setSimilarOpportunities] = useState<any[]>([]);
 
-  const opportunity = opportunitiesData[slug as keyof typeof opportunitiesData];
-  const similarOpportunities = Object.entries(opportunitiesData)
-    .filter(([key]) => key !== slug)
-    .slice(0, 2)
-    .map(([key, value]) => ({
-      ...value,
-      slug: key,
-    }));
+  useEffect(() => {
+    if (!opportunity) return;
+    const localOpportunities = getLocalOpportunities?.() || [];
+    const allOpportunities = [
+      ...Object.values(opportunitiesData),
+      ...localOpportunities,
+    ];
+    setSimilarOpportunities(
+      allOpportunities
+        .filter(
+          (op) =>
+            op.slug !== opportunity.slug &&
+            op.category === opportunity.category,
+        )
+        .slice(0, 2),
+    );
+  }, [opportunity]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -96,7 +107,7 @@ export function OpportunityDetailTemplate({
             className="inline-flex items-center text-purple-600 hover:opacity-80"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
-            Volver a oportunidades
+            Ver oportunidades
           </Link>
         </div>
       </div>
@@ -120,7 +131,7 @@ export function OpportunityDetailTemplate({
           }}
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
-          Volver a oportunidades
+          Ver oportunidades
         </Link>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -133,11 +144,7 @@ export function OpportunityDetailTemplate({
           </div>
         </div>
 
-        <OpportunitySimilar
-          similarOpportunities={Object.values(opportunitiesData)
-            .filter((op) => op.slug !== slug)
-            .slice(0, 2)}
-        />
+        <OpportunitySimilar similarOpportunities={similarOpportunities} />
       </div>
     </div>
   );

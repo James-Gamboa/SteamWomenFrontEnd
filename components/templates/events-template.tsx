@@ -5,7 +5,8 @@ import { EventsFilters } from "@/components/organisms/events-filters";
 import { EventsList } from "@/components/organisms/events-list";
 import { EventsCalendar } from "@/components/organisms/events-calendar";
 import { EventsCTA } from "@/components/organisms/events-cta";
-import { useState } from "react";
+import { eventsData } from "@/lib/events-data";
+import { useEffect, useState } from "react";
 
 export function EventsTemplate() {
   const [viewMode, setViewMode] = useState<"list" | "calendar">("list");
@@ -13,6 +14,17 @@ export function EventsTemplate() {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedLocation, setSelectedLocation] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [allEvents, setAllEvents] = useState(eventsData);
+
+  useEffect(() => {
+    const storedEvents = JSON.parse(localStorage.getItem("events") || "[]");
+  (sin duplicados por id)
+    const merged = [
+      ...storedEvents,
+      ...eventsData.filter((e) => !storedEvents.some((se) => se.id === e.id)),
+    ];
+    setAllEvents(merged);
+  }, []);
 
   return (
     <main
@@ -38,12 +50,14 @@ export function EventsTemplate() {
             searchTerm={searchTerm}
             selectedCategory={selectedCategory}
             selectedLocation={selectedLocation}
+            events={allEvents}
           />
         ) : (
           <EventsCalendar
             searchTerm={searchTerm}
             selectedCategory={selectedCategory}
             selectedLocation={selectedLocation}
+            events={allEvents}
           />
         )}
         <EventsCTA />

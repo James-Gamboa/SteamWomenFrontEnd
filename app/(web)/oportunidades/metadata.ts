@@ -2,10 +2,12 @@ import type { Metadata } from "next";
 
 export const generateMetadata = async (): Promise<Metadata> => ({
   title: "Oportunidades STEAM para Mujeres | STEAMWomen",
-  description: "Encuentra oportunidades exclusivas para mujeres en ciencia, tecnología, ingeniería, arte y matemáticas.",
+  description:
+    "Encuentra oportunidades exclusivas para mujeres en ciencia, tecnología, ingeniería, arte y matemáticas.",
   openGraph: {
     title: "Oportunidades STEAM para Mujeres | STEAMWomen",
-    description: "Encuentra oportunidades exclusivas para mujeres en ciencia, tecnología, ingeniería, arte y matemáticas.",
+    description:
+      "Encuentra oportunidades exclusivas para mujeres en ciencia, tecnología, ingeniería, arte y matemáticas.",
     url: "https://steam-women-front-end.vercel.app/oportunidades",
     siteName: "STEAMWomen",
     images: [
@@ -22,7 +24,8 @@ export const generateMetadata = async (): Promise<Metadata> => ({
   twitter: {
     card: "summary_large_image",
     title: "Oportunidades STEAM para Mujeres | STEAMWomen",
-    description: "Encuentra oportunidades exclusivas para mujeres en ciencia, tecnología, ingeniería, arte y matemáticas.",
+    description:
+      "Encuentra oportunidades exclusivas para mujeres en ciencia, tecnología, ingeniería, arte y matemáticas.",
     images: ["/img/dummy-women.jpg.jpeg"],
   },
-}); 
+});

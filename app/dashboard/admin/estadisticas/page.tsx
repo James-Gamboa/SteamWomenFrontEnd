@@ -35,9 +35,14 @@ const AdminEstadisticasPage = () => {
 
     try {
       const userStats = storageUtils.getStats();
-      const eventsCount = eventsData.length + dataStorage.getItems("event").length;
-      const opportunitiesCount = opportunitiesEventsData.length + dataStorage.getItems("opportunity").length;
-      const applicationsCount = (JSON.parse(localStorage.getItem("applications") || "[]")).length;
+      const eventsCount =
+        eventsData.length + dataStorage.getItems("event").length;
+      const opportunitiesCount =
+        opportunitiesEventsData.length +
+        dataStorage.getItems("opportunity").length;
+      const applicationsCount = JSON.parse(
+        localStorage.getItem("applications") || "[]",
+      ).length;
 
       setStats({
         ...userStats,
@@ -46,7 +51,9 @@ const AdminEstadisticasPage = () => {
         applications: applicationsCount,
       });
     } catch (error) {
-      toast.error("Error al cargar las estadísticas. Por favor, revise los datos en localStorage.");
+      toast.error(
+        "Error al cargar las estadísticas. Por favor, revise los datos en localStorage.",
+      );
     }
   }, [currentUser, router]);
 
@@ -108,4 +115,4 @@ const AdminEstadisticasPage = () => {
   );
 };
 
-export default AdminEstadisticasPage; 
+export default AdminEstadisticasPage;

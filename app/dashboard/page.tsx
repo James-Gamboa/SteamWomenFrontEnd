@@ -33,7 +33,10 @@ export default function DashboardPage() {
             <p className="text-xs text-[#C8C8C9] mt-1">
               Descubre nuevas oportunidades laborales
             </p>
-            <Button asChild className="mt-4 w-full bg-[#8B5CF6] hover:bg-[#7C3AED]">
+            <Button
+              asChild
+              className="mt-4 w-full bg-[#8B5CF6] hover:bg-[#7C3AED]"
+            >
               <Link href="/oportunidades">Ver Oportunidades</Link>
             </Button>
           </CardContent>
@@ -49,7 +52,10 @@ export default function DashboardPage() {
             <p className="text-xs text-[#C8C8C9] mt-1">
               Únete a eventos y networking
             </p>
-            <Button asChild className="mt-4 w-full bg-[#8B5CF6] hover:bg-[#7C3AED]">
+            <Button
+              asChild
+              className="mt-4 w-full bg-[#8B5CF6] hover:bg-[#7C3AED]"
+            >
               <Link href="/eventos">Ver Eventos</Link>
             </Button>
           </CardContent>
@@ -80,7 +86,10 @@ export default function DashboardPage() {
             <p className="text-xs text-[#C8C8C9] mt-1">
               Crea y administra tus ofertas
             </p>
-            <Button asChild className="mt-4 w-full bg-[#8B5CF6] hover:bg-[#7C3AED]">
+            <Button
+              asChild
+              className="mt-4 w-full bg-[#8B5CF6] hover:bg-[#7C3AED]"
+            >
               <Link href="/dashboard/oportunidades">Ver Mis Oportunidades</Link>
             </Button>
           </CardContent>
@@ -96,8 +105,13 @@ export default function DashboardPage() {
             <p className="text-xs text-[#C8C8C9] mt-1">
               Gestiona las postulaciones recibidas
             </p>
-            <Button asChild className="mt-4 w-full bg-[#8B5CF6] hover:bg-[#7C3AED]">
-              <Link href="/dashboard/oportunidades-aplicadas">Ver Mis Candidatos</Link>
+            <Button
+              asChild
+              className="mt-4 w-full bg-[#8B5CF6] hover:bg-[#7C3AED]"
+            >
+              <Link href="/dashboard/oportunidades-aplicadas">
+                Ver Mis Candidatos
+              </Link>
             </Button>
           </CardContent>
         </Card>
@@ -112,7 +126,10 @@ export default function DashboardPage() {
             <p className="text-xs text-[#C8C8C9] mt-1">
               Crea y gestiona tus eventos
             </p>
-            <Button asChild className="mt-4 w-full bg-[#8B5CF6] hover:bg-[#7C3AED]">
+            <Button
+              asChild
+              className="mt-4 w-full bg-[#8B5CF6] hover:bg-[#7C3AED]"
+            >
               <Link href="/dashboard/eventos">Ver Mis Eventos</Link>
             </Button>
           </CardContent>
@@ -143,7 +160,10 @@ export default function DashboardPage() {
             <p className="text-xs text-[#C8C8C9] mt-1">
               Administra usuarios y roles
             </p>
-            <Button asChild className="mt-4 w-full bg-[#8B5CF6] hover:bg-[#7C3AED]">
+            <Button
+              asChild
+              className="mt-4 w-full bg-[#8B5CF6] hover:bg-[#7C3AED]"
+            >
               <Link href="/dashboard/usuarios">Ver Usuarios</Link>
             </Button>
           </CardContent>
@@ -159,7 +179,10 @@ export default function DashboardPage() {
             <p className="text-xs text-[#C8C8C9] mt-1">
               Revisa y gestiona ofertas
             </p>
-            <Button asChild className="mt-4 w-full bg-[#8B5CF6] hover:bg-[#7C3AED]">
+            <Button
+              asChild
+              className="mt-4 w-full bg-[#8B5CF6] hover:bg-[#7C3AED]"
+            >
               <Link href="/dashboard/oportunidades">Ver Oportunidades</Link>
             </Button>
           </CardContent>
@@ -175,7 +198,10 @@ export default function DashboardPage() {
             <p className="text-xs text-[#C8C8C9] mt-1">
               Gestiona eventos y contenido
             </p>
-            <Button asChild className="mt-4 w-full bg-[#8B5CF6] hover:bg-[#7C3AED]">
+            <Button
+              asChild
+              className="mt-4 w-full bg-[#8B5CF6] hover:bg-[#7C3AED]"
+            >
               <Link href="/dashboard/eventos">Ver Eventos</Link>
             </Button>
           </CardContent>

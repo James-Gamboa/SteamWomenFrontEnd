@@ -18,4 +18,4 @@ export default function CreateEventPage() {
       </Card>
     </div>
   );
-} 
+}

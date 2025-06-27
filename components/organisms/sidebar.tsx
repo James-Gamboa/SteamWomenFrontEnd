@@ -5,7 +5,15 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Menu, LayoutDashboard, Calendar, Briefcase, User, FileText, Users } from "lucide-react";
+import {
+  Menu,
+  LayoutDashboard,
+  Calendar,
+  Briefcase,
+  User,
+  FileText,
+  Users,
+} from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
@@ -102,7 +110,7 @@ export function Sidebar({ className, open, setOpen, onLogout }: SidebarProps) {
   ];
 
   const filteredNavigation = navigation.filter((item) =>
-    item.roles.includes(user.role)
+    item.roles.includes(user.role),
   );
 
   const NavContent = () => (
@@ -117,15 +125,16 @@ export function Sidebar({ className, open, setOpen, onLogout }: SidebarProps) {
                 variant={pathname === item.href ? "secondary" : "ghost"}
                 className={cn(
                   "w-full justify-start flex items-center gap-3 px-4 py-2 text-base font-medium",
-                  pathname === item.href && "bg-[#F1F0FB] text-[#8B5CF6]"
+                  pathname === item.href && "bg-[#F1F0FB] text-[#8B5CF6]",
                 )}
               >
                 <Link href={item.href} passHref legacyBehavior>
                   <a className="flex items-center gap-3 w-full">
-                    {item.icon && (() => {
-                      const Icon = iconMap[item.icon as keyof typeof iconMap];
-                      return Icon ? <Icon className="h-5 w-5" /> : null;
-                    })()}
+                    {item.icon &&
+                      (() => {
+                        const Icon = iconMap[item.icon as keyof typeof iconMap];
+                        return Icon ? <Icon className="h-5 w-5" /> : null;
+                      })()}
                     <span className="whitespace-nowrap">{item.title}</span>
                   </a>
                 </Link>
@@ -165,7 +174,9 @@ export function Sidebar({ className, open, setOpen, onLogout }: SidebarProps) {
         <div className="flex flex-col flex-grow">
           <div className="flex items-center flex-shrink-0 px-6">
             <Link href="/" className="flex items-center">
-              <span className="text-2xl font-bold text-[#8B5CF6]">SteamWomen</span>
+              <span className="text-2xl font-bold text-[#8B5CF6]">
+                SteamWomen
+              </span>
             </Link>
           </div>
           <NavContent />
@@ -185,7 +196,9 @@ export function Sidebar({ className, open, setOpen, onLogout }: SidebarProps) {
         <SheetContent side="left" className="p-0 w-72">
           <div className="flex items-center flex-shrink-0 px-6 py-4">
             <Link href="/" className="flex items-center">
-              <span className="text-2xl font-bold text-[#8B5CF6]">SteamWomen</span>
+              <span className="text-2xl font-bold text-[#8B5CF6]">
+                SteamWomen
+              </span>
             </Link>
           </div>
           <NavContent />
@@ -193,4 +206,4 @@ export function Sidebar({ className, open, setOpen, onLogout }: SidebarProps) {
       </Sheet>
     </>
   );
-} 
+}

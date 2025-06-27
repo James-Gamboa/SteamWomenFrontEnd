@@ -43,7 +43,8 @@ export function JoinCommunitySection() {
                 fontWeight: "400",
               }}
             >
-              Descubre oportunidades exclusivas, eventos y conecta con mujeres líderes en STEAM.
+              Descubre oportunidades exclusivas, eventos y conecta con mujeres
+              líderes en STEAM.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Button

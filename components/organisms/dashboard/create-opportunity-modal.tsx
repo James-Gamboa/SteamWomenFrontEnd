@@ -6,11 +6,10 @@ interface CreateOpportunityModalProps {
   onOpportunityCreated: () => void;
 }
 
-export function CreateOpportunityModal({ onOpportunityCreated }: CreateOpportunityModalProps) {
+export function CreateOpportunityModal({
+  onOpportunityCreated,
+}: CreateOpportunityModalProps) {
   return (
-    <CreateItemModal
-      type="opportunity"
-      onItemCreated={onOpportunityCreated}
-    />
+    <CreateItemModal type="opportunity" onItemCreated={onOpportunityCreated} />
   );
-} 
+}

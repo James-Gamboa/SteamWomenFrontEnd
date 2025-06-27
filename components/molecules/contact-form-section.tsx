@@ -1,15 +1,21 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Mail, Phone, MapPin, Send } from "lucide-react"
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Mail, Phone, MapPin, Send } from "lucide-react";
 
 export function ContactFormSection() {
   const [formData, setFormData] = useState({
@@ -18,16 +24,16 @@ export function ContactFormSection() {
     subject: "",
     message: "",
     type: "",
-  })
+  });
 
   const handleInputChange = (field: string, value: string) => {
-    setFormData((prev) => ({ ...prev, [field]: value }))
-  }
+    setFormData((prev) => ({ ...prev, [field]: value }));
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    console.log("Form submitted:", formData)
-  }
+    e.preventDefault();
+    console.log("Form submitted:", formData);
+  };
 
   return (
     <section className="py-12 lg:py-20">
@@ -53,12 +59,16 @@ export function ContactFormSection() {
               lineHeight: "1.6",
             }}
           >
-            ¿Tienes preguntas, sugerencias o quieres colaborar con nosotras? Nos encantaría escucharte.
+            ¿Tienes preguntas, sugerencias o quieres colaborar con nosotras? Nos
+            encantaría escucharte.
           </p>
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-1 space-y-6">
-            <Card className="border-0 shadow-lg" style={{ backgroundColor: "#F1F0FB" }}>
+            <Card
+              className="border-0 shadow-lg"
+              style={{ backgroundColor: "#F1F0FB" }}
+            >
               <CardHeader>
                 <CardTitle
                   className="text-xl lg:text-2xl"
@@ -168,7 +178,10 @@ export function ContactFormSection() {
             </Card>
           </div>
           <div className="lg:col-span-2">
-            <Card className="border-0 shadow-lg" style={{ backgroundColor: "#FFFFFF" }}>
+            <Card
+              className="border-0 shadow-lg"
+              style={{ backgroundColor: "#FFFFFF" }}
+            >
               <CardContent className="p-6 lg:p-8">
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -188,7 +201,9 @@ export function ContactFormSection() {
                         id="name"
                         placeholder="Tu nombre"
                         value={formData.name}
-                        onChange={(e) => handleInputChange("name", e.target.value)}
+                        onChange={(e) =>
+                          handleInputChange("name", e.target.value)
+                        }
                         style={{
                           backgroundColor: "#F1F0FB",
                           borderColor: "#C8C8C9",
@@ -213,7 +228,9 @@ export function ContactFormSection() {
                         type="email"
                         placeholder="tu@correo.com"
                         value={formData.email}
-                        onChange={(e) => handleInputChange("email", e.target.value)}
+                        onChange={(e) =>
+                          handleInputChange("email", e.target.value)
+                        }
                         style={{
                           backgroundColor: "#F1F0FB",
                           borderColor: "#C8C8C9",
@@ -235,7 +252,12 @@ export function ContactFormSection() {
                     >
                       Tipo de consulta
                     </Label>
-                    <Select value={formData.type} onValueChange={(value) => handleInputChange("type", value)}>
+                    <Select
+                      value={formData.type}
+                      onValueChange={(value) =>
+                        handleInputChange("type", value)
+                      }
+                    >
                       <SelectTrigger
                         style={{
                           backgroundColor: "#F1F0FB",
@@ -246,10 +268,18 @@ export function ContactFormSection() {
                         <SelectValue placeholder="Selecciona el tipo de consulta" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="general">Consulta general</SelectItem>
-                        <SelectItem value="partnership">Alianza estratégica</SelectItem>
-                        <SelectItem value="mentorship">Programa de mentoría</SelectItem>
-                        <SelectItem value="events">Organización de eventos</SelectItem>
+                        <SelectItem value="general">
+                          Consulta general
+                        </SelectItem>
+                        <SelectItem value="partnership">
+                          Alianza estratégica
+                        </SelectItem>
+                        <SelectItem value="mentorship">
+                          Programa de mentoría
+                        </SelectItem>
+                        <SelectItem value="events">
+                          Organización de eventos
+                        </SelectItem>
                         <SelectItem value="press">Prensa y medios</SelectItem>
                       </SelectContent>
                     </Select>
@@ -271,7 +301,9 @@ export function ContactFormSection() {
                       id="subject"
                       placeholder="Asunto de tu mensaje"
                       value={formData.subject}
-                      onChange={(e) => handleInputChange("subject", e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("subject", e.target.value)
+                      }
                       style={{
                         backgroundColor: "#F1F0FB",
                         borderColor: "#C8C8C9",
@@ -297,7 +329,9 @@ export function ContactFormSection() {
                       placeholder="Escribe tu mensaje aquí..."
                       rows={5}
                       value={formData.message}
-                      onChange={(e) => handleInputChange("message", e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("message", e.target.value)
+                      }
                       style={{
                         backgroundColor: "#F1F0FB",
                         borderColor: "#C8C8C9",
@@ -326,5 +360,5 @@ export function ContactFormSection() {
         </div>
       </div>
     </section>
-  )
+  );
 }

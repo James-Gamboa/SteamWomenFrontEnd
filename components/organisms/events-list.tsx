@@ -3,7 +3,6 @@
 import { useMemo } from "react";
 import { EventCard } from "./event-card";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { eventsData } from "@/lib/events-data";
 
 interface EventsListProps {
   currentPage: number;
@@ -11,6 +10,7 @@ interface EventsListProps {
   searchTerm: string;
   selectedCategory: string;
   selectedLocation: string;
+  events: any[];
 }
 
 export function EventsList({
@@ -19,20 +19,25 @@ export function EventsList({
   searchTerm,
   selectedCategory,
   selectedLocation,
+  events,
 }: EventsListProps) {
   const filteredEvents = useMemo(() => {
-    return eventsData.filter((event) => {
+    return events.filter((event) => {
       const matchesSearch =
         event.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         event.description.toLowerCase().includes(searchTerm.toLowerCase());
       const matchesCategory =
-        selectedCategory === "all" || !selectedCategory || event.category === selectedCategory;
+        selectedCategory === "all" ||
+        !selectedCategory ||
+        event.category === selectedCategory;
       const matchesLocation =
-        selectedLocation === "all" || !selectedLocation || event.location === selectedLocation;
+        selectedLocation === "all" ||
+        !selectedLocation ||
+        event.location === selectedLocation;
 
       return matchesSearch && matchesCategory && matchesLocation;
     });
-  }, [searchTerm, selectedCategory, selectedLocation]);
+  }, [searchTerm, selectedCategory, selectedLocation, events]);
 
   const getCategoryStyles = (category: string) => {
     const styles = {

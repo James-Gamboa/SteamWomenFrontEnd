@@ -1,6 +1,6 @@
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 
-export type ItemType = 'event' | 'opportunity';
+export type ItemType = "event" | "opportunity";
 
 export interface BaseItem {
   id: string;
@@ -29,41 +29,9 @@ export interface Application {
   itemType: ItemType;
   studentId: string;
   studentEmail: string;
-  status: 'pending' | 'accepted' | 'rejected';
+  status: "pending" | "accepted" | "rejected";
   createdAt: string;
 }
-
-// TODO: Reemplazar con conexión a Django
-// Endpoints:
-// - GET /api/events/ - Listar eventos
-// - POST /api/events/ - Crear evento
-// - GET /api/opportunities/ - Listar oportunidades
-// - POST /api/opportunities/ - Crear oportunidad
-// - GET /api/events/{slug}/ - Detalle de evento
-// - GET /api/opportunities/{slug}/ - Detalle de oportunidad
-//
-// Estructura de datos en Django:
-// {
-//   id: number,              // ID en la base de datos
-//   title: string,           // título del evento/oportunidad
-//   description: string,     // descripción breve
-//   location: string,        // ciudad o provincia
-//   date: string,            // fecha con formato YYYY-MM-DD
-//   time: string,            // hora o rango horario
-//   category: string,        // categoría o tipo
-//   image: string,           // url de imagen representativa
-//   slug: string,            // ruta única (generado automáticamente)
-//   organizer: string,       // nombre de la empresa (relacionado con User)
-//   website: string,         // opcional, sitio web
-//   full_description: string, // descripción extendida
-//   requirements: string[],   // array con requisitos
-//   benefits: string[],      // array con beneficios (solo para oportunidades)
-//   application_process: string, // instrucciones para postulación/registro
-//   created_at: string,      // fecha de creación
-//   updated_at: string,      // fecha de actualización
-//   is_active: boolean,      // estado de publicación
-//   company: number          // ID de la empresa creadora
-// }
 
 class DataStorage {
   private static instance: DataStorage;
@@ -82,9 +50,9 @@ class DataStorage {
   }
 
   private loadFromStorage() {
-    const storedItems = localStorage.getItem('items');
-    const storedApplications = localStorage.getItem('applications');
-    
+    const storedItems = localStorage.getItem("items");
+    const storedApplications = localStorage.getItem("applications");
+
     if (storedItems) {
       this.items = JSON.parse(storedItems);
     }
@@ -94,11 +62,13 @@ class DataStorage {
   }
 
   private saveToStorage() {
-    localStorage.setItem('items', JSON.stringify(this.items));
-    localStorage.setItem('applications', JSON.stringify(this.applications));
+    localStorage.setItem("items", JSON.stringify(this.items));
+    localStorage.setItem("applications", JSON.stringify(this.applications));
   }
 
-  public createItem(item: Omit<BaseItem, 'id' | 'createdAt' | 'updatedAt'>): BaseItem {
+  public createItem(
+    item: Omit<BaseItem, "id" | "createdAt" | "updatedAt">,
+  ): BaseItem {
     const newItem: BaseItem = {
       ...item,
       id: uuidv4(),
@@ -111,7 +81,7 @@ class DataStorage {
   }
 
   public updateItem(id: string, updates: Partial<BaseItem>): BaseItem | null {
-    const index = this.items.findIndex(item => item.id === id);
+    const index = this.items.findIndex((item) => item.id === id);
     if (index === -1) return null;
 
     const updatedItem = {
@@ -125,80 +95,164 @@ class DataStorage {
   }
 
   public deleteItem(id: string): boolean {
-    const index = this.items.findIndex(item => item.id === id);
+    const index = this.items.findIndex((item) => item.id === id);
     if (index === -1) return false;
 
     this.items.splice(index, 1);
-    this.applications = this.applications.filter(app => app.itemId !== id);
+    this.applications = this.applications.filter((app) => app.itemId !== id);
     this.saveToStorage();
     return true;
   }
 
   public getItem(id: string): BaseItem | null {
-    return this.items.find(item => item.id === id) || null;
+    return this.items.find((item) => item.id === id) || null;
   }
 
-  public getItems(type?: ItemType): BaseItem[] {
-    if (type) {
-      return this.items.filter(item => item.type === type);
-    }
+  public getItems(): BaseItem[] {
     return this.items;
   }
 
-  public createApplication(itemId: string, itemType: ItemType, studentId: string, studentEmail: string): Application {
-    const application: Application = {
+  public createApplication(
+    application: Omit<Application, "id" | "createdAt">,
+  ): Application {
+    const newApplication: Application = {
+      ...application,
       id: uuidv4(),
-      itemId,
-      itemType,
-      studentId,
-      studentEmail,
-      status: 'pending',
       createdAt: new Date().toISOString(),
     };
-    this.applications.push(application);
+    this.applications.push(newApplication);
     this.saveToStorage();
-    return application;
+    return newApplication;
   }
 
-  public getApplicationsByItem(itemId: string): Application[] {
-    return this.applications.filter(app => app.itemId === itemId);
-  }
-
-  public getApplicationsByStudent(studentId: string): Application[] {
-    return this.applications.filter(app => app.studentId === studentId);
-  }
-
-  public updateApplicationStatus(applicationId: string, status: Application['status']): Application | null {
-    const index = this.applications.findIndex(app => app.id === applicationId);
+  public updateApplication(
+    id: string,
+    updates: Partial<Application>,
+  ): Application | null {
+    const index = this.applications.findIndex((app) => app.id === id);
     if (index === -1) return null;
 
     const updatedApplication = {
       ...this.applications[index],
-      status,
+      ...updates,
     };
     this.applications[index] = updatedApplication;
     this.saveToStorage();
     return updatedApplication;
   }
-}
 
-export const dataStorage = DataStorage.getInstance();
+  public deleteApplication(id: string): boolean {
+    const index = this.applications.findIndex((app) => app.id === id);
+    if (index === -1) return false;
 
-export function ensureAdminUser() {
-  const users = JSON.parse(localStorage.getItem("users") || "[]");
-  const adminUser = {
-    id: Date.now(),
-    name: "Admin",
-    email: "jjguevarag@gmail.com",
-    password: "admin",
-    role: "admin",
-    company: ""
-  };
-  const exists = users.some((u: any) => u.email === adminUser.email);
-  if (!exists) {
-    users.push(adminUser);
-    localStorage.setItem("users", JSON.stringify(users));
+    this.applications.splice(index, 1);
+    this.saveToStorage();
+    return true;
+  }
+
+  public getApplicationsByItem(itemId: string): Application[] {
+    return this.applications.filter((app) => app.itemId === itemId);
+  }
+
+  public getApplication(id: string): Application | null {
+    return this.applications.find((app) => app.id === id) || null;
+  }
+
+  public getAllApplications(): Application[] {
+    return this.applications;
   }
 }
 
-ensureAdminUser(); 
+let instance: DataStorage | null = null;
+if (typeof window !== "undefined") {
+  instance = DataStorage.getInstance();
+}
+
+export function createItem(
+  item: Omit<BaseItem, "id" | "createdAt" | "updatedAt">,
+): BaseItem | null {
+  if (!instance) return null;
+  return instance.createItem(item);
+}
+
+export function updateItem(
+  id: string,
+  updates: Partial<BaseItem>,
+): BaseItem | null {
+  if (!instance) return null;
+  return instance.updateItem(id, updates);
+}
+
+export function deleteItem(id: string): boolean {
+  if (!instance) return false;
+  return instance.deleteItem(id);
+}
+
+export function getItem(id: string): BaseItem | null {
+  if (!instance) return null;
+  return instance.getItem(id);
+}
+
+export function getItems(): BaseItem[] {
+  if (!instance) return [];
+  return instance.getItems();
+}
+
+export function createApplication(
+  application: Omit<Application, "id" | "createdAt">,
+): Application | null {
+  if (!instance) return null;
+  return instance.createApplication(application);
+}
+
+export function updateApplication(
+  id: string,
+  updates: Partial<Application>,
+): Application | null {
+  if (!instance) return null;
+  return instance.updateApplication(id, updates);
+}
+
+export function deleteApplication(id: string): boolean {
+  if (!instance) return false;
+  return instance.deleteApplication(id);
+}
+
+export function getApplicationsByItem(itemId: string): Application[] {
+  if (!instance) return [];
+  return instance.getApplicationsByItem(itemId);
+}
+
+export function getApplication(id: string): Application | null {
+  if (!instance) return null;
+  return instance.getApplication(id);
+}
+
+export function getAllApplications(): Application[] {
+  if (!instance) return [];
+  return instance.getAllApplications();
+}
+
+export function getLocalOpportunities() {
+  if (typeof window === "undefined") return [];
+  try {
+    const items = JSON.parse(localStorage.getItem("items") || "[]");
+    return items.filter((item: any) => item.type === "opportunity");
+  } catch {
+    return [];
+  }
+}
+
+export function getLocalOpportunityBySlug(slug: string) {
+  if (typeof window === "undefined") return null;
+  try {
+    const items = JSON.parse(localStorage.getItem("items") || "[]");
+    return (
+      items.find(
+        (item: any) => item.type === "opportunity" && item.slug === slug,
+      ) || null
+    );
+  } catch {
+    return null;
+  }
+}

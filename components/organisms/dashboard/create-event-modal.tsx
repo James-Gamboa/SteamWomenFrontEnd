@@ -7,10 +7,5 @@ interface CreateEventModalProps {
 }
 
 export function CreateEventModal({ onEventCreated }: CreateEventModalProps) {
-  return (
-    <CreateItemModal
-      type="event"
-      onItemCreated={onEventCreated}
-    />
-  );
-} 
+  return <CreateItemModal type="event" onItemCreated={onEventCreated} />;
+}

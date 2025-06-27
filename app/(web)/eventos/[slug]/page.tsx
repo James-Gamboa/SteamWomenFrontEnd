@@ -22,7 +22,11 @@ interface Event {
   applicationProcess?: string;
 }
 
-export default function EventDetailPage({ params }: { params: Promise<{ slug: string }> }) {
+export default function EventDetailPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
   const { slug } = use(params);
   const [event, setEvent] = useState<Event | null>(null);
 

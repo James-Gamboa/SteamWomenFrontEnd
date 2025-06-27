@@ -59,7 +59,7 @@ export const PROVINCES = [
   "Heredia",
   "Guanacaste",
   "Puntarenas",
-  "Limón"
+  "Limón",
 ] as const;
 
 // TODO: Implementar con Django

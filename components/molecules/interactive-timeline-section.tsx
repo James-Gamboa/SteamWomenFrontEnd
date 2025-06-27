@@ -1,12 +1,12 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Card, CardContent } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Calendar, Users, Award, Globe } from "lucide-react"
+import { useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Calendar, Users, Award, Globe } from "lucide-react";
 
 export function InteractiveTimelineSection() {
-  const [activeYear, setActiveYear] = useState(2018)
+  const [activeYear, setActiveYear] = useState(2018);
 
   const timelineData = [
     {
@@ -50,10 +50,11 @@ export function InteractiveTimelineSection() {
       icon: Award,
       color: "#F97316",
     },
-  ]
+  ];
 
-  const activeData = timelineData.find((item) => item.year === activeYear) || timelineData[0]
-  const IconComponent = activeData.icon
+  const activeData =
+    timelineData.find((item) => item.year === activeYear) || timelineData[0];
+  const IconComponent = activeData.icon;
 
   return (
     <section className="py-12 lg:py-20">
@@ -79,12 +80,16 @@ export function InteractiveTimelineSection() {
               lineHeight: "1.6",
             }}
           >
-            Explora los momentos clave que han definido el crecimiento de STEAMWomen
+            Explora los momentos clave que han definido el crecimiento de
+            STEAMWomen
           </p>
         </div>
         <div className="flex justify-center mb-12">
           <div className="relative">
-            <div className="absolute top-6 left-0 right-0 h-1 rounded-full" style={{ backgroundColor: "#C8C8C9" }} />
+            <div
+              className="absolute top-6 left-0 right-0 h-1 rounded-full"
+              style={{ backgroundColor: "#C8C8C9" }}
+            />
             <div
               className="absolute top-6 left-0 h-1 rounded-full transition-all duration-500"
               style={{
@@ -106,13 +111,17 @@ export function InteractiveTimelineSection() {
                       activeYear === item.year ? "shadow-lg" : ""
                     }`}
                     style={{
-                      backgroundColor: activeYear === item.year ? item.color : "#FFFFFF",
+                      backgroundColor:
+                        activeYear === item.year ? item.color : "#FFFFFF",
                       borderColor: item.color,
                     }}
                   >
                     <Calendar
                       className="w-5 h-5"
-                      style={{ color: activeYear === item.year ? "#FFFFFF" : item.color }}
+                      style={{
+                        color:
+                          activeYear === item.year ? "#FFFFFF" : item.color,
+                      }}
                     />
                   </div>
                   <span
@@ -142,7 +151,10 @@ export function InteractiveTimelineSection() {
                     className="w-20 h-20 lg:w-24 lg:h-24 rounded-full flex items-center justify-center shadow-lg"
                     style={{ backgroundColor: activeData.color }}
                   >
-                    <IconComponent className="w-10 h-10 lg:w-12 lg:h-12" style={{ color: "#FFFFFF" }} />
+                    <IconComponent
+                      className="w-10 h-10 lg:w-12 lg:h-12"
+                      style={{ color: "#FFFFFF" }}
+                    />
                   </div>
                 </div>
 
@@ -204,7 +216,10 @@ export function InteractiveTimelineSection() {
                             lineHeight: "1.5",
                           }}
                         >
-                          <span className="mr-2" style={{ color: activeData.color }}>
+                          <span
+                            className="mr-2"
+                            style={{ color: activeData.color }}
+                          >
                             •
                           </span>
                           {achievement}
@@ -219,5 +234,5 @@ export function InteractiveTimelineSection() {
         </div>
       </div>
     </section>
-  )
+  );
 }

@@ -22,8 +22,12 @@ export default function EventosInscritosPage() {
 
   useEffect(() => {
     if (user && user.role === "student") {
-      const all = JSON.parse(localStorage.getItem("student_event_registrations") || "[]");
-      setRegistrations(all.filter((reg: EventRegistration) => reg.userId === user.id));
+      const all = JSON.parse(
+        localStorage.getItem("student_event_registrations") || "[]",
+      );
+      setRegistrations(
+        all.filter((reg: EventRegistration) => reg.userId === user.id),
+      );
     }
   }, [user]);
 
@@ -53,15 +57,28 @@ export default function EventosInscritosPage() {
             ) : (
               <div className="space-y-4">
                 {registrations.map((reg) => (
-                  <div key={reg.eventSlug} className="flex items-center justify-between p-4 border rounded-lg">
+                  <div
+                    key={reg.eventSlug}
+                    className="flex items-center justify-between p-4 border rounded-lg"
+                  >
                     <div className="space-y-1">
                       <p className="font-medium">{reg.eventTitle}</p>
                       <p className="text-sm text-[#C8C8C9]">{reg.organizer}</p>
                       <div className="flex gap-2 mt-1">
-                        {reg.provincia && <span className="text-xs bg-[#F1F0FB] text-[#8B5CF6] px-2 py-0.5 rounded">{reg.provincia}</span>}
-                        {reg.categoria && <span className="text-xs bg-[#F1F0FB] text-[#F97316] px-2 py-0.5 rounded">{reg.categoria}</span>}
+                        {reg.provincia && (
+                          <span className="text-xs bg-[#F1F0FB] text-[#8B5CF6] px-2 py-0.5 rounded">
+                            {reg.provincia}
+                          </span>
+                        )}
+                        {reg.categoria && (
+                          <span className="text-xs bg-[#F1F0FB] text-[#F97316] px-2 py-0.5 rounded">
+                            {reg.categoria}
+                          </span>
+                        )}
                       </div>
-                      <p className="text-xs text-[#8E9196]">{new Date(reg.fechaRegistro).toLocaleDateString()}</p>
+                      <p className="text-xs text-[#8E9196]">
+                        {new Date(reg.fechaRegistro).toLocaleDateString()}
+                      </p>
                     </div>
                     <Badge variant="secondary">Registrado</Badge>
                   </div>
@@ -73,4 +90,4 @@ export default function EventosInscritosPage() {
       </div>
     </div>
   );
-} 
+}

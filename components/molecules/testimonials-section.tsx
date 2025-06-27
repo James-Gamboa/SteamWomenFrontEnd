@@ -1,21 +1,21 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { useState, useRef } from "react"
-import { Card, CardContent } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { ChevronLeft, ChevronRight, Quote } from "lucide-react"
-import Image from "next/image"
+import * as React from "react";
+import { useState, useRef } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { ChevronLeft, ChevronRight, Quote } from "lucide-react";
+import Image from "next/image";
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
-} from "@/components/ui/carousel"
+} from "@/components/ui/carousel";
 
 export function TestimonialsSection() {
-  const [currentTestimonial, setCurrentTestimonial] = useState(0)
-  const [isLoading, setIsLoading] = useState(true)
-  const carouselRef = useRef<any>(null)
+  const [currentTestimonial, setCurrentTestimonial] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
+  const carouselRef = useRef<any>(null);
 
   const testimonials = [
     {
@@ -63,27 +63,27 @@ export function TestimonialsSection() {
       testimonial:
         "STEAMWomen no solo me conectó con oportunidades, sino que me inspiró a crear mi propia empresa. La mentoría que recibí fue invaluable.",
     },
-  ]
+  ];
 
   const nextTestimonial = () => {
     if (carouselRef.current) {
-      carouselRef.current.scrollTo(currentTestimonial + 1)
+      carouselRef.current.scrollTo(currentTestimonial + 1);
     }
-  }
+  };
 
   const prevTestimonial = () => {
     if (carouselRef.current) {
-      carouselRef.current.scrollTo(currentTestimonial - 1)
+      carouselRef.current.scrollTo(currentTestimonial - 1);
     }
-  }
+  };
 
   const handleSlideChange = (index: number) => {
-    setCurrentTestimonial(index)
-  }
+    setCurrentTestimonial(index);
+  };
 
   const handleImageLoad = () => {
-    setIsLoading(false)
-  }
+    setIsLoading(false);
+  };
 
   return (
     <section className="py-12 lg:py-20 bg-[#1A1F2C]">
@@ -93,47 +93,55 @@ export function TestimonialsSection() {
             Lo que dicen nuestras usuarias
           </h2>
           <p className="max-w-2xl mx-auto text-base sm:text-lg text-[#C8C8C9] font-dm-sans font-normal leading-relaxed">
-            Historias reales de mujeres que han transformado sus carreras a través de STEAMWomen
+            Historias reales de mujeres que han transformado sus carreras a
+            través de STEAMWomen
           </p>
         </div>
 
         <div className="relative max-w-4xl mx-auto select-none">
           <Carousel
             className="transition-transform duration-300 ease-in-out"
-            opts={{ 
+            opts={{
               containScroll: "trimSnaps",
               loop: false,
               dragFree: false,
               align: "center",
-              skipSnaps: false
+              skipSnaps: false,
             }}
             setApi={(api) => {
               if (api && api.selectedScrollSnap) {
                 api.on("select", () => {
-                  setCurrentTestimonial(api.selectedScrollSnap())
-                })
+                  setCurrentTestimonial(api.selectedScrollSnap());
+                });
               }
-              carouselRef.current = api
+              carouselRef.current = api;
             }}
           >
             <CarouselContent>
               {testimonials.map((testimonial, index) => (
-                <CarouselItem key={testimonial.id} className="transition-all duration-300 ease-in-out">
+                <CarouselItem
+                  key={testimonial.id}
+                  className="transition-all duration-300 ease-in-out"
+                >
                   <Card className="border-0 shadow-2xl overflow-hidden bg-[#F1F0FB]">
                     <CardContent className="p-8 lg:p-12">
                       <div className="flex flex-col lg:flex-row items-center gap-8">
                         <div className="flex-shrink-0">
                           <div className="relative">
-                            <div className={`w-32 h-32 lg:w-38 lg:h-38 rounded-full bg-gray-200 animate-pulse ${isLoading ? 'block' : 'hidden'}`} />
+                            <div
+                              className={`w-32 h-32 lg:w-38 lg:h-38 rounded-full bg-gray-200 animate-pulse ${isLoading ? "block" : "hidden"}`}
+                            />
                             <Image
-                              src={testimonial.image || "/img/dummy-women.jpg.jpeg"}
+                              src={
+                                testimonial.image || "/img/dummy-women.jpg.jpeg"
+                              }
                               alt={testimonial.name}
                               width={180}
                               height={180}
                               quality={85}
                               loading={index === 0 ? "eager" : "lazy"}
                               sizes="(max-width: 768px) 96px, 120px"
-                              className={`w-32 h-32 lg:w-38 lg:h-38 rounded-full object-cover border-4 border-[#8B5CF6] transition-opacity duration-300 ${isLoading ? 'opacity-0' : 'opacity-100'}`}
+                              className={`w-32 h-32 lg:w-38 lg:h-38 rounded-full object-cover border-4 border-[#8B5CF6] transition-opacity duration-300 ${isLoading ? "opacity-0" : "opacity-100"}`}
                               onLoad={handleImageLoad}
                               priority={index === 0}
                             />
@@ -169,12 +177,18 @@ export function TestimonialsSection() {
             <Button
               variant="outline"
               size="sm"
-              onClick={() => carouselRef.current && carouselRef.current.scrollPrev()}
-              disabled={carouselRef.current && carouselRef.current.selectedScrollSnap() === 0}
+              onClick={() =>
+                carouselRef.current && carouselRef.current.scrollPrev()
+              }
+              disabled={
+                carouselRef.current &&
+                carouselRef.current.selectedScrollSnap() === 0
+              }
               className={`w-12 h-12 rounded-full border-2 transition-all duration-300 hover:scale-110 ${
-                carouselRef.current && carouselRef.current.selectedScrollSnap() === 0 
-                  ? 'opacity-50 cursor-not-allowed' 
-                  : 'hover:bg-[#8B5CF6] hover:text-white'
+                carouselRef.current &&
+                carouselRef.current.selectedScrollSnap() === 0
+                  ? "opacity-50 cursor-not-allowed"
+                  : "hover:bg-[#8B5CF6] hover:text-white"
               }`}
               style={{
                 borderColor: "#8B5CF6",
@@ -187,12 +201,20 @@ export function TestimonialsSection() {
             <Button
               variant="outline"
               size="sm"
-              onClick={() => carouselRef.current && carouselRef.current.scrollNext()}
-              disabled={carouselRef.current && carouselRef.current.selectedScrollSnap() === testimonials.length - 1}
+              onClick={() =>
+                carouselRef.current && carouselRef.current.scrollNext()
+              }
+              disabled={
+                carouselRef.current &&
+                carouselRef.current.selectedScrollSnap() ===
+                  testimonials.length - 1
+              }
               className={`w-12 h-12 rounded-full border-2 transition-all duration-300 hover:scale-110 ${
-                carouselRef.current && carouselRef.current.selectedScrollSnap() === testimonials.length - 1 
-                  ? 'opacity-50 cursor-not-allowed' 
-                  : 'hover:bg-[#8B5CF6] hover:text-white'
+                carouselRef.current &&
+                carouselRef.current.selectedScrollSnap() ===
+                  testimonials.length - 1
+                  ? "opacity-50 cursor-not-allowed"
+                  : "hover:bg-[#8B5CF6] hover:text-white"
               }`}
               style={{
                 borderColor: "#8B5CF6",
@@ -207,12 +229,15 @@ export function TestimonialsSection() {
             {testimonials.map((_, index) => (
               <button
                 key={index}
-                onClick={() => carouselRef.current && carouselRef.current.scrollTo(index)}
+                onClick={() =>
+                  carouselRef.current && carouselRef.current.scrollTo(index)
+                }
                 className={`w-3 h-3 rounded-full transition-all duration-300 ${
                   index === currentTestimonial ? "scale-125" : "hover:scale-110"
                 }`}
                 style={{
-                  backgroundColor: index === currentTestimonial ? "#8B5CF6" : "#C8C8C9",
+                  backgroundColor:
+                    index === currentTestimonial ? "#8B5CF6" : "#C8C8C9",
                 }}
               />
             ))}
@@ -220,5 +245,5 @@ export function TestimonialsSection() {
         </div>
       </div>
     </section>
-  )
+  );
 }

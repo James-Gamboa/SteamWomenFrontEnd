@@ -3,13 +3,21 @@
 import { useEffect, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { dataStorage } from "@/lib/data-storage";
+import * as dataStorage from "@/lib/data-storage";
 import { useAuth } from "@/lib/context/auth-context";
 import { toast } from "sonner";
 import { BaseItem } from "@/lib/data-storage";
-import { Calendar, MapPin, Building2, Globe, FileText, Award, Send } from "lucide-react";
+import {
+  Calendar,
+  MapPin,
+  Building2,
+  Globe,
+  FileText,
+  Award,
+  Send,
+} from "lucide-react";
 
-// TODO: Reemplazar con conexión a Django 
+// TODO: Reemplazar con conexión a Django
 
 interface ItemDetailProps {
   id: string;
@@ -19,7 +27,13 @@ interface ItemDetailProps {
   onItemEdited?: () => void;
 }
 
-export function ItemDetail({ id, type, showActions = false, onItemDeleted, onItemEdited }: ItemDetailProps) {
+export function ItemDetail({
+  id,
+  type,
+  showActions = false,
+  onItemDeleted,
+  onItemEdited,
+}: ItemDetailProps) {
   const { user } = useAuth();
   const [item, setItem] = useState<BaseItem | null>(null);
 
@@ -65,7 +79,13 @@ export function ItemDetail({ id, type, showActions = false, onItemDeleted, onIte
       return;
     }
 
-    const success = dataStorage.createApplication(id, type, user.id, user.email);
+    const success = dataStorage.createApplication({
+      itemId: id,
+      itemType: type,
+      studentId: user.id,
+      studentEmail: user.email,
+      status: "pending",
+    });
     if (success) {
       toast.success("¡Postulación exitosa!");
     } else {
@@ -73,8 +93,12 @@ export function ItemDetail({ id, type, showActions = false, onItemDeleted, onIte
     }
   };
 
-  const requirements = Array.isArray(item.requirements) ? item.requirements : [item.requirements];
-  const benefits = Array.isArray(item.benefits) ? item.benefits : [item.benefits];
+  const requirements = Array.isArray(item.requirements)
+    ? item.requirements
+    : [item.requirements];
+  const benefits = Array.isArray(item.benefits)
+    ? item.benefits
+    : [item.benefits];
 
   return (
     <div className="max-w-4xl mx-auto">
@@ -90,7 +114,9 @@ export function ItemDetail({ id, type, showActions = false, onItemDeleted, onIte
               <Calendar className="h-5 w-5 text-gray-500" />
               <div>
                 <p className="text-sm font-medium">Fecha</p>
-                <p className="text-sm text-gray-500">{new Date(item.date).toLocaleDateString()}</p>
+                <p className="text-sm text-gray-500">
+                  {new Date(item.date).toLocaleDateString()}
+                </p>
               </div>
             </div>
 
@@ -136,7 +162,9 @@ export function ItemDetail({ id, type, showActions = false, onItemDeleted, onIte
                 <h2 className="text-lg font-semibold">Requisitos</h2>
                 <ul className="list-disc list-inside mt-2 space-y-1">
                   {requirements.map((req, index) => (
-                    <li key={index} className="text-gray-600">{req}</li>
+                    <li key={index} className="text-gray-600">
+                      {req}
+                    </li>
                   ))}
                 </ul>
               </div>
@@ -147,7 +175,9 @@ export function ItemDetail({ id, type, showActions = false, onItemDeleted, onIte
                 <h2 className="text-lg font-semibold">Beneficios</h2>
                 <ul className="list-disc list-inside mt-2 space-y-1">
                   {benefits.map((benefit, index) => (
-                    <li key={index} className="text-gray-600">{benefit}</li>
+                    <li key={index} className="text-gray-600">
+                      {benefit}
+                    </li>
                   ))}
                 </ul>
               </div>
@@ -180,10 +210,7 @@ export function ItemDetail({ id, type, showActions = false, onItemDeleted, onIte
                 </Button>
               </>
             ) : user?.role === "student" ? (
-              <Button
-                className="flex-1"
-                onClick={handleApply}
-              >
+              <Button className="flex-1" onClick={handleApply}>
                 <Send className="h-4 w-4 mr-2" />
                 Postularme
               </Button>

@@ -10,10 +10,7 @@ export async function POST(request: Request) {
     const token = cookieStore.get("token")?.value;
 
     if (!token) {
-      return NextResponse.json(
-        { error: "No token provided" },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: "No token provided" }, { status: 401 });
     }
 
     // TODO: Implementar llamada a Django para verificar el token
@@ -35,15 +32,12 @@ export async function POST(request: Request) {
     // const data = await response.json();
     // return NextResponse.json({ valid: true });
 
-    return NextResponse.json(
-      { error: "Not implemented" },
-      { status: 501 }
-    );
+    return NextResponse.json({ error: "Not implemented" }, { status: 501 });
   } catch (error) {
     console.error("Error verifying token:", error);
     return NextResponse.json(
       { error: "Error verifying token" },
-      { status: 500 }
+      { status: 500 },
     );
   }
-} 
+}

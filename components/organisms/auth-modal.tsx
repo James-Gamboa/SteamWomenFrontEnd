@@ -29,7 +29,9 @@ export function AuthModal({
   onModeChange,
 }: AuthModalProps) {
   const { login, register } = useAuth();
-  const [accountType, setAccountType] = useState<"student" | "company">("student");
+  const [accountType, setAccountType] = useState<"student" | "company">(
+    "student",
+  );
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     organizationName: "",
@@ -42,12 +44,12 @@ export function AuthModal({
 
   useEffect(() => {
     if (isOpen) {
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = "unset";
     }
     return () => {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = "unset";
     };
   }, [isOpen]);
 
@@ -87,7 +89,10 @@ export function AuthModal({
           return;
         }
 
-        if (accountType === "student" && (!formData.firstName || !formData.lastName)) {
+        if (
+          accountType === "student" &&
+          (!formData.firstName || !formData.lastName)
+        ) {
           setError("Por favor ingrese su nombre y apellido");
           return;
         }
@@ -96,7 +101,7 @@ export function AuthModal({
           ...formData,
           role: accountType,
         });
-        
+
         toast.success("¡Cuenta creada exitosamente! Por favor inicia sesión.");
         setFormData({
           organizationName: "",
@@ -108,20 +113,34 @@ export function AuthModal({
         onModeChange("login");
       }
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : "Error al procesar la solicitud";
-      
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : "Error al procesar la solicitud";
+
       if (mode === "register") {
-        if (errorMessage.toLowerCase().includes("email") || errorMessage.toLowerCase().includes("correo")) {
+        if (
+          errorMessage.toLowerCase().includes("email") ||
+          errorMessage.toLowerCase().includes("correo")
+        ) {
           setError("Este correo electrónico ya está registrado");
         } else if (errorMessage.toLowerCase().includes("guardar")) {
-          setError("Error al guardar los datos. Por favor, intente nuevamente.");
+          setError(
+            "Error al guardar los datos. Por favor, intente nuevamente.",
+          );
         } else {
           setError(errorMessage || "Error al crear la cuenta");
         }
       } else {
-        if (errorMessage.toLowerCase().includes("email") || errorMessage.toLowerCase().includes("correo")) {
+        if (
+          errorMessage.toLowerCase().includes("email") ||
+          errorMessage.toLowerCase().includes("correo")
+        ) {
           setError("El correo electrónico no está registrado");
-        } else if (errorMessage.toLowerCase().includes("password") || errorMessage.toLowerCase().includes("contraseña")) {
+        } else if (
+          errorMessage.toLowerCase().includes("password") ||
+          errorMessage.toLowerCase().includes("contraseña")
+        ) {
           setError("La contraseña es incorrecta");
         } else {
           setError("El correo electrónico o la contraseña son incorrectos");
@@ -431,8 +450,8 @@ export function AuthModal({
               {isLoading
                 ? "Cargando..."
                 : mode === "register"
-                ? "Registrarse"
-                : "Iniciar Sesión"}
+                  ? "Registrarse"
+                  : "Iniciar Sesión"}
             </Button>
 
             <div className="text-center">

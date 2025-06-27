@@ -6,7 +6,13 @@ import { Heart, Share } from "lucide-react";
 import { useState } from "react";
 import { useAuth } from "@/lib/context/auth-context";
 import { toast } from "sonner";
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 interface Event {
   id: string;
@@ -44,9 +50,11 @@ export function EventDetailSidebar({
       toast.error("Solo los estudiantes pueden registrarse a eventos.");
       return;
     }
-    const registrations = JSON.parse(localStorage.getItem("student_event_registrations") || "[]");
+    const registrations = JSON.parse(
+      localStorage.getItem("student_event_registrations") || "[]",
+    );
     const alreadyRegistered = registrations.some(
-      (reg: any) => reg.userId === user.id && reg.eventSlug === event.slug
+      (reg: any) => reg.userId === user.id && reg.eventSlug === event.slug,
     );
     if (alreadyRegistered) {
       toast.error("Ya te has registrado a este evento.");
@@ -58,7 +66,9 @@ export function EventDetailSidebar({
   const handleConfirm = () => {
     if (!user) return;
 
-    const registrations = JSON.parse(localStorage.getItem("student_event_registrations") || "[]");
+    const registrations = JSON.parse(
+      localStorage.getItem("student_event_registrations") || "[]",
+    );
     const province = event.location.split(",")[0].trim();
     registrations.push({
       userId: user.id,
@@ -69,11 +79,16 @@ export function EventDetailSidebar({
       fechaRegistro: new Date().toISOString(),
       provincia: province,
       categoria: event.category,
-      estado: "Pendiente"
+      estado: "Pendiente",
     });
-    localStorage.setItem("student_event_registrations", JSON.stringify(registrations));
+    localStorage.setItem(
+      "student_event_registrations",
+      JSON.stringify(registrations),
+    );
 
-    const organizerRegistrations = JSON.parse(localStorage.getItem("organizer_event_registrations") || "[]");
+    const organizerRegistrations = JSON.parse(
+      localStorage.getItem("organizer_event_registrations") || "[]",
+    );
     organizerRegistrations.push({
       eventId: event.id,
       eventTitle: event.title,
@@ -82,9 +97,12 @@ export function EventDetailSidebar({
       registrantName: `${user.firstName} ${user.lastName}`,
       registrantEmail: user.email,
       fechaRegistro: new Date().toISOString(),
-      estado: "Pendiente"
+      estado: "Pendiente",
     });
-    localStorage.setItem("organizer_event_registrations", JSON.stringify(organizerRegistrations));
+    localStorage.setItem(
+      "organizer_event_registrations",
+      JSON.stringify(organizerRegistrations),
+    );
 
     setModalOpen(false);
     toast.success("¡Registro exitoso!");
@@ -124,14 +142,21 @@ export function EventDetailSidebar({
                 <div className="mb-4">
                   <p className="font-semibold">{event.title}</p>
                   <p className="text-sm text-[#8E9196]">{event.organizer}</p>
-                  <p className="text-xs text-[#8E9196]">{formatDate(event.date)}</p>
-                  <p className="text-xs text-[#8E9196] mt-2">Categoría: {event.category}</p>
+                  <p className="text-xs text-[#8E9196]">
+                    {formatDate(event.date)}
+                  </p>
+                  <p className="text-xs text-[#8E9196] mt-2">
+                    Categoría: {event.category}
+                  </p>
                 </div>
                 <DialogFooter>
                   <Button variant="outline" onClick={() => setModalOpen(false)}>
                     Cancelar
                   </Button>
-                  <Button className="bg-[#8B5CF6] hover:bg-[#7C3AED]" onClick={handleConfirm}>
+                  <Button
+                    className="bg-[#8B5CF6] hover:bg-[#7C3AED]"
+                    onClick={handleConfirm}
+                  >
                     Confirmar registro
                   </Button>
                 </DialogFooter>

@@ -1,10 +1,10 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import Image from "next/image"
+import { useState } from "react";
+import Image from "next/image";
 
 export function PartnersSection() {
-  const [selectedPartner, setSelectedPartner] = useState<number | null>(null)
+  const [selectedPartner, setSelectedPartner] = useState<number | null>(null);
 
   const partners = [
     {
@@ -57,13 +57,13 @@ export function PartnersSection() {
       name: "TikTok",
       logo: "img/tik-tok.png",
     },
-  ]
+  ];
 
-  const duplicatedPartners = [...partners, ...partners, ...partners]
+  const duplicatedPartners = [...partners, ...partners, ...partners];
 
   const handlePartnerClick = (partnerId: number) => {
-    setSelectedPartner(selectedPartner === partnerId ? null : partnerId)
-  }
+    setSelectedPartner(selectedPartner === partnerId ? null : partnerId);
+  };
 
   return (
     <section className="py-12 lg:py-20" style={{ backgroundColor: "#F1F0FB" }}>
@@ -153,5 +153,5 @@ export function PartnersSection() {
         }
       `}</style>
     </section>
-  )
+  );
 }

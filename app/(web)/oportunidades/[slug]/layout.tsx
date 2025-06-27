@@ -1,12 +1,16 @@
 import type { Metadata } from "next";
 import { opportunitiesEventsData } from "@/lib/opportunities-events-data";
 
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
   const { slug } = await params;
   const opportunity = opportunitiesEventsData.find((o) => o.slug === slug);
   if (!opportunity) {
     return {
-      title: "Oportunidad no encontrada | STEAMWomen",
+      title: "Oportunidad| STEAMWomen",
       description: "Esta oportunidad no existe o ha sido eliminada.",
     };
   }
@@ -42,4 +46,4 @@ export default function OpportunityLayout({
   children: React.ReactNode;
 }) {
   return children;
-} 
+}

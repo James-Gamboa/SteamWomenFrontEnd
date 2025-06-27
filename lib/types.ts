@@ -8,4 +8,4 @@ export interface User {
   organizationName?: string;
   isPrimaryAdmin?: boolean;
   createdAt: string;
-} 
+}

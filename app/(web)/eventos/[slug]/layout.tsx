@@ -1,7 +1,11 @@
 import type { Metadata } from "next";
 import { eventsData } from "@/lib/events-data";
 
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
   const { slug } = await params;
   const event = eventsData.find((e) => e.slug === slug);
   if (!event) {
@@ -42,4 +46,4 @@ export default function EventLayout({
   children: React.ReactNode;
 }) {
   return children;
-} 
+}

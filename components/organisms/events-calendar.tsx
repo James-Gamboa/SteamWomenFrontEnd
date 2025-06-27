@@ -4,20 +4,19 @@ import { useMemo } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Calendar, MapPin } from "lucide-react";
 import Link from "next/link";
-import { opportunitiesEventsData } from "@/lib/opportunities-events-data";
 
 interface EventsCalendarProps {
   searchTerm: string;
   selectedCategory: string;
   selectedLocation: string;
+  events: any[];
 }
-
-const events = opportunitiesEventsData;
 
 export function EventsCalendar({
   searchTerm,
   selectedCategory,
   selectedLocation,
+  events,
 }: EventsCalendarProps) {
   const filteredEvents = useMemo(() => {
     return events.filter((event) => {
@@ -31,7 +30,7 @@ export function EventsCalendar({
 
       return matchesSearch && matchesCategory && matchesLocation;
     });
-  }, [searchTerm, selectedCategory, selectedLocation]);
+  }, [searchTerm, selectedCategory, selectedLocation, events]);
 
   const getCategoryStyles = (category: string) => {
     const styles = {
@@ -99,7 +98,11 @@ export function EventsCalendar({
               {monthEvents.map((event) => {
                 const eventDate = formatDate(event.date);
                 return (
-                  <Link key={event.id} href={`/eventos/${event.slug}`} className="block">
+                  <Link
+                    key={event.id}
+                    href={`/eventos/${event.slug}`}
+                    className="block"
+                  >
                     <div
                       className="overflow-hidden flex hover:shadow-lg transition-all duration-300 border-0 shadow-sm cursor-pointer transform hover:scale-[1.02]"
                       style={{
