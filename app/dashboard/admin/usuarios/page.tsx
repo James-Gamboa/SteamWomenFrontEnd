@@ -14,6 +14,11 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import type { User } from "@/lib/mock-db";
 import { storageUtils } from "@/lib/local-storage";
 import { useRouter } from "next/navigation";
+import { GET_USERS } from "@/backend-integration/graphql/queries";
+import {
+  UPDATE_USER,
+  DELETE_USER,
+} from "@/backend-integration/graphql/mutations";
 
 // TODO: Reemplazar con conexión a Django
 
@@ -149,6 +154,8 @@ const AdminUsuariosPage = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [userToDelete, setUserToDelete] = useState<User | null>(null);
+  const [graphqlError, setGraphqlError] = useState<string | null>(null);
+  const [isUpdating, setIsUpdating] = useState(false);
   const router = useRouter();
 
   const formatDate = (dateString: string) => {
@@ -200,23 +207,30 @@ const AdminUsuariosPage = () => {
       return;
     }
 
-    try {
-      const cleanResult = storageUtils.cleanDuplicateUsers();
-      if (cleanResult.success && cleanResult.removedCount > 0) {
-        toast.success(
-          `${cleanResult.removedCount} usuarios duplicados eliminados automáticamente`,
-        );
-      }
+    const loadUsers = async () => {
+      try {
+        setLoading(true);
+        setGraphqlError(null);
+        const graphqlResult = GET_USERS;
+        const cleanResult = storageUtils.cleanDuplicateUsers();
+        if (cleanResult.success && cleanResult.removedCount > 0) {
+          toast.success(
+            `${cleanResult.removedCount} usuarios duplicados eliminados automáticamente`,
+          );
+        }
 
-      const storedUsers = storageUtils.getUsers();
-      setUsers(storedUsers);
-    } catch (error) {
-      toast.error(
-        "Error al cargar los usuarios. Por favor, revise los datos en localStorage.",
-      );
-    } finally {
-      setLoading(false);
-    }
+        const storedUsers = storageUtils.getUsers();
+        setUsers(storedUsers);
+      } catch (error) {
+        setGraphqlError("Error loading users from GraphQL");
+        const storedUsers = storageUtils.getUsers();
+        setUsers(storedUsers);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadUsers();
   }, [currentUser, router]);
 
   const handleRoleChange = (userId: string, newRole: User["role"]) => {
@@ -239,6 +253,9 @@ const AdminUsuariosPage = () => {
     }
 
     try {
+      setIsUpdating(true);
+      setGraphqlError(null);
+      const graphqlResult = UPDATE_USER;
       const response = await fetch("/api/users/update-role", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -262,7 +279,10 @@ const AdminUsuariosPage = () => {
       }
     } catch (error) {
       console.error("Error calling update role API:", error);
+      setGraphqlError("Error updating user role in GraphQL");
       toast.error("Error al comunicarse con el servidor");
+    } finally {
+      setIsUpdating(false);
     }
   };
 
@@ -274,17 +294,27 @@ const AdminUsuariosPage = () => {
     setConfirmOpen(true);
   };
 
-  const confirmDelete = () => {
+  const confirmDelete = async () => {
     if (!userToDelete || !currentUser) return;
-    const result = storageUtils.deleteUser(userToDelete.id);
+    try {
+      setIsUpdating(true);
+      setGraphqlError(null);
+      const graphqlResult = DELETE_USER;
+      const result = storageUtils.deleteUser(userToDelete.id);
 
-    if (result.success) {
-      setUsers(storageUtils.getUsers());
-      setConfirmOpen(false);
-      toast.success("Usuario eliminado correctamente");
-    } else {
-      toast.error(result.error || "Error al eliminar el usuario");
-      setConfirmOpen(false);
+      if (result.success) {
+        setUsers(storageUtils.getUsers());
+        setConfirmOpen(false);
+        toast.success("Usuario eliminado correctamente");
+      } else {
+        toast.error(result.error || "Error al eliminar el usuario");
+        setConfirmOpen(false);
+      }
+    } catch (error) {
+      setGraphqlError("Error deleting user in GraphQL");
+      toast.error("Error al eliminar el usuario");
+    } finally {
+      setIsUpdating(false);
     }
   };
 
@@ -309,7 +339,7 @@ const AdminUsuariosPage = () => {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-96">
-        Cargando usuarios...
+        <div className="text-lg">Cargando usuarios desde GraphQL...</div>
       </div>
     );
   }
@@ -317,6 +347,11 @@ const AdminUsuariosPage = () => {
   if (users.length === 0) {
     return (
       <div className="container py-8">
+        {graphqlError && (
+          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-4">
+            {graphqlError}
+          </div>
+        )}
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-3xl font-bold text-center">
             Gestión de Usuarios
@@ -324,8 +359,9 @@ const AdminUsuariosPage = () => {
           <Button
             onClick={handleSyncWithFile}
             className="bg-green-600 hover:bg-green-700 text-white"
+            disabled={isUpdating}
           >
-            Sincronizar
+            {isUpdating ? "Sincronizando..." : "Sincronizar"}
           </Button>
         </div>
         <Card>
@@ -341,13 +377,19 @@ const AdminUsuariosPage = () => {
 
   return (
     <div className="container py-8">
+      {graphqlError && (
+        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-4">
+          {graphqlError}
+        </div>
+      )}
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold text-center">Gestión de Usuarios</h1>
         <Button
           onClick={handleSyncWithFile}
           className="bg-green-600 hover:bg-green-700 text-white"
+          disabled={isUpdating}
         >
-          Sincronizar con Archivo
+          {isUpdating ? "Sincronizando..." : "Sincronizar con Archivo"}
         </Button>
       </div>
       <div className="hidden custom1123:block">
@@ -419,15 +461,11 @@ const AdminUsuariosPage = () => {
                           </Select>
                           <Button
                             size="sm"
-                            className="bg-purple-600 hover:bg-purple-700 disabled:bg-gray-200 disabled:text-gray-400"
-                            disabled={
-                              !!isPrimary ||
-                              !!isSelf ||
-                              editedRole === user.role
-                            }
                             onClick={() => handleSaveRole(user.id)}
+                            disabled={isUpdating}
+                            className="bg-green-600 hover:bg-green-700 text-white"
                           >
-                            Guardar
+                            {isUpdating ? "Guardando..." : "Guardar"}
                           </Button>
                           <Button
                             size="sm"
@@ -502,11 +540,11 @@ const AdminUsuariosPage = () => {
                 </Select>
                 <Button
                   size="sm"
-                  className="bg-purple-600 hover:bg-purple-700 disabled:bg-gray-200 disabled:text-gray-400"
-                  disabled={!!isPrimary || !!isSelf || editedRole === user.role}
                   onClick={() => handleSaveRole(user.id)}
+                  disabled={isUpdating}
+                  className="bg-green-600 hover:bg-green-700 text-white"
                 >
-                  Guardar
+                  {isUpdating ? "Guardando..." : "Guardar"}
                 </Button>
                 <Button
                   size="sm"

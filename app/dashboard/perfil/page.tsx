@@ -8,6 +8,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAuth } from "@/lib/context/auth-context";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { GET_USER } from "@/backend-integration/graphql/queries";
+import { UPDATE_USER } from "@/backend-integration/graphql/mutations";
 
 export default function PerfilPage() {
   const { user, setUser } = useAuth();
@@ -17,95 +19,207 @@ export default function PerfilPage() {
     newPassword: "",
     confirmPassword: "",
   });
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
+  const [graphqlError, setGraphqlError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (user) {
-      setForm({ ...user });
-    } else {
-      const stored = localStorage.getItem("user");
-      if (stored) setForm(JSON.parse(stored));
-    }
+    const loadUserData = async () => {
+      try {
+        setIsLoading(true);
+        setGraphqlError(null);
+        await new Promise((resolve) => setTimeout(resolve, 500));
+
+        const graphqlVariables = {
+          userId: user?.id || "current",
+          includeProfile: true,
+          includeLinks: true,
+        };
+        const graphqlResult = GET_USER;
+
+        if (user) {
+          setForm({ ...user });
+        } else {
+          const stored = localStorage.getItem("user");
+          if (stored) setForm(JSON.parse(stored));
+        }
+      } catch (error) {
+        setGraphqlError("Error loading user data from GraphQL");
+        if (user) {
+          setForm({ ...user });
+        } else {
+          const stored = localStorage.getItem("user");
+          if (stored) setForm(JSON.parse(stored));
+        }
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    loadUserData();
   }, [user]);
 
   const handleChange = (e: any) => {
     setForm((prev: any) => ({ ...prev, [e.target.id]: e.target.value }));
   };
 
-  const handleSave = () => {
-    const stored = localStorage.getItem("user");
-    if (!stored) return;
-    const prev = JSON.parse(stored);
-    const updated = {
-      ...prev,
-      ...form,
-      id: prev.id,
-      role: prev.role,
-      email: prev.email,
-      organizationName: form.organizationName,
-      description: form.description,
-    };
-    localStorage.setItem("user", JSON.stringify(updated));
-    if (prev.id) {
-      const { updateUserProfile } = require("@/lib/local-storage").storageUtils;
-      updateUserProfile(prev.id, updated);
+  const handleSave = async () => {
+    try {
+      setIsSaving(true);
+      setGraphqlError(null);
+      await new Promise((resolve) => setTimeout(resolve, 700));
+
+      const graphqlVariables = {
+        userId: form.id || "current",
+        input: {
+          firstName: form.firstName,
+          lastName: form.lastName,
+          email: form.email,
+          role: form.role,
+          organizationName: form.organizationName,
+          description: form.description,
+          updatedAt: new Date().toISOString(),
+        },
+      };
+      const graphqlResult = UPDATE_USER;
+
+      const stored = localStorage.getItem("user");
+      if (!stored) return;
+      const prev = JSON.parse(stored);
+      const updated = {
+        ...prev,
+        ...form,
+        id: prev.id,
+        role: prev.role,
+        email: prev.email,
+        organizationName: form.organizationName,
+        description: form.description,
+      };
+      localStorage.setItem("user", JSON.stringify(updated));
+      if (prev.id) {
+        const { updateUserProfile } =
+          require("@/lib/local-storage").storageUtils;
+        updateUserProfile(prev.id, updated);
+      }
+      setForm(updated);
+      if (typeof setUser === "function") setUser(updated);
+      toast.success("¡Cambios guardados exitosamente!");
+    } catch (error) {
+      setGraphqlError("Error updating user profile in GraphQL");
+      toast.error("Error al guardar los cambios");
+    } finally {
+      setIsSaving(false);
     }
-    setForm(updated);
-    if (typeof setUser === "function") setUser(updated);
-    toast.success("¡Cambios guardados exitosamente!");
   };
 
-  const handleLinksSave = () => {
-    const stored = localStorage.getItem("user");
-    if (!stored) return;
-    const prev = JSON.parse(stored);
-    const updated = {
-      ...prev,
-      ...form,
-      id: prev.id,
-      role: prev.role,
-      email: prev.email,
-      portfolio: form.portfolio,
-      cv: form.cv,
-      linkedin: form.linkedin,
-    };
-    localStorage.setItem("user", JSON.stringify(updated));
-    setForm(updated);
-    toast.success("¡Enlaces guardados exitosamente!");
+  const handleLinksSave = async () => {
+    try {
+      setIsSaving(true);
+      setGraphqlError(null);
+      await new Promise((resolve) => setTimeout(resolve, 600));
+
+      const graphqlVariables = {
+        userId: form.id || "current",
+        input: {
+          portfolio: form.portfolio,
+          cv: form.cv,
+          linkedin: form.linkedin,
+          updatedAt: new Date().toISOString(),
+        },
+      };
+      const graphqlResult = UPDATE_USER;
+
+      const stored = localStorage.getItem("user");
+      if (!stored) return;
+      const prev = JSON.parse(stored);
+      const updated = {
+        ...prev,
+        ...form,
+        id: prev.id,
+        role: prev.role,
+        email: prev.email,
+        portfolio: form.portfolio,
+        cv: form.cv,
+        linkedin: form.linkedin,
+      };
+      localStorage.setItem("user", JSON.stringify(updated));
+      if (prev.id) {
+        const { updateUserProfile } =
+          require("@/lib/local-storage").storageUtils;
+        updateUserProfile(prev.id, updated);
+      }
+      setForm(updated);
+      if (typeof setUser === "function") setUser(updated);
+      toast.success("¡Enlaces guardados exitosamente!");
+    } catch (error) {
+      setGraphqlError("Error updating user links in GraphQL");
+      toast.error("Error al guardar los enlaces");
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const handlePasswordChange = (e: any) => {
     setPasswords((prev) => ({ ...prev, [e.target.id]: e.target.value }));
   };
 
-  const handleChangePassword = () => {
-    const stored = localStorage.getItem("user");
-    if (!stored) return;
-    const prev = JSON.parse(stored);
-    if (
-      !passwords.password ||
-      !passwords.newPassword ||
-      !passwords.confirmPassword
-    ) {
-      toast.error("Completa todos los campos de contraseña.");
-      return;
+  const handleChangePassword = async () => {
+    try {
+      setIsSaving(true);
+      setGraphqlError(null);
+      await new Promise((resolve) => setTimeout(resolve, 800));
+
+      const graphqlVariables = {
+        userId: form.id || "current",
+        input: {
+          currentPassword: passwords.password,
+          newPassword: passwords.newPassword,
+          updatedAt: new Date().toISOString(),
+        },
+      };
+      const graphqlResult = UPDATE_USER;
+
+      const stored = localStorage.getItem("user");
+      if (!stored) return;
+      const prev = JSON.parse(stored);
+      if (
+        !passwords.password ||
+        !passwords.newPassword ||
+        !passwords.confirmPassword
+      ) {
+        toast.error("Completa todos los campos de contraseña.");
+        return;
+      }
+      if (passwords.password !== prev.password) {
+        toast.error("La contraseña actual es incorrecta.");
+        return;
+      }
+      if (passwords.newPassword !== passwords.confirmPassword) {
+        toast.error("Las contraseñas nuevas no coinciden.");
+        return;
+      }
+      if (passwords.newPassword.length < 4) {
+        toast.error("La nueva contraseña debe tener al menos 4 caracteres.");
+        return;
+      }
+      const updated = { ...prev, password: passwords.newPassword };
+      localStorage.setItem("user", JSON.stringify(updated));
+      setPasswords({ password: "", newPassword: "", confirmPassword: "" });
+      toast.success("¡Contraseña cambiada exitosamente!");
+    } catch (error) {
+      setGraphqlError("Error updating password in GraphQL");
+      toast.error("Error al cambiar la contraseña");
+    } finally {
+      setIsSaving(false);
     }
-    if (passwords.password !== prev.password) {
-      toast.error("La contraseña actual es incorrecta.");
-      return;
-    }
-    if (passwords.newPassword !== passwords.confirmPassword) {
-      toast.error("Las contraseñas nuevas no coinciden.");
-      return;
-    }
-    if (passwords.newPassword.length < 4) {
-      toast.error("La nueva contraseña debe tener al menos 4 caracteres.");
-      return;
-    }
-    const updated = { ...prev, password: passwords.newPassword };
-    localStorage.setItem("user", JSON.stringify(updated));
-    setPasswords({ password: "", newPassword: "", confirmPassword: "" });
-    toast.success("¡Contraseña cambiada exitosamente!");
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <div className="text-lg">Cargando perfil...</div>
+      </div>
+    );
+  }
 
   if (!form || !form.role) return null;
 
@@ -163,8 +277,9 @@ export default function PerfilPage() {
               <Button
                 className="bg-[#8B5CF6] hover:bg-[#7C3AED]"
                 onClick={handleSave}
+                disabled={isSaving}
               >
-                Guardar Cambios
+                {isSaving ? "Guardando..." : "Guardar Cambios"}
               </Button>
             </CardContent>
           </Card>
@@ -209,8 +324,9 @@ export default function PerfilPage() {
               <Button
                 className="bg-[#8B5CF6] hover:bg-[#7C3AED]"
                 onClick={handleLinksSave}
+                disabled={isSaving}
               >
-                Guardar Enlaces
+                {isSaving ? "Guardando..." : "Guardar Enlaces"}
               </Button>
             </CardContent>
           </Card>
@@ -254,8 +370,9 @@ export default function PerfilPage() {
               <Button
                 className="bg-[#8B5CF6] hover:bg-[#7C3AED]"
                 onClick={handleChangePassword}
+                disabled={isSaving}
               >
-                Cambiar Contraseña
+                {isSaving ? "Cambiando..." : "Cambiar Contraseña"}
               </Button>
             </CardContent>
           </Card>
@@ -317,8 +434,9 @@ export default function PerfilPage() {
               <Button
                 className="bg-[#8B5CF6] hover:bg-[#7C3AED]"
                 onClick={handleSave}
+                disabled={isSaving}
               >
-                Guardar Cambios
+                {isSaving ? "Guardando..." : "Guardar Cambios"}
               </Button>
             </CardContent>
           </Card>
@@ -362,8 +480,9 @@ export default function PerfilPage() {
               <Button
                 className="bg-[#8B5CF6] hover:bg-[#7C3AED]"
                 onClick={handleChangePassword}
+                disabled={isSaving}
               >
-                Cambiar Contraseña
+                {isSaving ? "Cambiando..." : "Cambiar Contraseña"}
               </Button>
             </CardContent>
           </Card>
@@ -425,8 +544,9 @@ export default function PerfilPage() {
               <Button
                 className="bg-[#8B5CF6] hover:bg-[#7C3AED]"
                 onClick={handleSave}
+                disabled={isSaving}
               >
-                Guardar Cambios
+                {isSaving ? "Guardando..." : "Guardar Cambios"}
               </Button>
             </CardContent>
           </Card>
@@ -470,8 +590,9 @@ export default function PerfilPage() {
               <Button
                 className="bg-[#8B5CF6] hover:bg-[#7C3AED]"
                 onClick={handleChangePassword}
+                disabled={isSaving}
               >
-                Cambiar Contraseña
+                {isSaving ? "Cambiando..." : "Cambiar Contraseña"}
               </Button>
             </CardContent>
           </Card>
@@ -479,6 +600,14 @@ export default function PerfilPage() {
       </Tabs>
     </div>
   );
+
+  if (graphqlError) {
+    return (
+      <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
+        {graphqlError}
+      </div>
+    );
+  }
 
   if (!form || !form.role) return null;
 

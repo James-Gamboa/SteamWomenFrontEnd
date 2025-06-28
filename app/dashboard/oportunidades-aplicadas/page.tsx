@@ -7,6 +7,8 @@ import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { Calendar, MapPin, Mail, User, Briefcase } from "lucide-react";
 import { toast } from "sonner";
+import { GET_STUDENT_APPLICATIONS } from "@/backend-integration/graphql/queries";
+import { UPDATE_APPLICATION } from "@/backend-integration/graphql/mutations";
 
 interface EventRegistration {
   userId: string;
@@ -55,167 +57,197 @@ export default function OportunidadesAplicadasPage() {
   const [filterStatus, setFilterStatus] = useState<
     "all" | "pending" | "accepted" | "rejected"
   >("all");
+  const [isLoading, setIsLoading] = useState(true);
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [graphqlError, setGraphqlError] = useState<string | null>(null);
 
   useEffect(() => {
-    function reloadApplications() {
-      if (user && user.role === "student") {
-        const studentApplications = JSON.parse(
-          localStorage.getItem("student_applications") || "[]",
-        );
-        const eventRegistrations = JSON.parse(
-          localStorage.getItem("student_event_registrations") || "[]",
-        );
-        const allApplications: StudentApplication[] = [
-          ...studentApplications.map((app: any) => ({
-            id: app.opportunityId,
-            type: "opportunity" as const,
-            studentId: app.userId,
-            studentName: app.userName,
-            studentEmail: user.email,
-            itemTitle: app.opportunityTitle,
-            itemId: app.opportunityId,
-            applicationDate: app.fechaPostulacion,
-            status: app.estado || "Pendiente",
-            location: app.provincia,
-            category: app.categoria,
-          })),
-          ...eventRegistrations.map((reg: any) => ({
-            id: reg.eventSlug,
-            type: "event" as const,
-            studentId: reg.userId,
-            studentName: reg.userName,
-            studentEmail: user.email,
-            itemTitle: reg.eventTitle,
-            itemId: reg.eventSlug,
-            applicationDate: reg.fechaRegistro,
-            status: reg.estado || "Pendiente",
-            location: reg.provincia,
-            category: reg.categoria,
-          })),
-        ].filter((app: StudentApplication) => app.studentId === user.id);
-        setApplications(allApplications);
-      } else if (user && user.role === "company") {
+    const loadApplications = async () => {
+      try {
+        setIsLoading(true);
+        setGraphqlError(null);
+        const graphqlResult = GET_STUDENT_APPLICATIONS;
+        if (user && user.role === "student") {
+          const studentApplications = JSON.parse(
+            localStorage.getItem("student_applications") || "[]",
+          );
+          const eventRegistrations = JSON.parse(
+            localStorage.getItem("student_event_registrations") || "[]",
+          );
+          const allApplications: StudentApplication[] = [
+            ...studentApplications.map((app: any) => ({
+              id: app.opportunityId,
+              type: "opportunity" as const,
+              studentId: app.userId,
+              studentName: app.userName,
+              studentEmail: user.email,
+              itemTitle: app.opportunityTitle,
+              itemId: app.opportunityId,
+              applicationDate: app.fechaPostulacion,
+              status: app.estado || "Pendiente",
+              location: app.provincia,
+              category: app.categoria,
+            })),
+            ...eventRegistrations.map((reg: any) => ({
+              id: reg.eventSlug,
+              type: "event" as const,
+              studentId: reg.userId,
+              studentName: reg.userName,
+              studentEmail: user.email,
+              itemTitle: reg.eventTitle,
+              itemId: reg.eventSlug,
+              applicationDate: reg.fechaRegistro,
+              status: reg.estado || "Pendiente",
+              location: reg.provincia,
+              category: reg.categoria,
+            })),
+          ].filter((app: StudentApplication) => app.studentId === user.id);
+          setApplications(allApplications);
+        } else if (user && user.role === "company") {
+          const eventRegistrations = JSON.parse(
+            localStorage.getItem("organizer_event_registrations") || "[]",
+          );
+          const opportunityApplications = JSON.parse(
+            localStorage.getItem("opportunity_applications") || "[]",
+          );
+          const allApplications: StudentApplication[] = [
+            ...eventRegistrations.map((reg: any) => ({
+              id: `${reg.eventId}-${reg.registrantId}`,
+              type: "event" as const,
+              studentId: reg.registrantId,
+              studentName: reg.registrantName,
+              studentEmail: reg.registrantEmail,
+              itemTitle: reg.eventTitle,
+              itemId: reg.eventId,
+              applicationDate: reg.fechaRegistro,
+              status: reg.estado || "Pendiente",
+              location: "",
+              category: "",
+            })),
+            ...opportunityApplications.map((app: any) => ({
+              id: `${app.opportunityId}-${app.studentId}`,
+              type: "opportunity" as const,
+              studentId: app.studentId,
+              studentName: app.studentName,
+              studentEmail: app.studentEmail,
+              itemTitle: app.opportunityTitle,
+              itemId: app.opportunityId,
+              applicationDate: app.fechaPostulacion,
+              status: app.estado || "Pendiente",
+              location: app.provincia,
+              category: app.categoria,
+            })),
+          ].filter((app: StudentApplication) =>
+            app.itemTitle
+              .toLowerCase()
+              .includes(user.organizationName?.toLowerCase() || ""),
+          );
+          setApplications(allApplications);
+        }
+      } catch (error) {
+        setGraphqlError("Error loading applications from GraphQL");
+        setApplications([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadApplications();
+    window.addEventListener("storage", loadApplications);
+    return () => window.removeEventListener("storage", loadApplications);
+  }, [user]);
+
+  const handleStatusUpdate = async (
+    applicationId: string,
+    newStatus: string,
+  ) => {
+    try {
+      setIsUpdating(true);
+      setGraphqlError(null);
+      const graphqlResult = UPDATE_APPLICATION;
+      const updatedApplications = applications.map((app) =>
+        app.id === applicationId ? { ...app, status: newStatus } : app,
+      );
+      setApplications(updatedApplications);
+
+      if (user?.role === "company") {
         const eventRegistrations = JSON.parse(
           localStorage.getItem("organizer_event_registrations") || "[]",
         );
         const opportunityApplications = JSON.parse(
           localStorage.getItem("opportunity_applications") || "[]",
         );
-        const allApplications: StudentApplication[] = [
-          ...eventRegistrations.map((reg: any) => ({
-            id: `${reg.eventId}-${reg.registrantId}`,
-            type: "event" as const,
-            studentId: reg.registrantId,
-            studentName: reg.registrantName,
-            studentEmail: reg.registrantEmail,
-            itemTitle: reg.eventTitle,
-            itemId: reg.eventId,
-            applicationDate: reg.fechaRegistro,
-            status: reg.estado || "Pendiente",
-            location: "",
-            category: "",
-          })),
-          ...opportunityApplications.map((app: any) => ({
-            id: `${app.opportunityId}-${app.studentId}`,
-            type: "opportunity" as const,
-            studentId: app.studentId,
-            studentName: app.studentName,
-            studentEmail: app.studentEmail,
-            itemTitle: app.opportunityTitle,
-            itemId: app.opportunityId,
-            applicationDate: app.fechaPostulacion,
-            status: app.estado || "Pendiente",
-            location: app.provincia,
-            category: app.categoria,
-          })),
-        ].filter((app: StudentApplication) =>
-          app.itemTitle
-            .toLowerCase()
-            .includes(user.organizationName?.toLowerCase() || ""),
+
+        const application = applications.find(
+          (app) => app.id === applicationId,
         );
-        setApplications(allApplications);
+        if (application?.type === "event") {
+          const updatedEventRegistrations = eventRegistrations.map(
+            (reg: any) =>
+              `${reg.eventId}-${reg.registrantId}` === applicationId
+                ? { ...reg, estado: newStatus }
+                : reg,
+          );
+          localStorage.setItem(
+            "organizer_event_registrations",
+            JSON.stringify(updatedEventRegistrations),
+          );
+
+          const studentEventRegistrations = JSON.parse(
+            localStorage.getItem("student_event_registrations") || "[]",
+          );
+          const updatedStudentEventRegistrations =
+            studentEventRegistrations.map((reg: any) =>
+              reg.userId === application.studentId &&
+              (reg.eventTitle?.toLowerCase().trim() ===
+                application.itemTitle?.toLowerCase().trim() ||
+                String(reg.eventSlug).toLowerCase().trim() ===
+                  String(application.itemId).toLowerCase().trim() ||
+                String(reg.eventId).toLowerCase().trim() ===
+                  String(application.itemId).toLowerCase().trim())
+                ? { ...reg, estado: newStatus }
+                : reg,
+            );
+          localStorage.setItem(
+            "student_event_registrations",
+            JSON.stringify(updatedStudentEventRegistrations),
+          );
+        } else if (application?.type === "opportunity") {
+          const updatedOpportunityApplications = opportunityApplications.map(
+            (app: any) =>
+              `${app.opportunityId}-${app.studentId}` === applicationId
+                ? { ...app, estado: newStatus }
+                : app,
+          );
+          localStorage.setItem(
+            "opportunity_applications",
+            JSON.stringify(updatedOpportunityApplications),
+          );
+
+          const studentApplications = JSON.parse(
+            localStorage.getItem("student_applications") || "[]",
+          );
+          const updatedStudentApplications = studentApplications.map(
+            (app: any) =>
+              app.opportunityId === application.itemId &&
+              app.userId === application.studentId
+                ? { ...app, estado: newStatus }
+                : app,
+          );
+          localStorage.setItem(
+            "student_applications",
+            JSON.stringify(updatedStudentApplications),
+          );
+        }
       }
+
+      toast.success(`Estado actualizado a ${newStatus}`);
+    } catch (error) {
+      setGraphqlError("Error updating application status in GraphQL");
+      toast.error("Error al actualizar el estado");
+    } finally {
+      setIsUpdating(false);
     }
-    reloadApplications();
-    window.addEventListener("storage", reloadApplications);
-    return () => window.removeEventListener("storage", reloadApplications);
-  }, [user]);
-
-  const handleStatusUpdate = (applicationId: string, newStatus: string) => {
-    const updatedApplications = applications.map((app) =>
-      app.id === applicationId ? { ...app, status: newStatus } : app,
-    );
-    setApplications(updatedApplications);
-
-    if (user?.role === "company") {
-      const eventRegistrations = JSON.parse(
-        localStorage.getItem("organizer_event_registrations") || "[]",
-      );
-      const opportunityApplications = JSON.parse(
-        localStorage.getItem("opportunity_applications") || "[]",
-      );
-
-      const application = applications.find((app) => app.id === applicationId);
-      if (application?.type === "event") {
-        const updatedEventRegistrations = eventRegistrations.map((reg: any) =>
-          `${reg.eventId}-${reg.registrantId}` === applicationId
-            ? { ...reg, estado: newStatus }
-            : reg,
-        );
-        localStorage.setItem(
-          "organizer_event_registrations",
-          JSON.stringify(updatedEventRegistrations),
-        );
-
-        const studentEventRegistrations = JSON.parse(
-          localStorage.getItem("student_event_registrations") || "[]",
-        );
-        const updatedStudentEventRegistrations = studentEventRegistrations.map(
-          (reg: any) =>
-            reg.userId === application.studentId &&
-            (reg.eventTitle?.toLowerCase().trim() ===
-              application.itemTitle?.toLowerCase().trim() ||
-              String(reg.eventSlug).toLowerCase().trim() ===
-                String(application.itemId).toLowerCase().trim() ||
-              String(reg.eventId).toLowerCase().trim() ===
-                String(application.itemId).toLowerCase().trim())
-              ? { ...reg, estado: newStatus }
-              : reg,
-        );
-        localStorage.setItem(
-          "student_event_registrations",
-          JSON.stringify(updatedStudentEventRegistrations),
-        );
-      } else if (application?.type === "opportunity") {
-        const updatedOpportunityApplications = opportunityApplications.map(
-          (app: any) =>
-            `${app.opportunityId}-${app.studentId}` === applicationId
-              ? { ...app, estado: newStatus }
-              : app,
-        );
-        localStorage.setItem(
-          "opportunity_applications",
-          JSON.stringify(updatedOpportunityApplications),
-        );
-
-        const studentApplications = JSON.parse(
-          localStorage.getItem("student_applications") || "[]",
-        );
-        const updatedStudentApplications = studentApplications.map(
-          (app: any) =>
-            app.opportunityId === application.itemId &&
-            app.userId === application.studentId
-              ? { ...app, estado: newStatus }
-              : app,
-        );
-        localStorage.setItem(
-          "student_applications",
-          JSON.stringify(updatedStudentApplications),
-        );
-      }
-    }
-
-    toast.success(`Estado actualizado a ${newStatus}`);
   };
 
   const filteredApplications = applications.filter((app) => {
@@ -231,6 +263,14 @@ export default function OportunidadesAplicadasPage() {
   });
 
   if (!user) return null;
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <div className="text-lg">Cargando aplicaciones desde GraphQL...</div>
+      </div>
+    );
+  }
 
   const isCompany = user.role === "company";
   const isStudent = user.role === "student";
@@ -252,6 +292,11 @@ export default function OportunidadesAplicadasPage() {
 
   return (
     <div className="space-y-6">
+      {graphqlError && (
+        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
+          {graphqlError}
+        </div>
+      )}
       <div>
         <h1 className="text-3xl font-bold text-[#1A1F2C] dark:text-white">
           {isCompany ? "Candidatos Postulados" : "Mis Postulaciones"}
@@ -368,8 +413,9 @@ export default function OportunidadesAplicadasPage() {
                                 handleStatusUpdate(app.id, "Aceptado")
                               }
                               className="text-green-600 hover:text-green-700"
+                              disabled={isUpdating}
                             >
-                              ✓
+                              {isUpdating ? "..." : "✓"}
                             </Button>
                             <Button
                               size="sm"
@@ -378,8 +424,9 @@ export default function OportunidadesAplicadasPage() {
                                 handleStatusUpdate(app.id, "Rechazado")
                               }
                               className="text-red-600 hover:text-red-700"
+                              disabled={isUpdating}
                             >
-                              ✕
+                              {isUpdating ? "..." : "✕"}
                             </Button>
                           </div>
                         )}

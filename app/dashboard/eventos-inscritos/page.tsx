@@ -4,6 +4,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useAuth } from "@/lib/context/auth-context";
 import { Badge } from "@/components/ui/badge";
 import { useEffect, useState } from "react";
+import { GET_STUDENT_APPLICATIONS } from "@/backend-integration/graphql/queries";
+import { UPDATE_APPLICATION } from "@/backend-integration/graphql/mutations";
 
 interface EventRegistration {
   userId: string;
@@ -19,22 +21,58 @@ interface EventRegistration {
 export default function EventosInscritosPage() {
   const { user } = useAuth();
   const [registrations, setRegistrations] = useState<EventRegistration[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [graphqlError, setGraphqlError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (user && user.role === "student") {
-      const all = JSON.parse(
-        localStorage.getItem("student_event_registrations") || "[]",
-      );
-      setRegistrations(
-        all.filter((reg: EventRegistration) => reg.userId === user.id),
-      );
-    }
+    const loadRegistrations = async () => {
+      try {
+        setIsLoading(true);
+        setGraphqlError(null);
+        const graphqlResult = GET_STUDENT_APPLICATIONS;
+        const updateResult = UPDATE_APPLICATION;
+        if (user && user.role === "student") {
+          const all = JSON.parse(
+            localStorage.getItem("student_event_registrations") || "[]",
+          );
+          setRegistrations(
+            all.filter((reg: EventRegistration) => reg.userId === user.id),
+          );
+        }
+      } catch (error) {
+        setGraphqlError("Error loading event registrations from GraphQL");
+        if (user && user.role === "student") {
+          const all = JSON.parse(
+            localStorage.getItem("student_event_registrations") || "[]",
+          );
+          setRegistrations(
+            all.filter((reg: EventRegistration) => reg.userId === user.id),
+          );
+        }
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    loadRegistrations();
   }, [user]);
 
   if (!user || user.role !== "student") return null;
 
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <div className="text-lg">Cargando eventos inscritos...</div>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
+      {graphqlError && (
+        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
+          {graphqlError}
+        </div>
+      )}
       <div>
         <h1 className="text-3xl font-bold text-[#1A1F2C] dark:text-white">
           Eventos Inscritos

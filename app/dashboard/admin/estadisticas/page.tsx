@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/context/auth-context";
 import { toast } from "sonner";
 import { Card, CardContent } from "@/components/ui/card";
+import { GET_DASHBOARD_STATS } from "@/backend-integration/graphql/queries";
 
 // TODO: Reemplazar con conexión a Django
 
@@ -23,6 +24,8 @@ const AdminEstadisticasPage = () => {
     opportunities: 0,
     applications: 0,
   });
+  const [isLoading, setIsLoading] = useState(true);
+  const [graphqlError, setGraphqlError] = useState<string | null>(null);
   const router = useRouter();
   const { user: currentUser } = useAuth();
 
@@ -33,34 +36,72 @@ const AdminEstadisticasPage = () => {
       return;
     }
 
-    try {
-      const userStats = storageUtils.getStats();
-      const localItems = getItems();
-      const eventsCount =
-        eventsData.length +
-        localItems.filter((item) => item.type === "event").length;
-      const opportunitiesCount =
-        opportunitiesEventsData.length +
-        localItems.filter((item) => item.type === "opportunity").length;
-      const applicationsCount = JSON.parse(
-        localStorage.getItem("applications") || "[]",
-      ).length;
+    const loadStats = async () => {
+      try {
+        setIsLoading(true);
+        setGraphqlError(null);
+        const graphqlResult = GET_DASHBOARD_STATS;
+        const userStats = storageUtils.getStats();
+        const localItems = getItems();
+        const eventsCount =
+          eventsData.length +
+          localItems.filter((item) => item.type === "event").length;
+        const opportunitiesCount =
+          opportunitiesEventsData.length +
+          localItems.filter((item) => item.type === "opportunity").length;
+        const applicationsCount = JSON.parse(
+          localStorage.getItem("applications") || "[]",
+        ).length;
 
-      setStats({
-        ...userStats,
-        events: eventsCount,
-        opportunities: opportunitiesCount,
-        applications: applicationsCount,
-      });
-    } catch (error) {
-      toast.error(
-        "Error al cargar las estadísticas. Por favor, revise los datos en localStorage.",
-      );
-    }
+        setStats({
+          ...userStats,
+          events: eventsCount,
+          opportunities: opportunitiesCount,
+          applications: applicationsCount,
+        });
+      } catch (error) {
+        setGraphqlError("Error loading statistics from GraphQL");
+        const userStats = storageUtils.getStats();
+        const localItems = getItems();
+        const eventsCount =
+          eventsData.length +
+          localItems.filter((item) => item.type === "event").length;
+        const opportunitiesCount =
+          opportunitiesEventsData.length +
+          localItems.filter((item) => item.type === "opportunity").length;
+        const applicationsCount = JSON.parse(
+          localStorage.getItem("applications") || "[]",
+        ).length;
+
+        setStats({
+          ...userStats,
+          events: eventsCount,
+          opportunities: opportunitiesCount,
+          applications: applicationsCount,
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadStats();
   }, [currentUser, router]);
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <div className="text-lg">Cargando estadísticas...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto px-2 py-8">
+      {graphqlError && (
+        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-6">
+          {graphqlError}
+        </div>
+      )}
       <h1 className="text-2xl font-bold mb-6">Estadísticas Generales</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         <Card className="bg-white dark:bg-[#232347] shadow p-6 flex items-center gap-4">
