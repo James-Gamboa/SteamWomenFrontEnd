@@ -83,7 +83,7 @@ export function OpportunitySidebar({
         opportunityId: opportunity.id,
         opportunityTitle: opportunity.title,
         company: opportunity.company,
-        fechaAplicacion: new Date().toISOString(),
+        fechaPostulacion: new Date().toISOString(),
         provincia: province,
         categoria: opportunity.category,
         estado: "Pendiente",
@@ -92,25 +92,27 @@ export function OpportunitySidebar({
         "student_applications",
         JSON.stringify(applications),
       );
-    }
 
-    const companyApplications = JSON.parse(
-      localStorage.getItem("company_applications") || "[]",
-    );
-    companyApplications.push({
-      opportunityId: opportunity.id,
-      opportunityTitle: opportunity.title,
-      company: opportunity.company,
-      applicantId: user.id,
-      applicantName: `${user.firstName} ${user.lastName}`,
-      applicantEmail: user.email,
-      fechaAplicacion: new Date().toISOString(),
-      estado: "Pendiente",
-    });
-    localStorage.setItem(
-      "company_applications",
-      JSON.stringify(companyApplications),
-    );
+      const opportunityApplications = JSON.parse(
+        localStorage.getItem("opportunity_applications") || "[]",
+      );
+      opportunityApplications.push({
+        opportunityId: opportunity.id,
+        opportunityTitle: opportunity.title,
+        company: opportunity.company,
+        studentId: user.id,
+        studentName: `${user.firstName} ${user.lastName}`,
+        studentEmail: user.email,
+        fechaPostulacion: new Date().toISOString(),
+        provincia: province,
+        categoria: opportunity.category,
+        estado: "Pendiente",
+      });
+      localStorage.setItem(
+        "opportunity_applications",
+        JSON.stringify(opportunityApplications),
+      );
+    }
 
     setModalOpen(false);
     toast.success("¡Postulación enviada con éxito!");
