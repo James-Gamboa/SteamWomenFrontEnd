@@ -7,12 +7,11 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 
 const AdminConfiguracionPage = () => {
-  const { user, logout } = useAuth();
+  const { user, setUser, logout } = useAuth();
   const [form, setForm] = useState({
     firstName: "",
     lastName: "",
     email: "",
-    password: "",
   });
   const [loading, setLoading] = useState(true);
 
@@ -22,7 +21,6 @@ const AdminConfiguracionPage = () => {
         firstName: user.firstName || "",
         lastName: user.lastName || "",
         email: user.email,
-        password: "",
       });
       setLoading(false);
     }
@@ -35,15 +33,20 @@ const AdminConfiguracionPage = () => {
   const handleSave = () => {
     if (!user) return;
     try {
-      const updatedUser = { ...user, ...form };
+      const updatedUser = {
+        ...user,
+        firstName: form.firstName,
+        lastName: form.lastName,
+      };
+
       const users = mockDb
         .getAllUsers()
-        .map((u: any) =>
-          u.id === user.id
-            ? { ...u, ...form, password: form.password || u.password }
-            : u,
-        );
+        .map((u: any) => (u.id === user.id ? updatedUser : u));
+
       localStorage.setItem("mockUsers", JSON.stringify(users));
+
+      setUser(updatedUser);
+
       toast.success("Perfil actualizado correctamente");
     } catch {
       toast.error("Error al actualizar el perfil");
@@ -89,17 +92,6 @@ const AdminConfiguracionPage = () => {
             onChange={handleChange}
             autoComplete="off"
             disabled
-          />
-        </div>
-        <div>
-          <label className="block font-semibold mb-1">Nueva contraseña</label>
-          <input
-            className="w-full border rounded px-3 py-2"
-            name="password"
-            value={form.password}
-            onChange={handleChange}
-            type="password"
-            autoComplete="new-password"
           />
         </div>
         <Button className="w-full mt-4" onClick={handleSave}>

@@ -33,6 +33,7 @@ interface AuthContextType {
   register: (userData: RegisterData) => Promise<void>;
   logout: () => void;
   isLoading: boolean;
+  setUser: (user: User | null) => void;
 }
 
 interface RegisterData {
@@ -140,6 +141,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         register,
         logout,
         isLoading,
+        setUser,
       }}
     >
       {children}

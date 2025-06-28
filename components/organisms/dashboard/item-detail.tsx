@@ -3,10 +3,14 @@
 import { useEffect, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import * as dataStorage from "@/lib/data-storage";
+import {
+  getItem,
+  deleteItem,
+  createApplication,
+  BaseItem,
+} from "@/lib/data-storage";
 import { useAuth } from "@/lib/context/auth-context";
 import { toast } from "sonner";
-import { BaseItem } from "@/lib/data-storage";
 import {
   Calendar,
   MapPin,
@@ -39,7 +43,7 @@ export function ItemDetail({
 
   useEffect(() => {
     const loadItem = () => {
-      const storedItem = dataStorage.getItem(id);
+      const storedItem = getItem(id);
       setItem(storedItem);
     };
 
@@ -58,7 +62,7 @@ export function ItemDetail({
 
   const handleDelete = () => {
     if (window.confirm("¿Estás seguro de que deseas eliminar este elemento?")) {
-      dataStorage.deleteItem(id);
+      deleteItem(id);
       toast.success("Elemento eliminado exitosamente");
       if (onItemDeleted) onItemDeleted();
     }
@@ -79,7 +83,7 @@ export function ItemDetail({
       return;
     }
 
-    const success = dataStorage.createApplication({
+    const success = createApplication({
       itemId: id,
       itemType: type,
       studentId: user.id,

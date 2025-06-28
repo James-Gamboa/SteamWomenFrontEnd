@@ -1,13 +1,13 @@
 [
   {
     "id": "1",
-    "email": "jjguevarag@gmail.com",
-    "password": "admin",
+    "email": "admin@steamwomen.com",
+    "password": "admin123",
     "role": "admin",
-    "firstName": "James",
-    "lastName": "Guevara",
+    "firstName": "Admin",
+    "lastName": "Principal",
     "isPrimaryAdmin": true,
-    "createdAt": "2025-06-05T22:11:07.108Z"
+    "createdAt": "2025-06-05T19:37:30.958Z"
   },
   {
     "id": "2",
@@ -15,7 +15,7 @@
     "password": "123456",
     "role": "student",
     "firstName": "James",
-    "lastName": "Student",
+    "lastName": "Gamboa",
     "createdAt": "2025-06-05T22:11:07.109Z"
   },
   {
@@ -31,7 +31,7 @@
   {
     "email": "maria.gonzalez@ejemplo.com",
     "password": "123456",
-    "role": "student",
+    "role": "company",
     "firstName": "James",
     "lastName": "Guevara Gamboa",
     "organizationName": "",
@@ -47,5 +47,15 @@
     "organizationName": "cookie",
     "id": "1751042456256",
     "createdAt": "2025-06-27T16:40:56.256Z"
+  },
+  {
+    "email": "prueba@gmail.com",
+    "password": "123456",
+    "role": "company",
+    "firstName": "James",
+    "lastName": "adadsasd",
+    "organizationName": "",
+    "id": "1751051921520",
+    "createdAt": "2025-06-27T19:18:41.520Z"
   }
 ]

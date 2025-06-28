@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Users, User, Briefcase, Calendar, ClipboardList } from "lucide-react";
 import { eventsData } from "@/lib/events-data";
 import { opportunitiesEventsData } from "@/lib/opportunities-events-data";
-import { dataStorage } from "@/lib/data-storage";
+import { getItems } from "@/lib/data-storage";
 import { storageUtils } from "@/lib/local-storage";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/context/auth-context";
@@ -35,11 +35,13 @@ const AdminEstadisticasPage = () => {
 
     try {
       const userStats = storageUtils.getStats();
+      const localItems = getItems();
       const eventsCount =
-        eventsData.length + dataStorage.getItems("event").length;
+        eventsData.length +
+        localItems.filter((item) => item.type === "event").length;
       const opportunitiesCount =
         opportunitiesEventsData.length +
-        dataStorage.getItems("opportunity").length;
+        localItems.filter((item) => item.type === "opportunity").length;
       const applicationsCount = JSON.parse(
         localStorage.getItem("applications") || "[]",
       ).length;

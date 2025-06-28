@@ -154,7 +154,10 @@ export function EventsDetailTemplate({ event }: EventsDetailTemplateProps) {
           <div className="lg:col-span-1">
             <div ref={sidebarRef}>
               <EventDetailSidebar
-                event={event}
+                event={{
+                  ...event,
+                  id: String(event.id),
+                }}
                 formatDate={formatDateString}
                 isSticky={isSticky}
               />

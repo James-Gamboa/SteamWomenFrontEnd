@@ -37,24 +37,41 @@ import {
 import { opportunitiesEventsData } from "@/lib/opportunities-events-data";
 import { OpportunityCard } from "@/components/organisms/opportunity-card";
 import { OpportunityFilters } from "@/components/organisms/opportunity-filters";
+import { getLocalOpportunities } from "@/lib/data-storage";
+
+interface Opportunity {
+  id: number;
+  title: string;
+  description: string;
+  location: string;
+  date: string;
+  time: string;
+  category: string;
+  organizer: string;
+  website: string;
+  slug: string;
+  image: string;
+  fullDescription: string;
+  requirements: string[];
+  benefits: string[];
+  applicationProcess?: string;
+}
 
 export function OpportunityTemplate() {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [selectedLocation, setSelectedLocation] = useState("all");
-  const [allOpportunities, setAllOpportunities] = useState(
+  const [allOpportunities, setAllOpportunities] = useState<Opportunity[]>(
     opportunitiesEventsData,
   );
 
   useEffect(() => {
-    const storedOpportunities = JSON.parse(
-      localStorage.getItem("opportunities") || "[]",
-    );
+    const storedOpportunities: Opportunity[] = getLocalOpportunities?.() || [];
     const merged = [
       ...storedOpportunities,
       ...opportunitiesEventsData.filter(
-        (o) => !storedOpportunities.some((so) => so.id === o.id),
+        (o) => !storedOpportunities.some((so: Opportunity) => so.id === o.id),
       ),
     ];
     setAllOpportunities(merged);

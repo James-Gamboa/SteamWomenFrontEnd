@@ -11,12 +11,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { dataStorage } from "@/lib/data-storage";
+import {
+  getItems,
+  deleteItem,
+  createApplication,
+  BaseItem,
+} from "@/lib/data-storage";
 import { useAuth } from "@/lib/context/auth-context";
 import { toast } from "sonner";
 import { ItemFilters } from "./item-filters";
 import { Calendar, List } from "lucide-react";
-import { BaseItem } from "@/lib/data-storage";
 
 interface ItemListProps {
   type: "event" | "opportunity";
@@ -43,8 +47,9 @@ export function ItemList({
 
   useEffect(() => {
     const loadItems = () => {
-      const storedItems = dataStorage.getItems(type);
-      setItems(storedItems);
+      const allItems = getItems();
+      const filteredItems = allItems.filter((item) => item.type === type);
+      setItems(filteredItems);
     };
 
     loadItems();
@@ -54,7 +59,7 @@ export function ItemList({
 
   const handleDelete = (id: string) => {
     if (window.confirm("¿Estás seguro de que deseas eliminar este elemento?")) {
-      dataStorage.deleteItem(id);
+      deleteItem(id);
       toast.success("Elemento eliminado exitosamente");
       if (onItemDeleted) onItemDeleted();
     }
@@ -75,12 +80,13 @@ export function ItemList({
       return;
     }
 
-    const success = dataStorage.createApplication(
-      id,
-      type,
-      user.id,
-      user.email,
-    );
+    const success = createApplication({
+      itemId: id,
+      itemType: type,
+      studentId: user.id,
+      studentEmail: user.email,
+      status: "pending",
+    });
     if (success) {
       toast.success("¡Postulación exitosa!");
     } else {

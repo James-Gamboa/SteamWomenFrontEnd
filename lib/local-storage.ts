@@ -95,10 +95,15 @@ export const storageUtils = {
   updateUsers: (users: User[]) => {
     try {
       const updatedUsers = users.map(ensureUserHasCreatedAt);
-      localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(updatedUsers));
-      const stats = calculateStats(updatedUsers);
-      localStorage.setItem(STORAGE_KEYS.STATS, JSON.stringify(stats));
-      return { success: true, stats };
+      if (typeof window !== "undefined") {
+        localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(updatedUsers));
+        const stats = calculateStats(updatedUsers);
+        localStorage.setItem(STORAGE_KEYS.STATS, JSON.stringify(stats));
+        return { success: true, stats };
+      } else {
+        const stats = calculateStats(updatedUsers);
+        return { success: true, stats };
+      }
     } catch (error) {
       console.error("Error updating users:", error);
       return { success: false, error: "Error al actualizar los usuarios" };
@@ -110,22 +115,43 @@ export const storageUtils = {
     newRole: User["role"],
   ): { success: boolean; error?: string } => {
     try {
+      console.log("updateUserRole called with:", { userId, newRole });
       const users = storageUtils.getUsers();
+      console.log("Current users:", users);
+
       const userIndex = users.findIndex((u) => u.id === userId);
+      console.log("User index found:", userIndex);
 
       if (userIndex === -1) {
+        console.log("User not found with ID:", userId);
         return { success: false, error: "Usuario no encontrado" };
       }
 
       if (users[userIndex].isPrimaryAdmin) {
+        console.log("Cannot change primary admin role");
         return {
           success: false,
           error: "No se puede cambiar el rol del administrador principal",
         };
       }
 
+      console.log(
+        "Updating user role from",
+        users[userIndex].role,
+        "to",
+        newRole,
+      );
       users[userIndex].role = newRole;
-      return storageUtils.updateUsers(users);
+      const result = storageUtils.updateUsers(users);
+      console.log("Update users result:", result);
+
+      if (result.success && typeof window !== "undefined") {
+        storageUtils.syncWithFileSystem().catch((error) => {
+          console.error("Error syncing with file system:", error);
+        });
+      }
+
+      return result;
     } catch (error) {
       console.error("Error updating user role:", error);
       return {
@@ -164,9 +190,21 @@ export const storageUtils = {
   ): { success: boolean; error?: string } => {
     try {
       const users = storageUtils.getUsers();
+
+      const generateUniqueId = (): string => {
+        const timestamp = Date.now();
+        const random = Math.random().toString(36).substr(2, 9);
+        return `${timestamp}-${random}`;
+      };
+
+      let newId = generateUniqueId();
+      while (users.some((existingUser) => existingUser.id === newId)) {
+        newId = generateUniqueId();
+      }
+
       const newUser = {
         ...user,
-        id: Date.now().toString(),
+        id: newId,
         createdAt: new Date().toISOString(),
       };
       const updatedUsers = [...users, newUser];
@@ -174,6 +212,78 @@ export const storageUtils = {
     } catch (error) {
       console.error("Error adding user:", error);
       return { success: false, error: "Error al agregar el usuario" };
+    }
+  },
+
+  cleanDuplicateUsers: (): { success: boolean; removedCount: number } => {
+    try {
+      const users = storageUtils.getUsers();
+      const seen = new Set<string>();
+      const uniqueUsers: User[] = [];
+      let removedCount = 0;
+
+      for (const user of users) {
+        if (!seen.has(user.id)) {
+          seen.add(user.id);
+          uniqueUsers.push(user);
+        } else {
+          removedCount++;
+        }
+      }
+
+      if (removedCount > 0) {
+        storageUtils.updateUsers(uniqueUsers);
+      }
+
+      return { success: true, removedCount };
+    } catch (error) {
+      console.error("Error cleaning duplicate users:", error);
+      return { success: false, removedCount: 0 };
+    }
+  },
+
+  syncWithFileSystem: async (): Promise<{
+    success: boolean;
+    error?: string;
+  }> => {
+    try {
+      if (typeof window === "undefined") {
+        return { success: false, error: "Sync not available on server" };
+      } else {
+        const users = storageUtils.getUsers();
+        const response = await fetch("/api/users/sync", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ users }),
+        });
+
+        if (response.ok) {
+          return { success: true };
+        } else {
+          return {
+            success: false,
+            error: "Error al sincronizar con el servidor",
+          };
+        }
+      }
+    } catch (error) {
+      console.error("Error syncing with file system:", error);
+      return { success: false, error: "Error de sincronización" };
+    }
+  },
+
+  updateUserProfile: (userId: string, updates: Partial<User>) => {
+    try {
+      const users = storageUtils.getUsers();
+      const idx = users.findIndex((u) => u.id === userId);
+      if (idx !== -1) {
+        users[idx] = { ...users[idx], ...updates };
+        storageUtils.updateUsers(users);
+        return { success: true };
+      }
+      return { success: false, error: "Usuario no encontrado" };
+    } catch (error) {
+      return { success: false, error: "Error al actualizar el perfil" };
     }
   },
 };

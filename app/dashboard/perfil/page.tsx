@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 export default function PerfilPage() {
-  const { user } = useAuth();
+  const { user, setUser } = useAuth();
   const [form, setForm] = useState<any>({});
   const [passwords, setPasswords] = useState({
     password: "",
@@ -41,9 +41,16 @@ export default function PerfilPage() {
       id: prev.id,
       role: prev.role,
       email: prev.email,
+      organizationName: form.organizationName,
+      description: form.description,
     };
     localStorage.setItem("user", JSON.stringify(updated));
+    if (prev.id) {
+      const { updateUserProfile } = require("@/lib/local-storage").storageUtils;
+      updateUserProfile(prev.id, updated);
+    }
     setForm(updated);
+    if (typeof setUser === "function") setUser(updated);
     toast.success("¡Cambios guardados exitosamente!");
   };
 
@@ -291,10 +298,10 @@ export default function PerfilPage() {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="descripcion">Descripción</Label>
+                <Label htmlFor="description">Descripción</Label>
                 <Input
-                  id="descripcion"
-                  value={form.descripcion || ""}
+                  id="description"
+                  value={form.description || ""}
                   onChange={handleChange}
                 />
               </div>

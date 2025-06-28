@@ -8,20 +8,41 @@ import { EventsCTA } from "@/components/organisms/events-cta";
 import { eventsData } from "@/lib/events-data";
 import { useEffect, useState } from "react";
 
+interface Event {
+  id: number;
+  title: string;
+  description: string;
+  location: string;
+  date: string;
+  time: string;
+  category: string;
+  organizer: string;
+  website: string;
+  slug: string;
+  image: string;
+  fullDescription: string;
+  requirements: string[];
+  benefits: string[];
+  applicationProcess?: string;
+}
+
 export function EventsTemplate() {
   const [viewMode, setViewMode] = useState<"list" | "calendar">("list");
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedLocation, setSelectedLocation] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [allEvents, setAllEvents] = useState(eventsData);
+  const [allEvents, setAllEvents] = useState<Event[]>(eventsData);
 
   useEffect(() => {
-    const storedEvents = JSON.parse(localStorage.getItem("events") || "[]");
-  (sin duplicados por id)
+    const storedEvents: Event[] = JSON.parse(
+      localStorage.getItem("events") || "[]",
+    );
     const merged = [
       ...storedEvents,
-      ...eventsData.filter((e) => !storedEvents.some((se) => se.id === e.id)),
+      ...eventsData.filter(
+        (e) => !storedEvents.some((se: Event) => se.id === e.id),
+      ),
     ];
     setAllEvents(merged);
   }, []);

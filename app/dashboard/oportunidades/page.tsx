@@ -8,7 +8,12 @@ import { EventModal } from "@/components/organisms/dashboard/event-modal";
 import { DeleteEventModal } from "@/components/organisms/dashboard/delete-event-modal";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
-import { getLocalOpportunities, createItem } from "@/lib/data-storage";
+import {
+  getLocalOpportunities,
+  createItem,
+  deleteItem,
+  updateItem,
+} from "@/lib/data-storage";
 
 interface Opportunity {
   id: number;
@@ -64,16 +69,12 @@ export default function OpportunitiesPage() {
 
   const handleDeleteConfirm = () => {
     if (!selectedOpportunity) return;
-    const storedOpportunities = getLocalOpportunities?.() || [];
-    const updatedOpportunities = storedOpportunities.filter(
-      (o: Opportunity) => o.id !== selectedOpportunity.id,
-    );
-    localStorage.setItem("items", JSON.stringify(updatedOpportunities));
+    deleteItem(String(selectedOpportunity.id));
     let legacyOpportunities = JSON.parse(
       localStorage.getItem("opportunities") || "[]",
     );
     legacyOpportunities = legacyOpportunities.filter(
-      (o: Opportunity) => o.id !== selectedOpportunity.id,
+      (o: Opportunity) => String(o.id) !== String(selectedOpportunity.id),
     );
     localStorage.setItem("opportunities", JSON.stringify(legacyOpportunities));
     loadOpportunities();
@@ -113,16 +114,17 @@ export default function OpportunitiesPage() {
   };
 
   const handleEditSubmit = (opportunityData: Opportunity) => {
-    const storedOpportunities = getLocalOpportunities?.() || [];
-    const updatedOpportunities = storedOpportunities.map((o: Opportunity) =>
-      o.id === opportunityData.id ? opportunityData : o,
-    );
-    localStorage.setItem("items", JSON.stringify(updatedOpportunities));
+    updateItem(String(opportunityData.id), {
+      ...opportunityData,
+      id: String(opportunityData.id),
+    });
     let legacyOpportunities = JSON.parse(
       localStorage.getItem("opportunities") || "[]",
     );
     legacyOpportunities = legacyOpportunities.map((o: Opportunity) =>
-      o.id === opportunityData.id ? opportunityData : o,
+      String(o.id) === String(opportunityData.id)
+        ? { ...opportunityData, id: String(opportunityData.id) }
+        : o,
     );
     localStorage.setItem("opportunities", JSON.stringify(legacyOpportunities));
     loadOpportunities();

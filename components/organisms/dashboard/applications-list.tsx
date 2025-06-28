@@ -9,7 +9,14 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { dataStorage, Application, ItemType } from "@/lib/data-storage";
+import {
+  getApplicationsByItem,
+  getAllApplications,
+  updateApplication,
+  getItem,
+  Application,
+  ItemType,
+} from "@/lib/data-storage";
 import { useAuth } from "@/lib/context/auth-context";
 import { Calendar, Mail, Check, X } from "lucide-react";
 import { toast } from "sonner";
@@ -36,9 +43,11 @@ export function ApplicationsList({
     const loadApplications = () => {
       let loadedApplications: Application[] = [];
       if (itemId) {
-        loadedApplications = dataStorage.getApplicationsByItem(itemId);
+        loadedApplications = getApplicationsByItem(itemId);
       } else if (studentId) {
-        loadedApplications = dataStorage.getApplicationsByStudent(studentId);
+        loadedApplications = getAllApplications().filter(
+          (app) => app.studentId === studentId,
+        );
       }
       if (type) {
         loadedApplications = loadedApplications.filter(
@@ -57,10 +66,7 @@ export function ApplicationsList({
     applicationId: string,
     status: Application["status"],
   ) => {
-    const updatedApplication = dataStorage.updateApplicationStatus(
-      applicationId,
-      status,
-    );
+    const updatedApplication = updateApplication(applicationId, { status });
     if (updatedApplication) {
       toast.success(
         `Estado actualizado a ${status === "accepted" ? "aceptado" : "rechazado"}`,
@@ -91,7 +97,7 @@ export function ApplicationsList({
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {applications.map((application) => {
-            const item = dataStorage.getItem(application.itemId);
+            const item = getItem(application.itemId);
             if (!item) return null;
 
             return (

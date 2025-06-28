@@ -201,6 +201,13 @@ const AdminUsuariosPage = () => {
     }
 
     try {
+      const cleanResult = storageUtils.cleanDuplicateUsers();
+      if (cleanResult.success && cleanResult.removedCount > 0) {
+        toast.success(
+          `${cleanResult.removedCount} usuarios duplicados eliminados automáticamente`,
+        );
+      }
+
       const storedUsers = storageUtils.getUsers();
       setUsers(storedUsers);
     } catch (error) {
@@ -216,20 +223,46 @@ const AdminUsuariosPage = () => {
     setEditedRoles((prev) => ({ ...prev, [userId]: newRole }));
   };
 
-  const handleSaveRole = (userId: string) => {
-    if (!currentUser) return;
-    const result = storageUtils.updateUserRole(userId, editedRoles[userId]);
+  const handleSaveRole = async (userId: string) => {
+    if (!currentUser) {
+      console.log("No current user found");
+      return;
+    }
 
-    if (result.success) {
-      setUsers(storageUtils.getUsers());
-      setEditedRoles((prev) => {
-        const copy = { ...prev };
-        delete copy[userId];
-        return copy;
+    const newRole = editedRoles[userId];
+    console.log("Attempting to save role:", { userId, newRole, editedRoles });
+
+    if (!newRole) {
+      console.log("No new role found for user:", userId);
+      toast.error("No se encontró el nuevo rol");
+      return;
+    }
+
+    try {
+      const response = await fetch("/api/users/update-role", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId, newRole }),
       });
-      toast.success("Rol actualizado correctamente");
-    } else {
-      toast.error(result.error || "Error al actualizar el rol");
+
+      const result = await response.json();
+
+      if (result.success) {
+        const updatedUsers = storageUtils.getUsers();
+        setUsers(updatedUsers);
+        setEditedRoles((prev) => {
+          const copy = { ...prev };
+          delete copy[userId];
+          return copy;
+        });
+        toast.success("Rol actualizado correctamente en el archivo");
+      } else {
+        console.error("Error updating role:", result.error);
+        toast.error(result.error || "Error al actualizar el rol");
+      }
+    } catch (error) {
+      console.error("Error calling update role API:", error);
+      toast.error("Error al comunicarse con el servidor");
     }
   };
 
@@ -260,6 +293,19 @@ const AdminUsuariosPage = () => {
     setModalOpen(true);
   };
 
+  const handleSyncWithFile = async () => {
+    try {
+      const result = await storageUtils.syncWithFileSystem();
+      if (result.success) {
+        toast.success("Datos sincronizados con el archivo correctamente");
+      } else {
+        toast.error(result.error || "Error al sincronizar");
+      }
+    } catch (error) {
+      toast.error("Error al sincronizar con el archivo");
+    }
+  };
+
   if (loading) {
     return (
       <div className="flex justify-center items-center h-96">
@@ -271,9 +317,17 @@ const AdminUsuariosPage = () => {
   if (users.length === 0) {
     return (
       <div className="container py-8">
-        <h1 className="text-3xl font-bold mb-6 text-center">
-          Gestión de Usuarios
-        </h1>
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-3xl font-bold text-center">
+            Gestión de Usuarios
+          </h1>
+          <Button
+            onClick={handleSyncWithFile}
+            className="bg-green-600 hover:bg-green-700 text-white"
+          >
+            Sincronizar
+          </Button>
+        </div>
         <Card>
           <CardContent className="py-8">
             <p className="text-center text-gray-500">
@@ -287,9 +341,15 @@ const AdminUsuariosPage = () => {
 
   return (
     <div className="container py-8">
-      <h1 className="text-3xl font-bold mb-6 text-center">
-        Gestión de Usuarios
-      </h1>
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-3xl font-bold text-center">Gestión de Usuarios</h1>
+        <Button
+          onClick={handleSyncWithFile}
+          className="bg-green-600 hover:bg-green-700 text-white"
+        >
+          Sincronizar con Archivo
+        </Button>
+      </div>
       <div className="hidden custom1123:block">
         <Card>
           <CardContent>
@@ -317,6 +377,7 @@ const AdminUsuariosPage = () => {
                     const isSelf = currentUser && user.id === currentUser.id;
                     const isPrimary = user.isPrimaryAdmin;
                     const editedRole = editedRoles[user.id] ?? user.role;
+
                     return (
                       <tr key={user.id} className="hover:bg-gray-50 transition">
                         <td className="px-6 py-4 break-words max-w-xs">
@@ -399,6 +460,7 @@ const AdminUsuariosPage = () => {
           const isSelf = currentUser && user.id === currentUser.id;
           const isPrimary = user.isPrimaryAdmin;
           const editedRole = editedRoles[user.id] ?? user.role;
+
           return (
             <Card key={user.id} className="max-w-xl mx-auto p-6">
               <div className="mb-2">

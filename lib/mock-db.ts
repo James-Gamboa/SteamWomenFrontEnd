@@ -1,6 +1,3 @@
-import fs from "fs";
-import path from "path";
-
 // TODO: Reemplazar con conexión a Django
 export interface User {
   id: string;
@@ -13,8 +10,6 @@ export interface User {
   isPrimaryAdmin?: boolean;
   createdAt: string;
 }
-
-const DB_FILE_PATH = path.join(process.cwd(), "data", "users.json");
 
 const defaultUsers: User[] = [
   {
@@ -48,33 +43,93 @@ const defaultUsers: User[] = [
   },
 ];
 
-const ensureDbFile = () => {
-  const dir = path.dirname(DB_FILE_PATH);
-  if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir, { recursive: true });
-  }
-  if (!fs.existsSync(DB_FILE_PATH)) {
-    writeUsers(defaultUsers);
-  }
-};
-
 const readUsers = (): User[] => {
+  if (typeof window === "undefined") {
+    try {
+      const fs = require("fs");
+      const path = require("path");
+      const DB_FILE_PATH = path.join(process.cwd(), "data", "users.json");
+
+      if (fs.existsSync(DB_FILE_PATH)) {
+        const data = fs.readFileSync(DB_FILE_PATH, "utf-8");
+        return JSON.parse(data);
+      } else {
+        const ensureDbFile = () => {
+          const dir = path.dirname(DB_FILE_PATH);
+          if (!fs.existsSync(dir)) {
+            fs.mkdirSync(dir, { recursive: true });
+          }
+          if (!fs.existsSync(DB_FILE_PATH)) {
+            fs.writeFileSync(
+              DB_FILE_PATH,
+              JSON.stringify(defaultUsers, null, 2),
+            );
+          }
+        };
+        ensureDbFile();
+        return defaultUsers;
+      }
+    } catch (error) {
+      console.error("Error reading users from file:", error);
+      return defaultUsers;
+    }
+  }
+
   try {
-    ensureDbFile();
-    const data = fs.readFileSync(DB_FILE_PATH, "utf-8");
-    return JSON.parse(data);
+    const stored = localStorage.getItem("users");
+    if (!stored) {
+      localStorage.setItem("users", JSON.stringify(defaultUsers));
+      return defaultUsers;
+    }
+    const parsedUsers = JSON.parse(stored);
+
+    const mergedUsers = [...defaultUsers];
+    parsedUsers.forEach((user: User) => {
+      const existingIndex = mergedUsers.findIndex(
+        (u) => u.email === user.email,
+      );
+      if (existingIndex >= 0) {
+        mergedUsers[existingIndex] = { ...mergedUsers[existingIndex], ...user };
+      } else {
+        mergedUsers.push(user);
+      }
+    });
+
+    localStorage.setItem("users", JSON.stringify(mergedUsers));
+    return mergedUsers;
   } catch (error) {
-    console.error("Error reading users:", error);
-    return [];
+    console.error("Error reading users from localStorage:", error);
+    return defaultUsers;
   }
 };
 
 const writeUsers = (users: User[]): void => {
+  if (typeof window === "undefined") {
+    try {
+      const fs = require("fs");
+      const path = require("path");
+      const DB_FILE_PATH = path.join(process.cwd(), "data", "users.json");
+
+      const ensureDbFile = () => {
+        const dir = path.dirname(DB_FILE_PATH);
+        if (!fs.existsSync(dir)) {
+          fs.mkdirSync(dir, { recursive: true });
+        }
+      };
+
+      ensureDbFile();
+      fs.writeFileSync(DB_FILE_PATH, JSON.stringify(users, null, 2));
+    } catch (error) {
+      console.error("Error writing users to file:", error);
+      throw new Error("Error al guardar los usuarios en el archivo");
+    }
+    return;
+  }
+
   try {
-    ensureDbFile();
-    fs.writeFileSync(DB_FILE_PATH, JSON.stringify(users, null, 2));
+    localStorage.setItem("users", JSON.stringify(users));
   } catch (error) {
-    console.error("Error writing users:", error);
+    console.error("Error writing users to localStorage:", error);
     throw new Error("Error al guardar los usuarios");
   }
 };
@@ -129,9 +184,20 @@ export const mockDb = {
         throw new Error("El correo electrónico ya está registrado");
       }
 
+      const generateUniqueId = (): string => {
+        const timestamp = Date.now();
+        const random = Math.random().toString(36).substr(2, 9);
+        return `${timestamp}-${random}`;
+      };
+
+      let newId = generateUniqueId();
+      while (users.some((user) => user.id === newId)) {
+        newId = generateUniqueId();
+      }
+
       const newUser: User = {
         ...userData,
-        id: Date.now().toString(),
+        id: newId,
         createdAt: new Date().toISOString(),
       };
 
@@ -198,58 +264,133 @@ export const mockDb = {
       const users = mockDb.getAllUsers();
       const assigner = users.find((user) => user.email === assignedBy);
 
-      if (!assigner?.isPrimaryAdmin) {
+      if (!assigner || assigner.role !== "admin") {
         return {
           success: false,
-          error: "No tienes permisos para asignar roles de admin",
+          error:
+            "Solo los administradores pueden asignar roles de administrador",
         };
       }
 
-      const userIndex = users.findIndex((user) => user.email === email);
-      if (userIndex === -1) {
-        return { success: false, error: "Usuario no encontrado" };
+      const userToUpdate = users.find((user) => user.email === email);
+      if (!userToUpdate) {
+        return {
+          success: false,
+          error: "Usuario no encontrado",
+        };
       }
 
-      const updatedUsers = [...users];
-      updatedUsers[userIndex].role = "admin";
-      mockDb.saveUsers(updatedUsers);
+      if (userToUpdate.role === "admin") {
+        return {
+          success: false,
+          error: "El usuario ya es administrador",
+        };
+      }
+
+      userToUpdate.role = "admin";
+      mockDb.saveUsers(users);
+
       return { success: true };
     } catch (error) {
       console.error("Error assigning admin role:", error);
-      return { success: false, error: "Error al asignar rol de admin" };
+      return {
+        success: false,
+        error: "Error al asignar el rol de administrador",
+      };
     }
   },
 
-  isPrimaryAdmin: (email: string): boolean => {
+  removeAdminRole: (
+    email: string,
+    removedBy: string,
+  ): { success: boolean; error?: string } => {
     try {
       const users = mockDb.getAllUsers();
-      const user = users.find((user) => user.email === email);
-      return user?.isPrimaryAdmin || false;
+      const remover = users.find((user) => user.email === removedBy);
+
+      if (!remover || remover.role !== "admin") {
+        return {
+          success: false,
+          error:
+            "Solo los administradores pueden remover roles de administrador",
+        };
+      }
+
+      const userToUpdate = users.find((user) => user.email === email);
+      if (!userToUpdate) {
+        return {
+          success: false,
+          error: "Usuario no encontrado",
+        };
+      }
+
+      if (userToUpdate.role !== "admin") {
+        return {
+          success: false,
+          error: "El usuario no es administrador",
+        };
+      }
+
+      if (userToUpdate.isPrimaryAdmin) {
+        return {
+          success: false,
+          error: "No se puede remover el rol del administrador principal",
+        };
+      }
+
+      userToUpdate.role = "student";
+      mockDb.saveUsers(users);
+
+      return { success: true };
     } catch (error) {
-      console.error("Error checking primary admin:", error);
-      return false;
+      console.error("Error removing admin role:", error);
+      return {
+        success: false,
+        error: "Error al remover el rol de administrador",
+      };
     }
   },
 
-  hasPrimaryAdmin: (): boolean => {
+  deleteUser: (
+    email: string,
+    deletedBy: string,
+  ): { success: boolean; error?: string } => {
     try {
       const users = mockDb.getAllUsers();
-      return users.some((user) => user.isPrimaryAdmin);
-    } catch (error) {
-      console.error("Error checking for primary admin:", error);
-      return false;
-    }
-  },
+      const deleter = users.find((user) => user.email === deletedBy);
 
-  deleteUser: (email: string): boolean => {
-    try {
-      const users = mockDb.getAllUsers();
+      if (!deleter || deleter.role !== "admin") {
+        return {
+          success: false,
+          error: "Solo los administradores pueden eliminar usuarios",
+        };
+      }
+
+      const userToDelete = users.find((user) => user.email === email);
+      if (!userToDelete) {
+        return {
+          success: false,
+          error: "Usuario no encontrado",
+        };
+      }
+
+      if (userToDelete.isPrimaryAdmin) {
+        return {
+          success: false,
+          error: "No se puede eliminar el administrador principal",
+        };
+      }
+
       const updatedUsers = users.filter((user) => user.email !== email);
       mockDb.saveUsers(updatedUsers);
-      return true;
+
+      return { success: true };
     } catch (error) {
       console.error("Error deleting user:", error);
-      return false;
+      return {
+        success: false,
+        error: "Error al eliminar el usuario",
+      };
     }
   },
 };
