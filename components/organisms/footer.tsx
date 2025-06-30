@@ -21,36 +21,6 @@ export function Footer() {
               Enlaces rápidos
             </h3>
             <ul className="space-y-2">
-              <li>
-                <Link
-                  href="/dashboard"
-                  className="transition-colors hover:underline hover:text-purple-500"
-                  style={{
-                    fontSize: "14px",
-                    lineHeight: "18px",
-                    color: "#C8C8C9",
-                    fontFamily: "DM Sans, sans-serif",
-                    fontWeight: "400",
-                  }}
-                >
-                  Publicar evento STEAM
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/dashboard"
-                  className="transition-colors hover:underline hover:text-purple-500"
-                  style={{
-                    fontSize: "14px",
-                    lineHeight: "18px",
-                    color: "#C8C8C9",
-                    fontFamily: "DM Sans, sans-serif",
-                    fontWeight: "400",
-                  }}
-                >
-                  Publicar oportunidad para mujeres
-                </Link>
-              </li>
                <li>
                 <Link
                   href="https://linktr.ee/ecosystemforwomen"
