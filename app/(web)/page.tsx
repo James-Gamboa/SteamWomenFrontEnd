@@ -10,11 +10,11 @@ export default function Home() {
 }
 
 export const generateMetadata = async (): Promise<Metadata> => ({
-  title: "STEAMWomen - Impulsando mujeres en STEAM",
+  title: "Ecosystem for women - Impulsando mujeres en STEAM",
   description:
     "Plataforma dedicada a potenciar el talento femenino en áreas STEAM a través de oportunidades, eventos y comunidad.",
   openGraph: {
-    title: "STEAMWomen - Impulsando mujeres en STEAM",
+    title: "Ecosystem for women - Impulsando mujeres en STEAM",
     description:
       "Plataforma dedicada a potenciar el talento femenino en áreas STEAM a través de oportunidades, eventos y comunidad.",
     url: "https://steam-women-front-end.vercel.app/",
@@ -32,7 +32,7 @@ export const generateMetadata = async (): Promise<Metadata> => ({
   },
   twitter: {
     card: "summary_large_image",
-    title: "STEAMWomen - Impulsando mujeres en STEAM",
+    title: "Ecosystem for women - Impulsando mujeres en STEAM",
     description:
       "Plataforma dedicada a potenciar el talento femenino en áreas STEAM a través de oportunidades, eventos y comunidad.",
     images: ["/img/dummy-women.jpg.jpeg"],

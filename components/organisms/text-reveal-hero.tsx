@@ -30,7 +30,7 @@ export function TextRevealHero() {
           fontWeight: "600",
         }}
       >
-        STEAMWOMEN
+        Ecosystem for Women
       </h1>
       <h2
         ref={subtitleRef}

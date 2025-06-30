@@ -51,6 +51,21 @@ export function Footer() {
                   Publicar oportunidad para mujeres
                 </Link>
               </li>
+               <li>
+                <Link
+                  href="https://linktr.ee/ecosystemforwomen"
+                  className="transition-colors hover:underline hover:text-purple-500"
+                  style={{
+                    fontSize: "14px",
+                    lineHeight: "18px",
+                    color: "#C8C8C9",
+                    fontFamily: "DM Sans, sans-serif",
+                    fontWeight: "400",
+                  }}
+                >
+                  Donaciones
+                </Link>
+              </li>
             </ul>
           </div>
 
@@ -115,7 +130,7 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  href="#"
+                  href="/nosotras#preguntas-frecuentes"
                   className="transition-colors hover:underline hover:text-purple-500"
                   style={{
                     fontSize: "14px",
@@ -135,7 +150,7 @@ export function Footer() {
             <ul className="space-y-2">
               <li>
                 <Link
-                  href="mailto:contacto@steamwomen.com"
+                  href="mailto:contacto@ecosystemforwomen.com"
                   className="transition-colors hover:underline hover:text-purple-500"
                   style={{
                     fontSize: "14px",
@@ -147,7 +162,7 @@ export function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  contacto@steamwomen.com
+                  contacto@ecosystemforwomen.com
                 </Link>
               </li>
               <li>
@@ -250,11 +265,12 @@ export function Footer() {
                 fontWeight: "400",
               }}
             >
-              © 2025 STEAMWomen. Todos los derechos reservados.
+              © 2025 Ecosystem for Women. Todos los derechos reservados.
             </p>
             <div className="flex space-x-4">
               <Link
-                href="#"
+                href="/PoliticadePrivacidad.pdf"
+                target="_blank"
                 className="transition-colors hover:underline hover:text-purple-500"
                 style={{
                   fontSize: "14px",
@@ -267,7 +283,8 @@ export function Footer() {
                 Política de privacidad
               </Link>
               <Link
-                href="#"
+                href="/TerminosdeServicio.pdf"
+                target="_blank"
                 className="transition-colors hover:underline hover:text-purple-500"
                 style={{
                   fontSize: "14px",

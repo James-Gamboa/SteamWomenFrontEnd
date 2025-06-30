@@ -73,11 +73,12 @@ export function ParallaxSections() {
                 className="mb-6 font-bold text-[38px] lg:text-[90px] text-white"
                 style={{
                   lineHeight: "95px",
+                  fontSize: "60px",
                   fontFamily: "DM Sans, sans-serif",
                   fontWeight: 600,
                 }}
               >
-                STEAMWOMEN
+                Ecosystem for Women
               </h1>
               <h2
                 className="mb-4 font-medium text-white"

@@ -87,7 +87,7 @@ export function Sidebar({ open, setOpen, onLogout }: SidebarProps) {
       >
         <div className="flex items-center mb-8 px-4 pt-8 justify-between">
           <span className="text-2xl font-extrabold text-[#8B5CF6] tracking-wide">
-            STEAMWomen
+            Ecosystem for Women
           </span>
           <button
             className="md:hidden p-2 rounded hover:bg-[#ede9fe]"

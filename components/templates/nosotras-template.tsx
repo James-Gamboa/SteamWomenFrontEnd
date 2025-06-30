@@ -7,6 +7,7 @@ import { TestimonialsSection } from "@/components/molecules/testimonials-section
 import { PartnersSection } from "@/components/molecules/partners-section";
 import { ContactFormSection } from "@/components/molecules/contact-form-section";
 import { JoinMissionSection } from "@/components/molecules/join-mission-section";
+import { FaqAccordion } from "@/components/molecules/FaqAccordion";
 
 export function NosotrasTemplate() {
   return (
@@ -20,6 +21,9 @@ export function NosotrasTemplate() {
       <InteractiveTimelineSection />
       <StatisticsSection />
       <TestimonialsSection />
+      <section id="preguntas-frecuentes">
+        <FaqAccordion />
+      </section>
       <PartnersSection />
       <section id="contacto">
         <ContactFormSection />
