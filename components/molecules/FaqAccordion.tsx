@@ -10,14 +10,15 @@ import {
 export function FaqAccordion() {
   return (
     <section className="bg-white py-16 px-4">
-      <h2 className="text-4xl font-bold mb-10 text-center text-[#2D2D2D] font-sans"
-      style={{
-              color: "#1A1F2C",
-              fontFamily: "DM Sans, sans-serif",
-              fontWeight: "600",
-              lineHeight: "1.1",
-            }}>
-        
+      <h2
+        className="text-4xl font-bold mb-10 text-center text-[#2D2D2D] font-sans"
+        style={{
+          color: "#1A1F2C",
+          fontFamily: "DM Sans, sans-serif",
+          fontWeight: "600",
+          lineHeight: "1.1",
+        }}
+      >
         Preguntas Frecuentes
       </h2>
 
@@ -28,7 +29,7 @@ export function FaqAccordion() {
       >
         {[
           {
-            question: "¿Qué es Ecosystem for Women?",
+            question: "¿Qué es STEAM WOMEN?",
             answer:
               "Una iniciativa para fortalecer el liderazgo femenino en tecnología, promoviendo espacios inclusivos, aprendizaje comunitario y desarrollo profesional.",
           },
@@ -68,14 +69,20 @@ export function FaqAccordion() {
             value={`item-${index}`}
             className="bg-white"
           >
-            <AccordionTrigger className="text-[#1A1F2C] font-medium font-sans py-4 px-6 hover:no-underline focus:outline-none"  style={{
-              fontFamily: "DM Sans, sans-serif",
-            }}>
+            <AccordionTrigger
+              className="text-[#1A1F2C] font-medium font-sans py-4 px-6 hover:no-underline focus:outline-none"
+              style={{
+                fontFamily: "DM Sans, sans-serif",
+              }}
+            >
               {item.question}
             </AccordionTrigger>
-            <AccordionContent className="text-[#4B4B4B] font-sans leading-relaxed pl-6 pr-6 pb-4 border-l-4 border-[#A267AC]" style={{
-              fontFamily: "DM Sans, sans-serif",
-            }}>
+            <AccordionContent
+              className="text-[#4B4B4B] font-sans leading-relaxed pl-6 pr-6 pb-4 border-l-4 border-[#A267AC]"
+              style={{
+                fontFamily: "DM Sans, sans-serif",
+              }}
+            >
               {item.answer}
             </AccordionContent>
           </AccordionItem>

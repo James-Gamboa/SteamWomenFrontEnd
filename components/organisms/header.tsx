@@ -81,7 +81,7 @@ export function Header() {
                 maxWidth: "100%",
               }}
             >
-              Ecosystem for Women
+              STEAM WOMEN
             </Link>
             <nav className="hidden lg:flex items-center justify-center space-x-8 flex-1 mx-8">
               <Link

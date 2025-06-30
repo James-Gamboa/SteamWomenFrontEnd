@@ -18,7 +18,7 @@ export function EventsCTA() {
           lineHeight: "1.2",
         }}
       >
-        ¿Organizas un evento para mujeres en STEAM?
+        ¿Quieres ser parte de nuestra comunidad?
       </h2>
       <p
         className="mb-8 max-w-2xl mx-auto text-base lg:text-lg"
@@ -29,9 +29,9 @@ export function EventsCTA() {
           lineHeight: "1.6",
         }}
       >
-        Publica tu evento en nuestra plataforma y llega a miles de mujeres
-        interesadas en oportunidades en ciencia, tecnología, ingeniería, arte y
-        matemáticas.
+        Únete a miles de mujeres apasionadas por STEAM. Conecta, aprende y crece
+        junto a una comunidad que impulsa el talento femenino en ciencia,
+        tecnología, ingeniería, arte y matemáticas.
       </p>
       <Button
         className="px-8 py-3 hover:opacity-90 border-0 text-base lg:text-lg"
@@ -43,7 +43,7 @@ export function EventsCTA() {
         }}
         asChild
       >
-        <Link href="/dashboard">Publicar un evento</Link>
+        <Link href="/nosotras">Unirse a la comunidad</Link>
       </Button>
     </div>
   );

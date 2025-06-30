@@ -38,7 +38,7 @@ const defaultUsers: User[] = [
     role: "company",
     firstName: "James",
     lastName: "Guevara",
-    organizationName: "Steam Women",
+    organizationName: "STEAM WOMEN",
     createdAt: new Date().toISOString(),
   },
 ];

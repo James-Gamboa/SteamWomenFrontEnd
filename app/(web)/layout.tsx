@@ -1,3 +1,4 @@
+import { Metadata } from "next";
 import { DM_Sans } from "next/font/google";
 import "@/app/globals.css";
 import { Toaster } from "@/components/ui/toaster";
@@ -14,23 +15,37 @@ const dmSans = DM_Sans({
   variable: "--font-dm-sans",
 });
 
+export const metadata: Metadata = {
+  title: "Inicio - STEAM WOMEN",
+  description:
+    "Plataforma dedicada a potenciar el talento femenino en áreas STEAM a través de oportunidades, eventos y comunidad.",
+  keywords:
+    "STEAM, mujeres, tecnología, ciencia, ingeniería, matemáticas, oportunidades, eventos",
+  authors: [{ name: "STEAM WOMEN" }],
+  openGraph: {
+    title: "Inicio - STEAM WOMEN",
+    description:
+      "Plataforma dedicada a potenciar el talento femenino en áreas STEAM",
+    type: "website",
+  },
+};
+
 export default function WebLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div
-      className={`${dmSans.variable} font-sans antialiased min-h-screen`}
-      style={{ fontFamily: "DM Sans, sans-serif" }}
-    >
-      <NextTopLoader color="#8B5CF6" showSpinner={true} height={4} />
-      <ApolloWrapper>
-        <SmoothScrollProvider>
-          <Header />
-          <main>{children}</main>
-          <Footer />
-          <WhatsAppButton />
-        </SmoothScrollProvider>
-      </ApolloWrapper>
-      <Toaster />
-      <GlobalToasts />
-    </div>
+    <html lang="es">
+      <body>
+        <NextTopLoader color="#8B5CF6" showSpinner={true} height={4} />
+        <ApolloWrapper>
+          <SmoothScrollProvider>
+            <Header />
+            <main>{children}</main>
+            <Footer />
+            <WhatsAppButton />
+            <GlobalToasts />
+          </SmoothScrollProvider>
+        </ApolloWrapper>
+        <Toaster />
+      </body>
+    </html>
   );
 }

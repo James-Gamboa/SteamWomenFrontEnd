@@ -1,5 +1,4 @@
 import { HomeTemplate } from "@/components/templates/home-template";
-import type { Metadata } from "next";
 
 export default function Home() {
   return (
@@ -8,33 +7,3 @@ export default function Home() {
     </div>
   );
 }
-
-export const generateMetadata = async (): Promise<Metadata> => ({
-  title: "Ecosystem for women - Impulsando mujeres en STEAM",
-  description:
-    "Plataforma dedicada a potenciar el talento femenino en áreas STEAM a través de oportunidades, eventos y comunidad.",
-  openGraph: {
-    title: "Ecosystem for women - Impulsando mujeres en STEAM",
-    description:
-      "Plataforma dedicada a potenciar el talento femenino en áreas STEAM a través de oportunidades, eventos y comunidad.",
-    url: "https://steam-women-front-end.vercel.app/",
-    siteName: "STEAMWomen",
-    images: [
-      {
-        url: "/img/dummy-women.jpg.jpeg",
-        width: 1200,
-        height: 630,
-        alt: "STEAMWomen Home",
-      },
-    ],
-    locale: "es_CR",
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Ecosystem for women - Impulsando mujeres en STEAM",
-    description:
-      "Plataforma dedicada a potenciar el talento femenino en áreas STEAM a través de oportunidades, eventos y comunidad.",
-    images: ["/img/dummy-women.jpg.jpeg"],
-  },
-});

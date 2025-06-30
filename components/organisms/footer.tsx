@@ -21,7 +21,22 @@ export function Footer() {
               Enlaces rápidos
             </h3>
             <ul className="space-y-2">
-               <li>
+              <li>
+                <Link
+                  href="/"
+                  className="transition-colors hover:underline hover:text-purple-500"
+                  style={{
+                    fontSize: "14px",
+                    lineHeight: "18px",
+                    color: "#C8C8C9",
+                    fontFamily: "DM Sans, sans-serif",
+                    fontWeight: "400",
+                  }}
+                >
+                  Inicio
+                </Link>
+              </li>
+              <li>
                 <Link
                   href="https://linktr.ee/ecosystemforwomen"
                   className="transition-colors hover:underline hover:text-purple-500"
@@ -36,9 +51,38 @@ export function Footer() {
                   Donaciones
                 </Link>
               </li>
+              <li>
+                <Link
+                  href="/eventos"
+                  className="transition-colors hover:underline hover:text-purple-500"
+                  style={{
+                    fontSize: "14px",
+                    lineHeight: "18px",
+                    color: "#C8C8C9",
+                    fontFamily: "DM Sans, sans-serif",
+                    fontWeight: "400",
+                  }}
+                >
+                  Comunidad
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/oportunidades"
+                  className="transition-colors hover:underline hover:text-purple-500"
+                  style={{
+                    fontSize: "14px",
+                    lineHeight: "18px",
+                    color: "#C8C8C9",
+                    fontFamily: "DM Sans, sans-serif",
+                    fontWeight: "400",
+                  }}
+                >
+                  Recursos
+                </Link>
+              </li>
             </ul>
           </div>
-
           <div>
             <h3
               className="mb-4 font-bold"
@@ -235,7 +279,7 @@ export function Footer() {
                 fontWeight: "400",
               }}
             >
-              © 2025 Ecosystem for Women. Todos los derechos reservados.
+              © 2025 STEAM WOMEN. Todos los derechos reservados.
             </p>
             <div className="flex space-x-4">
               <Link

@@ -78,7 +78,7 @@ export function ParallaxSections() {
                   fontWeight: 600,
                 }}
               >
-                Ecosystem for Women
+                STEAM WOMEN
               </h1>
               <h2
                 className="mb-4 font-medium text-white"
@@ -132,7 +132,7 @@ export function ParallaxSections() {
                     fontWeight: "600",
                   }}
                 >
-                  <Link href="/unirse">Unirse</Link>
+                  <Link href="/nosotras">Conoce más</Link>
                 </Button>
               </div>
             </div>

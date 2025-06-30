@@ -4,7 +4,7 @@ export function HistoryImpactSection() {
       year: "2018",
       title: "Los inicios",
       description:
-        "Ecosystem for women nace como una iniciativa local para conectar a mujeres estudiantes de carreras STEAM con profesionales del sector.",
+        "STEAM WOMEN nace como una iniciativa local para conectar a mujeres estudiantes de carreras STEAM con profesionales del sector.",
     },
     {
       year: "2020",
