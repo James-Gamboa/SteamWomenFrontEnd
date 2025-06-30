@@ -2,7 +2,7 @@
 
 ## Descripción
 
-Frontend de la plataforma Women Steam, orientada a centralizar oportunidades STEAM (Ciencia, Tecnología, Ingeniería, Arte y Matemáticas) para mujeres en Costa Rica y Latinoamérica. Este sistema permite a las usuarias explorar, postularse y gestionar oportunidades, así como interactuar con una comunidad activa, todo desde una interfaz moderna, accesible y responsiva.
+Frontend de la plataforma Ecosystem for Women, orientada a centralizar oportunidades STEAM (Ciencia, Tecnología, Ingeniería, Arte y Matemáticas) para mujeres en Costa Rica y Latinoamérica. Este sistema permite a las usuarias explorar, postularse y gestionar oportunidades, así como interactuar con una comunidad activa, todo desde una interfaz moderna, accesible y responsiva.
 
 ## Tecnologías
 
@@ -11,6 +11,7 @@ Frontend de la plataforma Women Steam, orientada a centralizar oportunidades STE
 - Tailwind CSS
 - Lenis (animaciones de scroll suave)
 - GSAP (animaciones avanzadas)
+- Graphql
 
 ## Estructura del Proyecto
 
@@ -48,3 +49,7 @@ Frontend de la plataforma Women Steam, orientada a centralizar oportunidades STE
 
 - María José Conejo Leiva
 - James Guevara Gamboa
+
+## Documentancion
+
+- [Documentacion oficial de GraphQl](https://graphql.org/learn/)
