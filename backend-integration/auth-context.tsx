@@ -1,69 +1,161 @@
-// import { createContext, useContext, useState, useEffect, ReactNode } from 'react'
-// import { User, LoginInput, SignUpInput } from './types'
-// import { login as apiLogin, signUp as apiSignUp } from './api'
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from "react";
+import {
+  login as apiLogin,
+  logout as apiLogout,
+  isAuthenticated as checkAuthStatus,
+  getToken,
+  client,
+} from "./api";
+import { GET_CURRENT_USER } from "./graphql/queries";
 
-// interface AuthContextType {
-//   user: User | null
-//   token: string | null
-//   login: (input: LoginInput) => Promise<void>
-//   signUp: (input: SignUpInput) => Promise<void>
-//   logout: () => void
-//   isLoading: boolean
-// }
+interface User {
+  id: string;
+  user: {
+    id: string;
+    email: string;
+    firstName: string;
+    lastName: string;
+  };
+  role: string;
+  organizationName?: string;
+  isPrimaryAdmin?: boolean;
+  createdAt: string;
+}
 
-// const AuthContext = createContext<AuthContextType | undefined>(undefined)
+interface LoginInput {
+  username: string;
+  password: string;
+}
 
-// export function AuthProvider({ children }: { children: ReactNode }) {
-//   const [user, setUser] = useState<User | null>(null)
-//   const [token, setToken] = useState<string | null>(null)
-//   const [isLoading, setIsLoading] = useState(true)
+interface AuthContextType {
+  user: User | null;
+  token: string | null;
+  login: (input: LoginInput) => Promise<void>;
+  logout: () => void;
+  isLoading: boolean;
+  isAuthenticated: boolean;
+}
 
-//   useEffect(() => {
-//     const storedToken = localStorage.getItem('token')
-//     const storedUser = localStorage.getItem('user')
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-//     if (storedToken && storedUser) {
-//       setToken(storedToken)
-//       setUser(JSON.parse(storedUser))
-//     }
+export function AuthProvider({ children }: { children: ReactNode }) {
+  const [user, setUser] = useState<User | null>(null);
+  const [token, setToken] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-//     setIsLoading(false)
-//   }, [])
+  const getCurrentUser = async (): Promise<User | null> => {
+    try {
+      const { data } = await client.query({
+        query: GET_CURRENT_USER,
+      });
+      return data.me;
+    } catch (error) {
+      console.error("Error getting current user:", error);
+      return null;
+    }
+  };
 
-//   const login = async (input: LoginInput) => {
-//     const response = await apiLogin(input)
-//     setToken(response.token)
-//     setUser(response.user)
-//     localStorage.setItem('token', response.token)
-//     localStorage.setItem('user', JSON.stringify(response.user))
-//   }
+  useEffect(() => {
+    const checkAuth = async () => {
+      const storedToken = getToken();
 
-//   const signUp = async (input: SignUpInput) => {
-//     const response = await apiSignUp(input)
-//     setToken(response.token)
-//     setUser(response.user)
-//     localStorage.setItem('token', response.token)
-//     localStorage.setItem('user', JSON.stringify(response.user))
-//   }
+      if (storedToken && checkAuthStatus()) {
+        setToken(storedToken);
 
-//   const logout = () => {
-//     setToken(null)
-//     setUser(null)
-//     localStorage.removeItem('token')
-//     localStorage.removeItem('user')
-//   }
+        try {
+          const currentUser = await getCurrentUser();
+          if (currentUser) {
+            setUser(currentUser);
+          } else {
+            apiLogout();
+            setToken(null);
+            setUser(null);
+          }
+        } catch (error) {
+          console.error("Error getting current user:", error);
+          apiLogout();
+          setToken(null);
+          setUser(null);
+        }
+      }
 
-//   return (
-//     <AuthContext.Provider value={{ user, token, login, signUp, logout, isLoading }}>
-//       {children}
-//     </AuthContext.Provider>
-//   )
-// }
+      setIsLoading(false);
+    };
 
-// export function useAuth() {
-//   const context = useContext(AuthContext)
-//   if (context === undefined) {
-//     throw new Error('useAuth must be used within an AuthProvider')
-//   }
-//   return context
-// }
+    checkAuth();
+  }, []);
+
+  const login = async (input: LoginInput) => {
+    try {
+      const response = await apiLogin(input);
+      setToken(response.access);
+
+      const userData = await getCurrentUser();
+      if (userData) {
+        setUser(userData);
+      } else {
+        throw new Error("Failed to get user data after login");
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      throw error;
+    }
+  };
+
+  const logout = () => {
+    apiLogout();
+    setToken(null);
+    setUser(null);
+  };
+
+  const value: AuthContextType = {
+    user,
+    token,
+    login,
+    logout,
+    isLoading,
+    isAuthenticated: !!token && !!user,
+  };
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+}
+
+export function useAuth() {
+  const context = useContext(AuthContext);
+  if (context === undefined) {
+    throw new Error("useAuth must be used within an AuthProvider");
+  }
+  return context;
+}
+
+export function useRequireAuth() {
+  const { user, isLoading, isAuthenticated } = useAuth();
+
+  useEffect(() => {
+    if (!isLoading && !isAuthenticated) {
+      window.location.href = "/login";
+    }
+  }, [isLoading, isAuthenticated]);
+
+  return { user, isLoading };
+}
+
+export function useRequireRole(requiredRole: string) {
+  const { user, isLoading, isAuthenticated } = useAuth();
+
+  useEffect(() => {
+    if (!isLoading && !isAuthenticated) {
+      window.location.href = "/login";
+    } else if (!isLoading && user && user.role !== requiredRole) {
+      window.location.href = "/unauthorized";
+    }
+  }, [isLoading, isAuthenticated, user, requiredRole]);
+
+  return { user, isLoading };
+}

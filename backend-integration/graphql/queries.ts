@@ -1,26 +1,8 @@
-/**
- * GraphQL Queries
- *
- * Flujo de datos:
- * 1. Los componentes llaman a los servicios (lib/services/*)
- * 2. Los servicios usan estas queries para obtener datos del backend
- * 3. Las queries se ejecutan a través del cliente Apollo (backend-integration/api.ts)
- *
- * Estructura de archivos:
- * - backend-integration/
- *   ├── api.ts (Configuración del cliente Apollo)
- *   ├── graphql/
- *   │   ├── queries.ts (Este archivo - Queries para obtener datos)
- *   │   └── mutations.ts (Operaciones de escritura)
- *   └── types.ts (Tipos compartidos)
- *
- * - lib/services/
- *   ├── user-service.ts (Servicios de usuario)
- *   ├── event-service.ts (Servicios de eventos)
- *   └── opportunity-service.ts (Servicios de oportunidades)
- */
-
 import { gql } from "@apollo/client";
+
+// ============================================================================
+// QUERIES BÁSICAS
+// ============================================================================
 
 export const GET_EVENTS_QUERY = gql`
   query {
@@ -40,10 +22,13 @@ export const GET_CURRENT_USER = gql`
   query GetCurrentUser {
     me {
       id
-      email
+      user {
+        id
+        email
+        firstName
+        lastName
+      }
       role
-      firstName
-      lastName
       organizationName
       isPrimaryAdmin
       createdAt
@@ -53,23 +38,16 @@ export const GET_CURRENT_USER = gql`
 
 export const GET_DASHBOARD_STATS = gql`
   query GetDashboardStats {
-    dashboardStats {
-      totalUsers
-      activeEvents
-      totalOpportunities
-      recentActivities {
-        id
-        type
-        title
-        description
-        createdAt
-      }
-    }
+    dashboardStats
   }
 `;
 
+// ============================================================================
+// EVENTOS
+// ============================================================================
+
 export const GET_EVENTS = gql`
-  query GetEvents($filter: EventFilterInput) {
+  query GetEvents($filter: String) {
     events(filter: $filter) {
       id
       title
@@ -86,11 +64,9 @@ export const GET_EVENTS = gql`
       benefits
       applicationProcess
       createdAt
-      createdBy {
+      company {
         id
-        firstName
-        lastName
-        organizationName
+        nameCompany
       }
     }
   }
@@ -114,18 +90,20 @@ export const GET_EVENT = gql`
       benefits
       applicationProcess
       createdAt
-      createdBy {
+      company {
         id
-        firstName
-        lastName
-        organizationName
+        nameCompany
       }
     }
   }
 `;
 
+// ============================================================================
+// OPORTUNIDADES
+// ============================================================================
+
 export const GET_OPPORTUNITIES = gql`
-  query GetOpportunities($filter: OpportunityFilterInput) {
+  query GetOpportunities($filter: String) {
     opportunities(filter: $filter) {
       id
       title
@@ -145,9 +123,7 @@ export const GET_OPPORTUNITIES = gql`
       createdAt
       company {
         id
-        organizationName
-        firstName
-        lastName
+        nameCompany
       }
     }
   }
@@ -174,60 +150,69 @@ export const GET_OPPORTUNITY = gql`
       createdAt
       company {
         id
-        organizationName
-        firstName
-        lastName
+        nameCompany
       }
     }
   }
 `;
 
+// ============================================================================
+// PERFILES
+// ============================================================================
+
 export const GET_COMPANY_PROFILE = gql`
-  query GetCompanyProfile {
-    companyProfile {
+  query GetCompanyProfile($id: ID!) {
+    companyProfile(id: $id) {
       id
-      organizationName
-      description
+      nameCompany
+      email
+      phone
       website
-      location
-      industry
-      size
-      founded
-      logo
+      slug
     }
   }
 `;
 
 export const GET_STUDENT_PROFILE = gql`
   query GetStudentProfile {
-    studentProfile {
+    me {
       id
-      firstName
-      lastName
-      email
-      phone
-      location
-      education
-      skills
-      experience
-      interests
-      resume
-      portfolio
+      user {
+        id
+        email
+        firstName
+        lastName
+      }
+      role
+      descripcion
+      cvUrl
+      linkedinUrl
     }
   }
 `;
 
+// ============================================================================
+// APLICACIONES
+// ============================================================================
+
 export const GET_STUDENT_APPLICATIONS = gql`
-  query GetStudentApplications {
-    studentApplications {
+  query GetStudentApplications($studentId: ID!) {
+    studentApplications(studentId: $studentId) {
       id
       status
       createdAt
+      event {
+        id
+        title
+        company {
+          nameCompany
+        }
+      }
       opportunity {
         id
         title
         company {
-          organizationName
+          nameCompany
         }
       }
     }
@@ -235,17 +220,22 @@ export const GET_STUDENT_APPLICATIONS = gql`
 `;
 
 export const GET_COMPANY_APPLICATIONS = gql`
-  query GetCompanyApplications {
-    companyApplications {
+  query GetCompanyApplications($companyId: ID!) {
+    companyApplications(companyId: $companyId) {
       id
       status
       createdAt
       student {
         id
-        firstName
-        lastName
-        email
-        resume
+        user {
+          email
+          firstName
+          lastName
+        }
+      }
+      event {
+        id
+        title
       }
       opportunity {
         id
@@ -255,14 +245,53 @@ export const GET_COMPANY_APPLICATIONS = gql`
   }
 `;
 
+export const GET_ALL_APPLICATIONS = gql`
+  query GetAllApplications {
+    allApplications {
+      id
+      status
+      createdAt
+      student {
+        id
+        user {
+          email
+          firstName
+          lastName
+        }
+      }
+      event {
+        id
+        title
+        company {
+          nameCompany
+        }
+      }
+      opportunity {
+        id
+        title
+        company {
+          nameCompany
+        }
+      }
+    }
+  }
+`;
+
+// ============================================================================
+// USUARIOS
+// ============================================================================
+
 export const GET_USER = gql`
   query GetUser($id: ID!) {
     user(id: $id) {
       id
-      email
+      user {
+        id
+        email
+        firstName
+        lastName
+      }
       role
-      firstName
-      lastName
       organizationName
       isPrimaryAdmin
       createdAt
@@ -274,13 +303,59 @@ export const GET_USERS = gql`
   query GetUsers {
     users {
       id
-      email
+      user {
+        id
+        email
+        firstName
+        lastName
+      }
       role
-      firstName
-      lastName
       organizationName
       isPrimaryAdmin
       createdAt
+    }
+  }
+`;
+
+// ============================================================================
+// EMPRESAS
+// ============================================================================
+
+export const GET_ALL_COMPANIES = gql`
+  query GetAllCompanies {
+    allCompanies {
+      id
+      nameCompany
+      email
+      phone
+      website
+      slug
+    }
+  }
+`;
+
+export const GET_COMPANIES = gql`
+  query GetCompanies {
+    allCompanies {
+      id
+      nameCompany
+      email
+      phone
+      website
+      slug
+    }
+  }
+`;
+
+export const GET_COMPANY = gql`
+  query GetCompany($id: ID!) {
+    company(id: $id) {
+      id
+      nameCompany
+      email
+      phone
+      website
+      slug
     }
   }
 `;

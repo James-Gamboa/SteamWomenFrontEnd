@@ -1,135 +1,146 @@
-/**
- * GraphQL Mutations
- *
- * Flujo de operaciones:
- * 1. Los componentes llaman a los servicios (lib/services/*)
- * 2. Los servicios usan estas mutations para modificar datos
- * 3. Las mutations se ejecutan a través del cliente Apollo (backend-integration/api.ts)
- *
- * Tipos de operaciones:
- * - CREATE_*: Crear nuevos registros
- * - UPDATE_*: Modificar registros existentes
- * - DELETE_*: Eliminar registros
- *
- *
- * Ejemplo de uso en servicios:
- * ```typescript
- * const createUser = async (input: SignUpInput) => {
- *   const { data } = await client.mutate({
- *     mutation: CREATE_USER,
- *     variables: { input }
- *   });
- *   return data.createUser;
- * };
- * ```
- */
-
 import { gql } from "@apollo/client";
 
-export const UPDATE_EVENT_MUTATION = `
-  mutation UpdateEvent($id: ID!, $input: EventInput!) {
-    updateEvent(id: $id, input: $input) {
+// ============================================================================
+// AUTENTICACIÓN
+// ============================================================================
+
+export const CUSTOM_LOGIN = gql`
+  mutation CustomLogin($username: String!, $password: String!) {
+    customLogin(username: $username, password: $password) {
+      refresh
+      access
+      roles
+    }
+  }
+`;
+
+// ============================================================================
+// EVENTOS
+// ============================================================================
+
+export const CREATE_EVENT = gql`
+  mutation CreateEvent(
+    $title: String!
+    $slug: String!
+    $description: String!
+    $fullDescription: String
+    $date: Date!
+    $time: Time!
+    $location: String!
+    $category: String
+    $image: String
+    $website: String
+    $provinciaId: Int
+    $cantonId: Int
+    $distritoId: Int
+    $companyId: Int!
+    $requirements: [String]
+    $benefits: [String]
+    $applicationProcess: String
+  ) {
+    createEvent(
+      title: $title
+      slug: $slug
+      description: $description
+      fullDescription: $fullDescription
+      date: $date
+      time: $time
+      location: $location
+      category: $category
+      image: $image
+      website: $website
+      provinciaId: $provinciaId
+      cantonId: $cantonId
+      distritoId: $distritoId
+      companyId: $companyId
+      requirements: $requirements
+      benefits: $benefits
+      applicationProcess: $applicationProcess
+    ) {
       event {
         id
         title
-      }
-    }
-  }
-`;
-
-export const DELETE_EVENT_MUTATION = `
-  mutation DeleteEvent($id: ID!) {
-    deleteEvent(id: $id) {
-      ok
-    }
-  }
-`;
-
-export const LOGIN = gql`
-  mutation Login($input: LoginInput!) {
-    login(input: $input) {
-      token
-      user {
-        id
-        email
-        role
-        firstName
-        lastName
-        organizationName
-        isPrimaryAdmin
-      }
-    }
-  }
-`;
-
-export const SIGN_UP = gql`
-  mutation SignUp($input: SignUpInput!) {
-    signUp(input: $input) {
-      token
-      user {
-        id
-        email
-        role
-        firstName
-        lastName
-        organizationName
-        isPrimaryAdmin
-      }
-    }
-  }
-`;
-
-export const CREATE_EVENT = gql`
-  mutation CreateEvent($input: CreateEventInput!) {
-    createEvent(input: $input) {
-      id
-      title
-      description
-      fullDescription
-      date
-      time
-      location
-      category
-      organizer
-      website
-      image
-      requirements
-      benefits
-      applicationProcess
-      createdAt
-      createdBy {
-        id
-        firstName
-        lastName
-        organizationName
+        description
+        fullDescription
+        date
+        time
+        location
+        category
+        organizer
+        website
+        image
+        requirements
+        benefits
+        applicationProcess
+        createdAt
+        company {
+          id
+          nameCompany
+        }
       }
     }
   }
 `;
 
 export const UPDATE_EVENT = gql`
-  mutation UpdateEvent($id: ID!, $input: UpdateEventInput!) {
-    updateEvent(id: $id, input: $input) {
-      id
-      title
-      description
-      fullDescription
-      date
-      time
-      location
-      category
-      organizer
-      website
-      image
-      requirements
-      benefits
-      applicationProcess
-      createdAt
-      createdBy {
+  mutation UpdateEvent(
+    $id: ID!
+    $title: String
+    $description: String
+    $location: String
+    $date: Date
+    $time: Time
+    $fullDescription: String
+    $category: String
+    $image: String
+    $website: String
+    $provinciaId: Int
+    $cantonId: Int
+    $distritoId: Int
+    $requirements: [String]
+    $benefits: [String]
+    $applicationProcess: String
+    $isActive: Boolean
+  ) {
+    updateEvent(
+      id: $id
+      title: $title
+      description: $description
+      location: $location
+      date: $date
+      time: $time
+      fullDescription: $fullDescription
+      category: $category
+      image: $image
+      website: $website
+      provinciaId: $provinciaId
+      cantonId: $cantonId
+      distritoId: $distritoId
+      requirements: $requirements
+      benefits: $benefits
+      applicationProcess: $applicationProcess
+      isActive: $isActive
+    ) {
+      event {
         id
-        firstName
-        lastName
-        organizationName
+        title
+        description
+        fullDescription
+        date
+        time
+        location
+        category
+        organizer
+        website
+        image
+        requirements
+        benefits
+        applicationProcess
+        createdAt
+        company {
+          id
+          nameCompany
+        }
       }
     }
   }
@@ -137,63 +148,141 @@ export const UPDATE_EVENT = gql`
 
 export const DELETE_EVENT = gql`
   mutation DeleteEvent($id: ID!) {
-    deleteEvent(id: $id)
+    deleteEvent(id: $id) {
+      ok
+    }
   }
 `;
 
+// ============================================================================
+// OPORTUNIDADES
+// ============================================================================
+
 export const CREATE_OPPORTUNITY = gql`
-  mutation CreateOpportunity($input: CreateOpportunityInput!) {
-    createOpportunity(input: $input) {
-      id
-      title
-      description
-      fullDescription
-      date
-      time
-      location
-      category
-      organizer
-      website
-      slug
-      image
-      requirements
-      benefits
-      applicationProcess
-      createdAt
-      company {
+  mutation CreateOpportunity(
+    $title: String!
+    $slug: String!
+    $description: String!
+    $fullDescription: String
+    $date: Date!
+    $time: Time!
+    $location: String!
+    $category: String
+    $image: String
+    $website: String
+    $provinciaId: Int
+    $cantonId: Int
+    $distritoId: Int
+    $companyId: Int!
+    $requirements: [String]
+    $benefits: [String]
+    $applicationProcess: String
+  ) {
+    createOpportunity(
+      title: $title
+      slug: $slug
+      description: $description
+      fullDescription: $fullDescription
+      date: $date
+      time: $time
+      location: $location
+      category: $category
+      image: $image
+      website: $website
+      provinciaId: $provinciaId
+      cantonId: $cantonId
+      distritoId: $distritoId
+      companyId: $companyId
+      requirements: $requirements
+      benefits: $benefits
+      applicationProcess: $applicationProcess
+    ) {
+      opportunity {
         id
-        organizationName
-        firstName
-        lastName
+        title
+        description
+        fullDescription
+        date
+        time
+        location
+        category
+        organizer
+        website
+        slug
+        image
+        requirements
+        benefits
+        applicationProcess
+        createdAt
+        company {
+          id
+          nameCompany
+        }
       }
     }
   }
 `;
 
 export const UPDATE_OPPORTUNITY = gql`
-  mutation UpdateOpportunity($id: ID!, $input: UpdateOpportunityInput!) {
-    updateOpportunity(id: $id, input: $input) {
-      id
-      title
-      description
-      fullDescription
-      date
-      time
-      location
-      category
-      organizer
-      website
-      slug
-      image
-      requirements
-      benefits
-      applicationProcess
-      createdAt
-      company {
+  mutation UpdateOpportunity(
+    $id: ID!
+    $title: String
+    $description: String
+    $location: String
+    $date: Date
+    $time: Time
+    $fullDescription: String
+    $category: String
+    $image: String
+    $website: String
+    $provinciaId: Int
+    $cantonId: Int
+    $distritoId: Int
+    $requirements: [String]
+    $benefits: [String]
+    $applicationProcess: String
+    $isActive: Boolean
+  ) {
+    updateOpportunity(
+      id: $id
+      title: $title
+      description: $description
+      location: $location
+      date: $date
+      time: $time
+      fullDescription: $fullDescription
+      category: $category
+      image: $image
+      website: $website
+      provinciaId: $provinciaId
+      cantonId: $cantonId
+      distritoId: $distritoId
+      requirements: $requirements
+      benefits: $benefits
+      applicationProcess: $applicationProcess
+      isActive: $isActive
+    ) {
+      opportunity {
         id
-        organizationName
-        firstName
-        lastName
+        title
+        description
+        fullDescription
+        date
+        time
+        location
+        category
+        organizer
+        website
+        slug
+        image
+        requirements
+        benefits
+        applicationProcess
+        createdAt
+        company {
+          id
+          nameCompany
+        }
       }
     }
   }
@@ -201,115 +290,232 @@ export const UPDATE_OPPORTUNITY = gql`
 
 export const DELETE_OPPORTUNITY = gql`
   mutation DeleteOpportunity($id: ID!) {
-    deleteOpportunity(id: $id)
-  }
-`;
-
-export const UPDATE_COMPANY_PROFILE = gql`
-  mutation UpdateCompanyProfile($input: UpdateCompanyProfileInput!) {
-    updateCompanyProfile(input: $input) {
-      id
-      organizationName
-      description
-      website
-      location
-      industry
-      size
-      founded
-      logo
+    deleteOpportunity(id: $id) {
+      ok
     }
   }
 `;
 
-export const UPDATE_STUDENT_PROFILE = gql`
-  mutation UpdateStudentProfile($input: UpdateStudentProfileInput!) {
-    updateStudentProfile(input: $input) {
-      id
-      firstName
-      lastName
-      email
-      phone
-      location
-      education
-      skills
-      experience
-      interests
-      resume
-      portfolio
-    }
-  }
-`;
+// ============================================================================
+// APLICACIONES
+// ============================================================================
 
 export const CREATE_APPLICATION = gql`
-  mutation CreateApplication($input: CreateApplicationInput!) {
-    createApplication(input: $input) {
-      id
-      status
-      createdAt
-      opportunity {
+  mutation CreateApplication(
+    $eventId: ID
+    $opportunityId: ID
+    $studentEmail: String!
+    $studentId: Int!
+  ) {
+    createApplication(
+      eventId: $eventId
+      opportunityId: $opportunityId
+      studentEmail: $studentEmail
+      studentId: $studentId
+    ) {
+      application {
         id
-        title
-        company {
-          organizationName
+        status
+        createdAt
+        event {
+          id
+          title
+          company {
+            nameCompany
+          }
+        }
+        opportunity {
+          id
+          title
+          company {
+            nameCompany
+          }
         }
       }
     }
   }
 `;
 
-export const UPDATE_APPLICATION = gql`
-  mutation UpdateApplication($id: ID!, $input: UpdateApplicationInput!) {
-    updateApplication(id: $id, input: $input) {
-      id
-      status
-      createdAt
-      student {
+export const DELETE_APPLICATION = gql`
+  mutation DeleteApplication($id: ID!) {
+    deleteApplication(id: $id) {
+      ok
+    }
+  }
+`;
+
+// ============================================================================
+// PERFILES DE USUARIO
+// ============================================================================
+
+export const CREATE_USER_PROFILE = gql`
+  mutation CreateUserProfile(
+    $userId: Int!
+    $slug: String!
+    $descripcion: String
+    $cvUrl: String
+    $linkedinUrl: String
+    $role: String!
+    $organizationName: String
+    $isPrimaryAdmin: Boolean
+    $provinciaId: Int
+    $cantonId: Int
+    $distritoId: Int
+  ) {
+    createUserProfile(
+      userId: $userId
+      slug: $slug
+      descripcion: $descripcion
+      cvUrl: $cvUrl
+      linkedinUrl: $linkedinUrl
+      role: $role
+      organizationName: $organizationName
+      isPrimaryAdmin: $isPrimaryAdmin
+      provinciaId: $provinciaId
+      cantonId: $cantonId
+      distritoId: $distritoId
+    ) {
+      profile {
         id
-        firstName
-        lastName
+        role
+        organizationName
+        isPrimaryAdmin
+        createdAt
+        user {
+          id
+          email
+          firstName
+          lastName
+        }
+      }
+    }
+  }
+`;
+
+export const UPDATE_USER_PROFILE = gql`
+  mutation UpdateUserProfile(
+    $id: ID!
+    $descripcion: String
+    $cvUrl: String
+    $linkedinUrl: String
+    $role: String
+    $organizationName: String
+    $isPrimaryAdmin: Boolean
+    $provinciaId: Int
+    $cantonId: Int
+    $distritoId: Int
+  ) {
+    updateUserProfile(
+      id: $id
+      descripcion: $descripcion
+      cvUrl: $cvUrl
+      linkedinUrl: $linkedinUrl
+      role: $role
+      organizationName: $organizationName
+      isPrimaryAdmin: $isPrimaryAdmin
+      provinciaId: $provinciaId
+      cantonId: $cantonId
+      distritoId: $distritoId
+    ) {
+      profile {
+        id
+        role
+        organizationName
+        isPrimaryAdmin
+        createdAt
+        user {
+          id
+          email
+          firstName
+          lastName
+        }
+      }
+    }
+  }
+`;
+
+export const DELETE_USER_PROFILE = gql`
+  mutation DeleteUserProfile($id: ID!) {
+    deleteUserProfile(id: $id) {
+      ok
+    }
+  }
+`;
+
+// ============================================================================
+// EMPRESAS
+// ============================================================================
+
+export const CREATE_COMPANY = gql`
+  mutation CreateCompany(
+    $nameCompany: String!
+    $slug: String!
+    $email: String!
+    $phone: String
+    $website: String
+    $provinciaId: Int
+    $cantonId: Int
+    $distritoId: Int
+  ) {
+    createCompany(
+      nameCompany: $nameCompany
+      slug: $slug
+      email: $email
+      phone: $phone
+      website: $website
+      provinciaId: $provinciaId
+      cantonId: $cantonId
+      distritoId: $distritoId
+    ) {
+      company {
+        id
+        nameCompany
         email
-        resume
+        phone
+        website
+        slug
       }
-      opportunity {
+    }
+  }
+`;
+
+export const UPDATE_COMPANY = gql`
+  mutation UpdateCompany(
+    $id: ID!
+    $nameCompany: String
+    $email: String
+    $phone: String
+    $website: String
+    $provinciaId: Int
+    $cantonId: Int
+    $distritoId: Int
+  ) {
+    updateCompany(
+      id: $id
+      nameCompany: $nameCompany
+      email: $email
+      phone: $phone
+      website: $website
+      provinciaId: $provinciaId
+      cantonId: $cantonId
+      distritoId: $distritoId
+    ) {
+      company {
         id
-        title
+        nameCompany
+        email
+        phone
+        website
+        slug
       }
     }
   }
 `;
 
-export const CREATE_USER = gql`
-  mutation CreateUser($input: CreateUserInput!) {
-    createUser(input: $input) {
-      id
-      email
-      role
-      firstName
-      lastName
-      organizationName
-      isPrimaryAdmin
-      createdAt
+export const DELETE_COMPANY = gql`
+  mutation DeleteCompany($id: ID!) {
+    deleteCompany(id: $id) {
+      ok
     }
-  }
-`;
-
-export const UPDATE_USER = gql`
-  mutation UpdateUser($id: ID!, $input: UpdateUserInput!) {
-    updateUser(id: $id, input: $input) {
-      id
-      email
-      role
-      firstName
-      lastName
-      organizationName
-      isPrimaryAdmin
-      createdAt
-    }
-  }
-`;
-
-export const DELETE_USER = gql`
-  mutation DeleteUser($id: ID!) {
-    deleteUser(id: $id)
   }
 `;

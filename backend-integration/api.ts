@@ -1,34 +1,6 @@
-/**
- * Apollo Client Configuration
- *
- * Este archivo configura el cliente GraphQL que se usa en toda la aplicación.
- *
- * Flujo de autenticación:
- * 1. El token se almacena en localStorage después del login
- * 2. Cada petición GraphQL incluye el token en el header
- * 3. El backend valida el token y autoriza la operación
- *
- * Uso en componentes:
- * ```typescript
- * import { client } from '@/backend-integration/api';
- *
- * // Query
- * const { data } = await client.query({
- *   query: GET_USERS
- * });
- *
- * // Mutation
- * const { data } = await client.mutate({
- *   mutation: CREATE_USER,
- *   variables: { input }
- * });
- * ```
- */
-
 import { ApolloClient, InMemoryCache, createHttpLink } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
-import { AuthResponse, LoginInput, SignUpInput, DashboardStats } from "./types";
-import { LOGIN, SIGN_UP } from "./graphql/mutations";
+import { CUSTOM_LOGIN } from "./graphql/mutations";
 import { GET_DASHBOARD_STATS } from "./graphql/queries";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
@@ -38,7 +10,7 @@ const httpLink = createHttpLink({
 });
 
 const authLink = setContext((_, { headers }) => {
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem("access_token");
   return {
     headers: {
       ...headers,
@@ -52,24 +24,148 @@ export const client = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
+// ============================================================================
+// TIPOS CORREGIDOS
+// ============================================================================
+
+export interface AuthResponse {
+  refresh: string;
+  access: string;
+  roles: string[];
+}
+
+export interface LoginInput {
+  username: string;
+  password: string;
+}
+
+export interface User {
+  id: string;
+  user: {
+    id: string;
+    email: string;
+    firstName: string;
+    lastName: string;
+  };
+  role: string;
+  organizationName?: string;
+  isPrimaryAdmin?: boolean;
+  createdAt: string;
+}
+
+export interface DashboardStats {
+  totalUsers: number;
+  activeEvents: number;
+  totalOpportunities: number;
+  recentActivities: Activity[];
+}
+
+export interface Activity {
+  id: string;
+  type: string;
+  title: string;
+  description: string;
+  createdAt: string;
+}
+
+export interface Event {
+  id: string;
+  title: string;
+  description: string;
+  fullDescription?: string;
+  date: string;
+  time: string;
+  location: string;
+  category: string;
+  organizer: string;
+  website?: string;
+  image?: string;
+  requirements: string[];
+  benefits: string[];
+  applicationProcess?: string;
+  createdAt: string;
+  company: {
+    id: string;
+    nameCompany: string;
+  };
+}
+
+export interface Opportunity {
+  id: string;
+  title: string;
+  description: string;
+  fullDescription?: string;
+  date: string;
+  time: string;
+  location: string;
+  category: string;
+  organizer: string;
+  website?: string;
+  slug: string;
+  image?: string;
+  requirements: string[];
+  benefits: string[];
+  applicationProcess?: string;
+  createdAt: string;
+  company: {
+    id: string;
+    nameCompany: string;
+  };
+}
+
+export interface Company {
+  id: string;
+  nameCompany: string;
+  email: string;
+  phone?: string;
+  website?: string;
+  slug: string;
+}
+
+export interface Application {
+  id: string;
+  status: string;
+  createdAt: string;
+  student: {
+    id: string;
+    user: {
+      email: string;
+      firstName: string;
+      lastName: string;
+    };
+  };
+  event?: {
+    id: string;
+    title: string;
+    company: {
+      nameCompany: string;
+    };
+  };
+  opportunity?: {
+    id: string;
+    title: string;
+    company: {
+      nameCompany: string;
+    };
+  };
+}
+
+// ============================================================================
+// FUNCIONES DE AUTENTICACIÓN CORREGIDAS
+// ============================================================================
+
 export const login = async (input: LoginInput): Promise<AuthResponse> => {
   const { data } = await client.mutate({
-    mutation: LOGIN,
-    variables: { input },
+    mutation: CUSTOM_LOGIN,
+    variables: input,
   });
 
   if (data.errors) throw new Error(data.errors[0].message);
-  return data.data.login;
-};
 
-export const signUp = async (input: SignUpInput): Promise<AuthResponse> => {
-  const { data } = await client.mutate({
-    mutation: SIGN_UP,
-    variables: { input },
-  });
+  localStorage.setItem("access_token", data.customLogin.access);
+  localStorage.setItem("refresh_token", data.customLogin.refresh);
 
-  if (data.errors) throw new Error(data.errors[0].message);
-  return data.data.signUp;
+  return data.customLogin;
 };
 
 export const getDashboardStats = async (): Promise<DashboardStats> => {
@@ -78,5 +174,28 @@ export const getDashboardStats = async (): Promise<DashboardStats> => {
   });
 
   if (data.errors) throw new Error(data.errors[0].message);
-  return data.data.dashboardStats;
+  return data.dashboardStats;
+};
+
+// ============================================================================
+// FUNCIONES DE UTILIDAD
+// ============================================================================
+
+export const logout = () => {
+  localStorage.removeItem("access_token");
+  localStorage.removeItem("refresh_token");
+  localStorage.removeItem("user");
+  client.clearStore();
+};
+
+export const isAuthenticated = (): boolean => {
+  return !!localStorage.getItem("access_token");
+};
+
+export const getToken = (): string | null => {
+  return localStorage.getItem("access_token");
+};
+
+export const getRefreshToken = (): string | null => {
+  return localStorage.getItem("refresh_token");
 };
