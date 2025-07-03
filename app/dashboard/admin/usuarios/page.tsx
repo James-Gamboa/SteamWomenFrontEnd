@@ -20,8 +20,6 @@ import {
   DELETE_USER,
 } from "@/backend-integration/graphql/mutations";
 
-// TODO: Reemplazar con conexión a Django
-
 type ConfirmModalProps = {
   open: boolean;
   onConfirm: () => void;
@@ -207,6 +205,24 @@ const AdminUsuariosPage = () => {
       return;
     }
 
+    if (typeof window !== "undefined") {
+      const users = storageUtils.getUsers();
+      if (users.length === 0) {
+        storageUtils.updateUsers([
+          {
+            id: "1",
+            email: "jjguevarag@gmail.com",
+            password: "admin",
+            role: "admin",
+            firstName: "James",
+            lastName: "Guevara",
+            isPrimaryAdmin: true,
+            createdAt: new Date().toISOString(),
+          },
+        ]);
+      }
+    }
+
     const loadUsers = async () => {
       try {
         setLoading(true);
@@ -231,6 +247,8 @@ const AdminUsuariosPage = () => {
     };
 
     loadUsers();
+    window.addEventListener("storage", loadUsers);
+    return () => window.removeEventListener("storage", loadUsers);
   }, [currentUser, router]);
 
   const handleRoleChange = (userId: string, newRole: User["role"]) => {
@@ -255,31 +273,32 @@ const AdminUsuariosPage = () => {
     try {
       setIsUpdating(true);
       setGraphqlError(null);
-      const graphqlResult = UPDATE_USER;
+      const localResult = storageUtils.updateUserRole(userId, newRole);
       const response = await fetch("/api/users/update-role", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userId, newRole }),
       });
+      const backendResult = await response.json();
 
-      const result = await response.json();
-
-      if (result.success) {
-        const updatedUsers = storageUtils.getUsers();
-        setUsers(updatedUsers);
+      if (localResult.success && backendResult.success) {
+        setUsers(storageUtils.getUsers());
         setEditedRoles((prev) => {
           const copy = { ...prev };
           delete copy[userId];
           return copy;
         });
-        toast.success("Rol actualizado correctamente en el archivo");
+        toast.success("Rol actualizado correctamente");
       } else {
-        console.error("Error updating role:", result.error);
-        toast.error(result.error || "Error al actualizar el rol");
+        const errorMsg =
+          backendResult.error ||
+          localResult.error ||
+          "Error al actualizar el rol";
+        toast.error(errorMsg);
       }
     } catch (error) {
-      console.error("Error calling update role API:", error);
-      setGraphqlError("Error updating user role in GraphQL");
+      console.error("Error updating user role:", error);
+      setGraphqlError("Error al actualizar el rol del usuario");
       toast.error("Error al comunicarse con el servidor");
     } finally {
       setIsUpdating(false);
@@ -384,13 +403,13 @@ const AdminUsuariosPage = () => {
       )}
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold text-center">Gestión de Usuarios</h1>
-        <Button
+        {/* <Button
           onClick={handleSyncWithFile}
           className="bg-green-600 hover:bg-green-700 text-white"
           disabled={isUpdating}
         >
           {isUpdating ? "Sincronizando..." : "Sincronizar con Archivo"}
-        </Button>
+        </Button> */}
       </div>
       <div className="hidden custom1123:block">
         <Card>

@@ -1,26 +1,31 @@
 export interface User {
   id: string;
-  user: {
-    id: string;
-    email: string;
-    firstName: string;
-    lastName: string;
-  };
-  role: string;
+  email: string;
+  role: "student" | "company" | "admin";
+  firstName: string;
+  lastName: string;
   organizationName?: string;
   isPrimaryAdmin?: boolean;
   createdAt: string;
 }
 
 export interface LoginInput {
-  username: string;
+  email: string;
   password: string;
 }
 
+export interface SignUpInput {
+  email: string;
+  password: string;
+  role: "student" | "company" | "admin";
+  firstName: string;
+  lastName: string;
+  organizationName?: string;
+}
+
 export interface AuthResponse {
-  refresh: string;
-  access: string;
-  roles: string[];
+  token: string;
+  user: User;
 }
 
 export interface DashboardStats {
@@ -42,228 +47,157 @@ export interface Event {
   id: string;
   title: string;
   description: string;
-  fullDescription?: string;
   date: string;
   time: string;
   location: string;
-  category: string;
-  organizer: string;
-  website?: string;
-  image?: string;
-  requirements: string[];
-  benefits: string[];
-  applicationProcess?: string;
+  imageUrl?: string;
   createdAt: string;
-  company: {
+  createdBy: {
     id: string;
-    nameCompany: string;
+    firstName: string;
+    lastName: string;
+    organizationName?: string;
   };
 }
 
 export interface CreateEventInput {
   title: string;
-  slug: string;
   description: string;
-  fullDescription?: string;
   date: string;
   time: string;
   location: string;
-  category?: string;
-  image?: string;
-  website?: string;
-  provinciaId?: number;
-  cantonId?: number;
-  distritoId?: number;
-  companyId: number;
-  requirements?: string[];
-  benefits?: string[];
-  applicationProcess?: string;
+  imageUrl?: string;
 }
 
 export interface UpdateEventInput {
   title?: string;
   description?: string;
-  location?: string;
   date?: string;
   time?: string;
-  fullDescription?: string;
-  category?: string;
-  image?: string;
-  website?: string;
-  provinciaId?: number;
-  cantonId?: number;
-  distritoId?: number;
-  requirements?: string[];
-  benefits?: string[];
-  applicationProcess?: string;
-  isActive?: boolean;
+  location?: string;
+  imageUrl?: string;
 }
 
 export interface Opportunity {
   id: string;
   title: string;
   description: string;
-  fullDescription?: string;
-  date: string;
-  time: string;
-  location: string;
-  category: string;
-  organizer: string;
-  website?: string;
-  slug: string;
-  image?: string;
   requirements: string[];
-  benefits: string[];
-  applicationProcess?: string;
+  location: string;
+  type: string;
+  salary?: string;
+  deadline: string;
   createdAt: string;
   company: {
     id: string;
-    nameCompany: string;
-  };
-}
-
-export interface CreateOpportunityInput {
-  title: string;
-  slug: string;
-  description: string;
-  fullDescription?: string;
-  date: string;
-  time: string;
-  location: string;
-  category?: string;
-  image?: string;
-  website?: string;
-  provinciaId?: number;
-  cantonId?: number;
-  distritoId?: number;
-  companyId: number;
-  requirements?: string[];
-  benefits?: string[];
-  applicationProcess?: string;
-}
-
-export interface UpdateOpportunityInput {
-  title?: string;
-  description?: string;
-  location?: string;
-  date?: string;
-  time?: string;
-  fullDescription?: string;
-  category?: string;
-  image?: string;
-  website?: string;
-  provinciaId?: number;
-  cantonId?: number;
-  distritoId?: number;
-  requirements?: string[];
-  benefits?: string[];
-  applicationProcess?: string;
-  isActive?: boolean;
-}
-
-export interface Company {
-  id: string;
-  nameCompany: string;
-  email: string;
-  phone?: string;
-  website?: string;
-  slug: string;
-}
-
-export interface CreateCompanyInput {
-  nameCompany: string;
-  slug: string;
-  email: string;
-  phone?: string;
-  website?: string;
-  provinciaId?: number;
-  cantonId?: number;
-  distritoId?: number;
-}
-
-export interface UpdateCompanyInput {
-  nameCompany?: string;
-  email?: string;
-  phone?: string;
-  website?: string;
-  provinciaId?: number;
-  cantonId?: number;
-  distritoId?: number;
-}
-
-export interface UserProfile {
-  id: string;
-  role: string;
-  organizationName?: string;
-  isPrimaryAdmin?: boolean;
-  createdAt: string;
-  user: {
-    id: string;
-    email: string;
+    organizationName: string;
     firstName: string;
     lastName: string;
   };
 }
 
-export interface CreateUserProfileInput {
-  userId: number;
-  slug: string;
-  descripcion?: string;
-  cvUrl?: string;
-  linkedinUrl?: string;
-  role: string;
-  organizationName?: string;
-  isPrimaryAdmin?: boolean;
-  provinciaId?: number;
-  cantonId?: number;
-  distritoId?: number;
+export interface CreateOpportunityInput {
+  title: string;
+  description: string;
+  requirements: string[];
+  location: string;
+  type: string;
+  salary?: string;
+  deadline: string;
 }
 
-export interface UpdateUserProfileInput {
-  descripcion?: string;
-  cvUrl?: string;
-  linkedinUrl?: string;
-  role?: string;
+export interface UpdateOpportunityInput {
+  title?: string;
+  description?: string;
+  requirements?: string[];
+  location?: string;
+  type?: string;
+  salary?: string;
+  deadline?: string;
+}
+
+export interface CompanyProfile {
+  id: string;
+  organizationName: string;
+  description: string;
+  website?: string;
+  location: string;
+  industry: string;
+  size: string;
+  founded: string;
+  logo?: string;
+  socialMedia: {
+    linkedin?: string;
+    twitter?: string;
+    facebook?: string;
+  };
+}
+
+export interface UpdateCompanyProfileInput {
   organizationName?: string;
-  isPrimaryAdmin?: boolean;
-  provinciaId?: number;
-  cantonId?: number;
-  distritoId?: number;
+  description?: string;
+  website?: string;
+  location?: string;
+  industry?: string;
+  size?: string;
+  founded?: string;
+  logo?: string;
+  socialMedia?: {
+    linkedin?: string;
+    twitter?: string;
+    facebook?: string;
+  };
+}
+
+export interface StudentProfile {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone?: string;
+  location: string;
+  education: string[];
+  skills: string[];
+  experience: string[];
+  interests: string[];
+  resume?: string;
+  portfolio?: string;
+  socialMedia: {
+    linkedin?: string;
+    github?: string;
+    twitter?: string;
+  };
+}
+
+export interface UpdateStudentProfileInput {
+  firstName?: string;
+  lastName?: string;
+  phone?: string;
+  location?: string;
+  education?: string[];
+  skills?: string[];
+  experience?: string[];
+  interests?: string[];
+  resume?: string;
+  portfolio?: string;
+  socialMedia?: {
+    linkedin?: string;
+    github?: string;
+    twitter?: string;
+  };
 }
 
 export interface Application {
   id: string;
   status: "PENDING" | "REVIEWING" | "ACCEPTED" | "REJECTED";
   createdAt: string;
-  student: {
-    id: string;
-    user: {
-      email: string;
-      firstName: string;
-      lastName: string;
-    };
-  };
-  event?: {
+  opportunity: {
     id: string;
     title: string;
     company: {
-      nameCompany: string;
+      organizationName: string;
     };
   };
-  opportunity?: {
-    id: string;
-    title: string;
-    company: {
-      nameCompany: string;
-    };
-  };
-}
-
-export interface CreateApplicationInput {
-  eventId?: string;
-  opportunityId?: string;
-  studentEmail: string;
-  studentId: number;
 }
 
 export interface CompanyApplication {
@@ -272,17 +206,12 @@ export interface CompanyApplication {
   createdAt: string;
   student: {
     id: string;
-    user: {
-      email: string;
-      firstName: string;
-      lastName: string;
-    };
+    firstName: string;
+    lastName: string;
+    email: string;
+    resume?: string;
   };
-  event?: {
-    id: string;
-    title: string;
-  };
-  opportunity?: {
+  opportunity: {
     id: string;
     title: string;
   };

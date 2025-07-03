@@ -7,8 +7,6 @@ export interface Application {
   created_at: string;
 }
 
-// TODO: Reemplazar con conexión a Django
-
 const STORAGE_KEY = "applications";
 
 const getApplications = (): Application[] => {

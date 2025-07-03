@@ -41,8 +41,6 @@ type EventModalProps = {
   loading?: boolean;
 };
 
-// TODO: Reemplazar con conexión a Django
-
 export function EventModal({
   mode,
   open,

@@ -64,8 +64,6 @@ const provinces = [
   "Limón",
 ];
 
-// TODO: Reemplazar con conexión a Django
-
 export function EditEventModal({
   event,
   open,

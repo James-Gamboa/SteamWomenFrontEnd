@@ -1,4 +1,9 @@
 import { v4 as uuidv4 } from "uuid";
+import {
+  safeStorageSet,
+  safeStorageGet,
+  getStorageUsage,
+} from "./utils/storage-utils";
 
 export type ItemType = "event" | "opportunity";
 
@@ -50,20 +55,29 @@ class DataStorage {
   }
 
   private loadFromStorage() {
-    const storedItems = localStorage.getItem("items");
-    const storedApplications = localStorage.getItem("applications");
+    const storedItems = safeStorageGet<BaseItem[]>("items");
+    const storedApplications = safeStorageGet<Application[]>("applications");
 
     if (storedItems) {
-      this.items = JSON.parse(storedItems);
+      this.items = storedItems;
     }
     if (storedApplications) {
-      this.applications = JSON.parse(storedApplications);
+      this.applications = storedApplications;
     }
   }
 
-  private saveToStorage() {
-    localStorage.setItem("items", JSON.stringify(this.items));
-    localStorage.setItem("applications", JSON.stringify(this.applications));
+  private saveToStorage(): boolean {
+    const itemsSuccess = safeStorageSet("items", this.items);
+    const applicationsSuccess = safeStorageSet(
+      "applications",
+      this.applications,
+    );
+
+    if (!itemsSuccess || !applicationsSuccess) {
+      console.warn("Storage save partially failed. Usage:", getStorageUsage());
+    }
+
+    return itemsSuccess && applicationsSuccess;
   }
 
   public createItem(
@@ -76,7 +90,12 @@ class DataStorage {
       updatedAt: new Date().toISOString(),
     };
     this.items.push(newItem);
-    this.saveToStorage();
+
+    const saveSuccess = this.saveToStorage();
+    if (!saveSuccess) {
+      console.error("Failed to save new item to storage");
+    }
+
     return newItem;
   }
 
@@ -90,7 +109,12 @@ class DataStorage {
       updatedAt: new Date().toISOString(),
     };
     this.items[index] = updatedItem;
-    this.saveToStorage();
+
+    const saveSuccess = this.saveToStorage();
+    if (!saveSuccess) {
+      console.error("Failed to save updated item to storage");
+    }
+
     return updatedItem;
   }
 
@@ -100,7 +124,12 @@ class DataStorage {
 
     this.items.splice(index, 1);
     this.applications = this.applications.filter((app) => app.itemId !== id);
-    this.saveToStorage();
+
+    const saveSuccess = this.saveToStorage();
+    if (!saveSuccess) {
+      console.error("Failed to save after item deletion");
+    }
+
     return true;
   }
 
@@ -121,7 +150,12 @@ class DataStorage {
       createdAt: new Date().toISOString(),
     };
     this.applications.push(newApplication);
-    this.saveToStorage();
+
+    const saveSuccess = this.saveToStorage();
+    if (!saveSuccess) {
+      console.error("Failed to save new application to storage");
+    }
+
     return newApplication;
   }
 
@@ -137,7 +171,12 @@ class DataStorage {
       ...updates,
     };
     this.applications[index] = updatedApplication;
-    this.saveToStorage();
+
+    const saveSuccess = this.saveToStorage();
+    if (!saveSuccess) {
+      console.error("Failed to save updated application to storage");
+    }
+
     return updatedApplication;
   }
 
@@ -146,7 +185,12 @@ class DataStorage {
     if (index === -1) return false;
 
     this.applications.splice(index, 1);
-    this.saveToStorage();
+
+    const saveSuccess = this.saveToStorage();
+    if (!saveSuccess) {
+      console.error("Failed to save after application deletion");
+    }
+
     return true;
   }
 

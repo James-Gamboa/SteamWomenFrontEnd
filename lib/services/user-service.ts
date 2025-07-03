@@ -30,8 +30,6 @@
  * ```
  */
 
-// TODO: Reemplazar con conexión a Django
-
 import { client } from "@/backend-integration/api";
 import {
   User,

@@ -21,8 +21,6 @@ import {
   Send,
 } from "lucide-react";
 
-// TODO: Reemplazar con conexión a Django
-
 interface ItemDetailProps {
   id: string;
   type: "event" | "opportunity";

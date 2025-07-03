@@ -10,8 +10,7 @@ import {
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import { toast } from "sonner";
-
-// TODO: Reemplazar con conexión a Django
+import { storageUtils } from "@/lib/local-storage";
 
 interface User {
   id: string;
@@ -94,6 +93,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setToken(data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
       Cookies.set("token", data.token, { expires: 7 });
+
+      if (data.user) {
+        const users = JSON.parse(
+          localStorage.getItem("steamWomenUsers") || "[]",
+        );
+        let userToAdd = { ...data.user };
+        if (!userToAdd.id) {
+          userToAdd.id =
+            Date.now().toString() + Math.random().toString(36).substr(2, 6);
+        }
+        if (!users.some((u: any) => u.id === userToAdd.id)) {
+          const { password, ...userNoPassword } = userToAdd;
+          users.push(userNoPassword);
+          localStorage.setItem("steamWomenUsers", JSON.stringify(users));
+        }
+      }
     } catch (error) {
       console.error("Login error:", error);
       throw error;
@@ -115,6 +130,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (!response.ok) {
         throw new Error(data.error || "Error al registrar usuario");
       }
+
+      let userToAdd: any = {
+        email: userData.email,
+        password: userData.password,
+        role: userData.role,
+        firstName: userData.firstName,
+        lastName: userData.lastName,
+        organizationName: userData.organizationName,
+      };
+      if (!userToAdd.id) {
+        userToAdd.id =
+          Date.now().toString() + Math.random().toString(36).substr(2, 6);
+      }
+      storageUtils.addUser(userToAdd);
 
       toast.success("¡Cuenta creada exitosamente!");
       return data;

@@ -1,61 +1,68 @@
 [
   {
     "id": "1",
-    "email": "admin@steamwomen.com",
-    "password": "admin123",
+    "email": "jjguevarag@gmail.com",
     "role": "admin",
-    "firstName": "Admin",
-    "lastName": "Principal",
-    "isPrimaryAdmin": true,
-    "createdAt": "2025-06-05T19:37:30.958Z"
-  },
-  {
-    "id": "2",
-    "email": "james@gmail.com",
-    "password": "123456",
-    "role": "student",
-    "firstName": "James",
-    "lastName": "Gamboa",
-    "createdAt": "2025-06-05T22:11:07.109Z"
-  },
-  {
-    "id": "3",
-    "email": "jjgamboag@gmail.com",
-    "password": "123456",
-    "role": "company",
     "firstName": "James",
     "lastName": "Guevara",
-    "organizationName": "STEAM WOMEN",
-    "createdAt": "2025-06-05T22:11:07.109Z"
+    "createdAt": "2025-07-03T04:09:38.691Z"
+  },
+  {
+    "email": "cookie@gmail.com",
+    "role": "company",
+    "firstName": "James",
+    "lastName": "Guevara Gamboa",
+    "organizationName": "",
+    "id": "1751517160918-sjjl707q8",
+    "createdAt": "2025-07-03T04:32:40.919Z",
+    "portfolio": "www.google.com",
+    "cv": "www.google.com",
+    "linkedin": "www.google.com"
   },
   {
     "email": "maria.gonzalez@ejemplo.com",
     "password": "123456",
     "role": "company",
-    "firstName": "James",
-    "lastName": "Guevara Gamboa",
-    "organizationName": "",
-    "id": "1751042163402",
-    "createdAt": "2025-06-27T16:36:03.402Z"
+    "firstName": "",
+    "lastName": "",
+    "organizationName": "la libertad",
+    "id": "1751517261103-glc25t029",
+    "createdAt": "2025-07-03T04:34:21.103Z"
   },
   {
-    "email": "cookie@gmail.com",
+    "id": "3",
+    "email": "jjgamboag@gmail.com",
+    "role": "company",
+    "firstName": "James",
+    "lastName": "Guevara",
+    "organizationName": "STEAM WOMEN",
+    "createdAt": "2025-07-03T06:08:05.833Z"
+  },
+  {
+    "id": "1751522904817-yy6c3myj0",
+    "email": "leon@gmail.com",
+    "role": "student",
+    "firstName": "",
+    "lastName": "",
+    "organizationName": "GG",
+    "createdAt": "2025-07-03T06:35:10.044Z"
+  },
+  {
+    "email": "maria.gonzalez@ejemplo.com",
     "password": "123456",
     "role": "company",
     "firstName": "",
     "lastName": "",
-    "organizationName": "cookie",
-    "id": "1751042456256",
-    "createdAt": "2025-06-27T16:40:56.256Z"
+    "organizationName": "la libertad",
+    "id": "1751524560859-ohjetko4p",
+    "createdAt": "2025-07-03T06:36:00.859Z"
   },
   {
-    "email": "prueba@gmail.com",
-    "password": "123456",
-    "role": "company",
+    "id": "2",
+    "email": "james@gmail.com",
+    "role": "student",
     "firstName": "James",
-    "lastName": "adadsasd",
-    "organizationName": "",
-    "id": "1751051921520",
-    "createdAt": "2025-06-27T19:18:41.520Z"
+    "lastName": "Student",
+    "createdAt": "2025-07-03T07:05:52.196Z"
   }
 ]

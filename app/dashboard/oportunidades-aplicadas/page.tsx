@@ -137,11 +137,7 @@ export default function OportunidadesAplicadasPage() {
               location: app.provincia,
               category: app.categoria,
             })),
-          ].filter((app: StudentApplication) =>
-            app.itemTitle
-              .toLowerCase()
-              .includes(user.organizationName?.toLowerCase() || ""),
-          );
+          ];
           setApplications(allApplications);
         }
       } catch (error) {
@@ -388,7 +384,17 @@ export default function OportunidadesAplicadasPage() {
                           </div>
                         )}
                       </div>
-
+                      <div className="flex items-center mt-2">
+                        <Badge className={`ml-2 ${getStatusColor(app.status)}`}>
+                          {app.status.toLowerCase() === "aceptado" ||
+                          app.status.toLowerCase() === "accepted"
+                            ? "Aprobado"
+                            : app.status.toLowerCase() === "rechazado" ||
+                                app.status.toLowerCase() === "rejected"
+                              ? "Rechazado"
+                              : "Pendiente"}
+                        </Badge>
+                      </div>
                       {app.category && (
                         <div className="flex gap-2">
                           <span className="text-xs bg-[#F1F0FB] text-[#8B5CF6] px-2 py-0.5 rounded">

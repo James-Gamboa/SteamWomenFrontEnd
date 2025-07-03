@@ -29,8 +29,6 @@ interface ItemListProps {
   onItemEdited?: () => void;
 }
 
-// TODO: Reemplazar con conexión a Django
-
 export function ItemList({
   type,
   showActions = false,

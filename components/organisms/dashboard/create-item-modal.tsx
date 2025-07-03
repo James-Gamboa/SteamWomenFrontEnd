@@ -27,8 +27,6 @@ interface CreateItemModalProps {
   onItemCreated: () => void;
 }
 
-// TODO: Reemplazar con conexión a Django
-
 export function CreateItemModal({ type, onItemCreated }: CreateItemModalProps) {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);

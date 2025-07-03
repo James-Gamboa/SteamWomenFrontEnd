@@ -3,7 +3,6 @@
 import { OpportunityDetailTemplate } from "@/components/templates/opportunity-detail-template";
 import { useEffect, useState, use } from "react";
 import { opportunitiesEventsData } from "@/lib/opportunities-events-data";
-import { getLocalOpportunities } from "@/lib/data-storage";
 
 interface Opportunity {
   id: string;
@@ -33,19 +32,35 @@ export default function OpportunityDetailPage({
 }) {
   const { slug } = use(params);
   const [opportunity, setOpportunity] = useState<Opportunity | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const storedOpportunities = getLocalOpportunities?.() || [];
-    let currentOpportunity = storedOpportunities.find(
-      (o: any) => o.slug === slug,
-    );
-    if (!currentOpportunity) {
-      currentOpportunity = (opportunitiesEventsData as any[]).find(
-        (o: any) => o.slug === slug,
+    const loadOpportunity = () => {
+      setIsLoading(true);
+      const items = JSON.parse(localStorage.getItem("items") || "[]");
+      let currentOpportunity = items.find(
+        (o: any) => o.type === "opportunity" && o.slug === slug,
       );
-    }
-    setOpportunity(currentOpportunity || null);
+      if (!currentOpportunity) {
+        currentOpportunity = (opportunitiesEventsData as any[]).find(
+          (o: any) => o.slug === slug,
+        );
+      }
+      setOpportunity(currentOpportunity || null);
+      setIsLoading(false);
+    };
+    loadOpportunity();
+    window.addEventListener("storage", loadOpportunity);
+    return () => window.removeEventListener("storage", loadOpportunity);
   }, [slug]);
+
+  if (isLoading) {
+    return (
+      <div className="container py-16 text-center">
+        <div className="text-lg">Cargando oportunidad...</div>
+      </div>
+    );
+  }
 
   if (!opportunity) {
     return (

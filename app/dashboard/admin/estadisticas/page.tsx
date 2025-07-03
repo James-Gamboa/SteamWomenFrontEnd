@@ -12,8 +12,6 @@ import { toast } from "sonner";
 import { Card, CardContent } from "@/components/ui/card";
 import { GET_DASHBOARD_STATS } from "@/backend-integration/graphql/queries";
 
-// TODO: Reemplazar con conexión a Django
-
 const AdminEstadisticasPage = () => {
   const [stats, setStats] = useState({
     total: 0,
@@ -42,6 +40,11 @@ const AdminEstadisticasPage = () => {
         setGraphqlError(null);
         const graphqlResult = GET_DASHBOARD_STATS;
         const userStats = storageUtils.getStats();
+        const users = storageUtils.getUsers();
+        const total = users.length;
+        const admins = users.filter((u) => u.role === "admin").length;
+        const companies = users.filter((u) => u.role === "company").length;
+        const students = users.filter((u) => u.role === "student").length;
         const localItems = getItems();
         const eventsCount =
           eventsData.length +
@@ -49,12 +52,22 @@ const AdminEstadisticasPage = () => {
         const opportunitiesCount =
           opportunitiesEventsData.length +
           localItems.filter((item) => item.type === "opportunity").length;
-        const applicationsCount = JSON.parse(
-          localStorage.getItem("applications") || "[]",
-        ).length;
+        let applicationsCount = 0;
+        const appKeys = [
+          "applications",
+          "opportunity_applications",
+          "student_applications",
+        ];
+        appKeys.forEach((key) => {
+          const arr = JSON.parse(localStorage.getItem(key) || "[]");
+          if (Array.isArray(arr)) applicationsCount += arr.length;
+        });
 
         setStats({
-          ...userStats,
+          total,
+          admins,
+          companies,
+          students,
           events: eventsCount,
           opportunities: opportunitiesCount,
           applications: applicationsCount,
@@ -72,12 +85,15 @@ const AdminEstadisticasPage = () => {
         const applicationsCount = JSON.parse(
           localStorage.getItem("applications") || "[]",
         ).length;
-
+        setGraphqlError("Error loading statistics");
         setStats({
-          ...userStats,
-          events: eventsCount,
-          opportunities: opportunitiesCount,
-          applications: applicationsCount,
+          total: 0,
+          admins: 0,
+          companies: 0,
+          students: 0,
+          events: 0,
+          opportunities: 0,
+          applications: 0,
         });
       } finally {
         setIsLoading(false);
@@ -85,6 +101,8 @@ const AdminEstadisticasPage = () => {
     };
 
     loadStats();
+    window.addEventListener("storage", loadStats);
+    return () => window.removeEventListener("storage", loadStats);
   }, [currentUser, router]);
 
   if (isLoading) {

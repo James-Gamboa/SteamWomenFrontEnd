@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
+import { StorageManager } from "@/components/organisms/dashboard/storage-manager";
 
 export default function ConfiguracionPage() {
   const { user } = useAuth();
@@ -87,6 +88,10 @@ export default function ConfiguracionPage() {
             </Button>
           </CardContent>
         </Card>
+
+        <div className="flex justify-center">
+          <StorageManager />
+        </div>
       </div>
     </div>
   );

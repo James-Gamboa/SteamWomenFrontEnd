@@ -20,6 +20,12 @@ import {
   UPDATE_OPPORTUNITY,
   DELETE_OPPORTUNITY,
 } from "@/backend-integration/graphql/mutations";
+import { generateSlug } from "@/lib/utils/slug-utils";
+import {
+  safeStorageSet,
+  safeStorageGet,
+  getStorageUsage,
+} from "@/lib/utils/storage-utils";
 
 interface Opportunity {
   id: number;
@@ -39,8 +45,6 @@ interface Opportunity {
   applicationProcess: string;
 }
 
-// TODO: Reemplazar con conexión a Django
-
 export default function OpportunitiesPage() {
   const [opportunities, setOpportunities] = useState<Opportunity[]>([]);
   const [selectedOpportunity, setSelectedOpportunity] =
@@ -56,20 +60,23 @@ export default function OpportunitiesPage() {
   const router = useRouter();
 
   const loadOpportunities = async () => {
+    setIsLoading(true);
     try {
-      setIsLoading(true);
-      setGraphqlError(null);
-      await new Promise((resolve) => setTimeout(resolve, 500));
-
-      const graphqlVariables = { userId: "current", limit: 50, offset: 0 };
-      const graphqlResult = GET_OPPORTUNITIES;
-
-      const storedOpportunities = getLocalOpportunities?.() || [];
-      setOpportunities(storedOpportunities);
+      const items = safeStorageGet<any[]>("items") || [];
+      const opportunities = items.filter((item) => item.type === "opportunity");
+      setOpportunities(opportunities);
     } catch (error) {
-      setGraphqlError("Error loading opportunities from GraphQL");
-      const storedOpportunities = getLocalOpportunities?.() || [];
-      setOpportunities(storedOpportunities);
+      console.error("Error loading opportunities:", error);
+      toast.error("Error al cargar las oportunidades", {
+        style: {
+          backgroundColor: "#FEF2F2",
+          color: "#DC2626",
+          fontFamily: "DM Sans, sans-serif",
+          fontSize: "14px",
+          lineHeight: "18px",
+          fontWeight: "500",
+        },
+      });
     } finally {
       setIsLoading(false);
     }
@@ -95,28 +102,33 @@ export default function OpportunitiesPage() {
 
   const handleDeleteConfirm = async () => {
     if (!selectedOpportunity) return;
+    setIsDeleting(true);
+    await new Promise((resolve) => setTimeout(resolve, 800));
+
     try {
-      setIsDeleting(true);
-      setGraphqlError(null);
-      await new Promise((resolve) => setTimeout(resolve, 800));
+      const items = safeStorageGet<any[]>("items") || [];
+      const updatedItems = items.filter(
+        (item: any) => item.id !== selectedOpportunity.id,
+      );
+      const saveSuccess = safeStorageSet("items", updatedItems);
 
-      const graphqlVariables = {
-        id: selectedOpportunity.id,
-        userId: "current",
-      };
-      const graphqlResult = DELETE_OPPORTUNITY;
+      if (!saveSuccess) {
+        toast.error(
+          "Error al eliminar la oportunidad. Espacio de almacenamiento insuficiente.",
+          {
+            style: {
+              backgroundColor: "#FEF2F2",
+              color: "#DC2626",
+              fontFamily: "DM Sans, sans-serif",
+              fontSize: "14px",
+              lineHeight: "18px",
+              fontWeight: "500",
+            },
+          },
+        );
+        return;
+      }
 
-      deleteItem(String(selectedOpportunity.id));
-      let legacyOpportunities = JSON.parse(
-        localStorage.getItem("opportunities") || "[]",
-      );
-      legacyOpportunities = legacyOpportunities.filter(
-        (o: Opportunity) => String(o.id) !== String(selectedOpportunity.id),
-      );
-      localStorage.setItem(
-        "opportunities",
-        JSON.stringify(legacyOpportunities),
-      );
       await loadOpportunities();
       setIsDeleteModalOpen(false);
       setSelectedOpportunity(null);
@@ -131,47 +143,73 @@ export default function OpportunitiesPage() {
         },
       });
     } catch (error) {
-      setGraphqlError("Error deleting opportunity in GraphQL");
-      toast.error("Error al eliminar la oportunidad");
+      console.error("Error deleting opportunity:", error);
+      toast.error("Error al eliminar la oportunidad", {
+        style: {
+          backgroundColor: "#FEF2F2",
+          color: "#DC2626",
+          fontFamily: "DM Sans, sans-serif",
+          fontSize: "14px",
+          lineHeight: "18px",
+          fontWeight: "500",
+        },
+      });
     } finally {
       setIsDeleting(false);
     }
   };
 
   const handleCreateSubmit = async (opportunityData: Opportunity) => {
+    setIsCreating(true);
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
     try {
-      setIsCreating(true);
-      setGraphqlError(null);
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      const graphqlVariables = {
-        input: {
-          title: opportunityData.title,
-          description: opportunityData.description,
-          location: opportunityData.location,
-          date: opportunityData.date,
-          time: opportunityData.time,
-          category: opportunityData.category,
-          organizer: opportunityData.organizer,
-          website: opportunityData.website,
-          fullDescription: opportunityData.fullDescription,
-          requirements: opportunityData.requirements,
-          benefits: opportunityData.benefits,
-          applicationProcess: opportunityData.applicationProcess,
-          userId: "current",
-        },
+      const baseSlug = generateSlug(opportunityData.title || "oportunidad");
+      const uniqueSlug = `${baseSlug}-${Date.now()}`;
+      const now = new Date().toISOString();
+      const newOpportunity = {
+        id: opportunityData.id || Date.now(),
+        title: opportunityData.title || "",
+        description: opportunityData.description || "",
+        location: opportunityData.location || "",
+        date: opportunityData.date || new Date().toISOString().slice(0, 10),
+        time: opportunityData.time || "",
+        category: opportunityData.category || "otro",
+        organizer: opportunityData.organizer || "",
+        website: opportunityData.website || "",
+        slug: uniqueSlug,
+        image: opportunityData.image || "",
+        fullDescription: opportunityData.fullDescription || "",
+        requirements: opportunityData.requirements || [],
+        benefits: opportunityData.benefits || [],
+        applicationProcess: opportunityData.applicationProcess || "",
+        type: "opportunity",
+        createdAt: now,
+        updatedAt: now,
       };
-      const graphqlResult = CREATE_OPPORTUNITY;
 
-      createItem({ ...opportunityData, type: "opportunity" });
-      const legacyOpportunities = JSON.parse(
-        localStorage.getItem("opportunities") || "[]",
-      );
-      legacyOpportunities.push(opportunityData);
-      localStorage.setItem(
-        "opportunities",
-        JSON.stringify(legacyOpportunities),
-      );
+      const items = safeStorageGet<any[]>("items") || [];
+      items.push(newOpportunity);
+      const saveSuccess = safeStorageSet("items", items);
+
+      if (!saveSuccess) {
+        const usage = getStorageUsage();
+        toast.error(
+          `Error al crear la oportunidad. Espacio de almacenamiento insuficiente (${usage.percentage.toFixed(1)}% usado).`,
+          {
+            style: {
+              backgroundColor: "#FEF2F2",
+              color: "#DC2626",
+              fontFamily: "DM Sans, sans-serif",
+              fontSize: "14px",
+              lineHeight: "18px",
+              fontWeight: "500",
+            },
+          },
+        );
+        return;
+      }
+
       await loadOpportunities();
       setIsCreateModalOpen(false);
       toast.success("Oportunidad creada exitosamente", {
@@ -185,55 +223,52 @@ export default function OpportunitiesPage() {
         },
       });
     } catch (error) {
-      setGraphqlError("Error creating opportunity in GraphQL");
-      toast.error("Error al crear la oportunidad");
+      console.error("Error creating opportunity:", error);
+      toast.error("Error al crear la oportunidad", {
+        style: {
+          backgroundColor: "#FEF2F2",
+          color: "#DC2626",
+          fontFamily: "DM Sans, sans-serif",
+          fontSize: "14px",
+          lineHeight: "18px",
+          fontWeight: "500",
+        },
+      });
     } finally {
       setIsCreating(false);
     }
   };
 
   const handleEditSubmit = async (opportunityData: Opportunity) => {
+    setIsUpdating(true);
+    await new Promise((resolve) => setTimeout(resolve, 900));
+
     try {
-      setIsUpdating(true);
-      setGraphqlError(null);
-      await new Promise((resolve) => setTimeout(resolve, 900));
+      const items = safeStorageGet<any[]>("items") || [];
+      const updatedItems = items.map((item: any) =>
+        item.id === opportunityData.id
+          ? { ...item, ...opportunityData, updatedAt: new Date().toISOString() }
+          : item,
+      );
+      const saveSuccess = safeStorageSet("items", updatedItems);
 
-      const graphqlVariables = {
-        id: opportunityData.id,
-        input: {
-          title: opportunityData.title,
-          description: opportunityData.description,
-          location: opportunityData.location,
-          date: opportunityData.date,
-          time: opportunityData.time,
-          category: opportunityData.category,
-          organizer: opportunityData.organizer,
-          website: opportunityData.website,
-          fullDescription: opportunityData.fullDescription,
-          requirements: opportunityData.requirements,
-          benefits: opportunityData.benefits,
-          applicationProcess: opportunityData.applicationProcess,
-          userId: "current",
-        },
-      };
-      const graphqlResult = UPDATE_OPPORTUNITY;
+      if (!saveSuccess) {
+        toast.error(
+          "Error al actualizar la oportunidad. Espacio de almacenamiento insuficiente.",
+          {
+            style: {
+              backgroundColor: "#FEF2F2",
+              color: "#DC2626",
+              fontFamily: "DM Sans, sans-serif",
+              fontSize: "14px",
+              lineHeight: "18px",
+              fontWeight: "500",
+            },
+          },
+        );
+        return;
+      }
 
-      updateItem(String(opportunityData.id), {
-        ...opportunityData,
-        id: String(opportunityData.id),
-      });
-      let legacyOpportunities = JSON.parse(
-        localStorage.getItem("opportunities") || "[]",
-      );
-      legacyOpportunities = legacyOpportunities.map((o: Opportunity) =>
-        String(o.id) === String(opportunityData.id)
-          ? { ...opportunityData, id: String(opportunityData.id) }
-          : o,
-      );
-      localStorage.setItem(
-        "opportunities",
-        JSON.stringify(legacyOpportunities),
-      );
       await loadOpportunities();
       setIsEditModalOpen(false);
       setSelectedOpportunity(null);
@@ -248,8 +283,17 @@ export default function OpportunitiesPage() {
         },
       });
     } catch (error) {
-      setGraphqlError("Error updating opportunity in GraphQL");
-      toast.error("Error al actualizar la oportunidad");
+      console.error("Error updating opportunity:", error);
+      toast.error("Error al actualizar la oportunidad", {
+        style: {
+          backgroundColor: "#FEF2F2",
+          color: "#DC2626",
+          fontFamily: "DM Sans, sans-serif",
+          fontSize: "14px",
+          lineHeight: "18px",
+          fontWeight: "500",
+        },
+      });
     } finally {
       setIsUpdating(false);
     }

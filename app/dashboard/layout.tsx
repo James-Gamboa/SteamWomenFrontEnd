@@ -4,9 +4,11 @@ import { useState, useEffect } from "react";
 import { Sidebar } from "@/components/organisms/dashboard/sidebar";
 import { useAuth } from "@/lib/context/auth-context";
 import { redirect, useRouter } from "next/navigation";
-import { Menu } from "lucide-react";
+import { Menu, AlertTriangle, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { useStorageMonitor } from "@/hooks/use-storage-monitor";
 
 const AdminRouteGuard = ({ children }: { children: React.ReactNode }) => {
   const { user, isLoading } = useAuth();
@@ -32,6 +34,40 @@ const AdminRouteGuard = ({ children }: { children: React.ReactNode }) => {
   return <>{children}</>;
 };
 
+const StorageWarningBanner = () => {
+  const { isWarning, isCritical, storageInfo } = useStorageMonitor();
+  const [isVisible, setIsVisible] = useState(true);
+
+  if (!isVisible || (!isWarning && !isCritical)) return null;
+
+  const getAlertVariant = () => {
+    if (isCritical) return "destructive";
+    return "default";
+  };
+
+  const getMessage = () => {
+    if (isCritical) {
+      return `¡Almacenamiento crítico! (${storageInfo.percentage.toFixed(1)}% usado). Limpia datos antiguos para evitar errores.`;
+    }
+    return `Almacenamiento bajo (${storageInfo.percentage.toFixed(1)}% usado). Considera limpiar datos antiguos.`;
+  };
+
+  return (
+    <Alert variant={getAlertVariant()} className="mb-4">
+      <AlertTriangle className="h-4 w-4" />
+      <AlertDescription className="flex-1">{getMessage()}</AlertDescription>
+      <Button
+        variant="ghost"
+        size="sm"
+        onClick={() => setIsVisible(false)}
+        className="ml-2"
+      >
+        <X className="h-4 w-4" />
+      </Button>
+    </Alert>
+  );
+};
+
 export default function DashboardLayout({
   children,
 }: {
@@ -52,8 +88,6 @@ export default function DashboardLayout({
   const pathname =
     typeof window !== "undefined" ? window.location.pathname : "";
   const isAdminRoute = pathname.startsWith("/dashboard/admin");
-
-  // TODO: Reemplazar con conexión a Django
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -81,6 +115,7 @@ export default function DashboardLayout({
 
           <main className="flex-1 overflow-y-auto p-4 md:p-6">
             <div className="mx-auto max-w-7xl">
+              <StorageWarningBanner />
               {isAdminRoute ? (
                 <AdminRouteGuard>{children}</AdminRouteGuard>
               ) : (

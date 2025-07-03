@@ -22,8 +22,6 @@ import { Calendar, Mail, Check, X } from "lucide-react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
-// TODO: Reemplazar con conexión a Django
-
 interface ApplicationsListProps {
   type?: ItemType;
   itemId?: string;

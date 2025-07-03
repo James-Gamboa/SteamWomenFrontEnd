@@ -1,4 +1,3 @@
-// TODO: Reemplazar con conexión a Django
 export interface User {
   id: string;
   email: string;

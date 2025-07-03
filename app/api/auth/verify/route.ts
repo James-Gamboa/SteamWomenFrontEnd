@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 
-// TODO: Reemplazar con conexión a Django
 // Endpoint: POST /api/auth/token/verify/
 
 export async function POST(request: Request) {

@@ -17,8 +17,6 @@ interface Application {
   itemType: string;
 }
 
-// TODO: Reemplazar con conexión a Django
-
 export default function PostulacionesPage() {
   const [applications, setApplications] = useState<Application[]>([]);
   const [isLoading, setIsLoading] = useState(true);

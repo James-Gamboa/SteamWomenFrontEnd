@@ -30,8 +30,6 @@ import { toast } from "sonner";
 import { getRoleLabel } from "@/utils/role-label";
 import { navigationByRole } from "@/lib/navigation";
 
-// TODO: Reemplazar con conexión a Django
-
 interface SidebarProps {
   open?: boolean;
   setOpen?: (open: boolean) => void;
@@ -171,9 +169,11 @@ export function Sidebar({ open, setOpen, onLogout }: SidebarProps) {
               ).toUpperCase()}
             </div>
             <span className="text-base font-semibold text-[#1A1F2C] dark:text-white">
-              {user.firstName
-                ? `${user.firstName} ${user.lastName || ""}`.trim()
-                : user.email}
+              {user.role === "company"
+                ? user.organizationName || user.email
+                : user.firstName
+                  ? `${user.firstName} ${user.lastName || ""}`.trim()
+                  : user.email}
             </span>
             <span className="text-xs text-[#8B5CF6] font-medium capitalize">
               {getRoleLabel(user.role)}

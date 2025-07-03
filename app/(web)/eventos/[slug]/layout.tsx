@@ -10,7 +10,7 @@ export async function generateMetadata({
   const event = eventsData.find((e) => e.slug === slug);
   if (!event) {
     return {
-      title: "Evento no encontrado | STEAMWomen",
+      title: "Evento | STEAMWomen",
       description: "Este evento no existe o ha sido eliminado.",
     };
   }

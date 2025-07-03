@@ -4,8 +4,6 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 
-// TODO: Reemplazar con conexión a Django
-
 export default function AdminSetup() {
   const [isLoading, setIsLoading] = useState(false);
 
