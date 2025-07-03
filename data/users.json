@@ -5,7 +5,8 @@
     "role": "admin",
     "firstName": "James",
     "lastName": "Guevara",
-    "createdAt": "2025-07-03T04:09:38.691Z"
+    "createdAt": "2025-07-03T04:09:38.691Z",
+    "password": "admin"
   },
   {
     "email": "cookie@gmail.com",
@@ -45,7 +46,8 @@
     "firstName": "",
     "lastName": "",
     "organizationName": "GG",
-    "createdAt": "2025-07-03T06:35:10.044Z"
+    "createdAt": "2025-07-03T06:35:10.044Z",
+    "password": "123456"
   },
   {
     "email": "maria.gonzalez@ejemplo.com",

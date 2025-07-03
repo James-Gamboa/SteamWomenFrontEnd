@@ -1,3 +1,6 @@
+import fs from "fs";
+import path from "path";
+
 export interface User {
   id: string;
   email: string;
@@ -133,6 +136,35 @@ const writeUsers = (users: User[]): void => {
   }
 };
 
+const ensureAdminUserInFile = () => {
+  const DB_FILE_PATH = path.join(process.cwd(), "data", "users.json");
+  let users = [];
+  try {
+    if (fs.existsSync(DB_FILE_PATH)) {
+      users = JSON.parse(fs.readFileSync(DB_FILE_PATH, "utf-8"));
+    }
+  } catch {
+    users = [];
+  }
+  const adminEmail = "jjguevarag@gmail.com";
+  const adminUser = {
+    id: "1",
+    email: adminEmail,
+    role: "admin",
+    firstName: "James",
+    lastName: "Guevara",
+    createdAt: "2025-07-03T04:09:38.691Z",
+    password: "admin",
+  };
+  const index = users.findIndex((u: any) => u.email === adminEmail);
+  if (index === -1) {
+    users.push(adminUser);
+  } else {
+    users[index] = { ...users[index], ...adminUser };
+  }
+  fs.writeFileSync(DB_FILE_PATH, JSON.stringify(users, null, 2));
+};
+
 export const mockDb = {
   initializeDefaultUsers: (): void => {
     try {
@@ -145,6 +177,7 @@ export const mockDb = {
   },
 
   getAllUsers: (): User[] => {
+    ensureAdminUserInFile();
     try {
       return readUsers();
     } catch (error) {
@@ -154,6 +187,7 @@ export const mockDb = {
   },
 
   saveUsers: (users: User[]): void => {
+    ensureAdminUserInFile();
     try {
       if (!Array.isArray(users)) {
         throw new Error("Los datos de usuarios no son válidos");
@@ -168,6 +202,7 @@ export const mockDb = {
   },
 
   createUser: (userData: Omit<User, "id" | "createdAt">): User => {
+    ensureAdminUserInFile();
     try {
       if (!userData.email || !userData.password || !userData.role) {
         throw new Error("Faltan campos requeridos");
@@ -287,6 +322,9 @@ export const mockDb = {
       }
 
       userToUpdate.role = "admin";
+      if (!userToUpdate.password) {
+        userToUpdate.password = "123456";
+      }
       mockDb.saveUsers(users);
 
       return { success: true };
@@ -338,6 +376,9 @@ export const mockDb = {
       }
 
       userToUpdate.role = "student";
+      if (!userToUpdate.password) {
+        userToUpdate.password = "123456";
+      }
       mockDb.saveUsers(users);
 
       return { success: true };
@@ -390,6 +431,35 @@ export const mockDb = {
         success: false,
         error: "Error al eliminar el usuario",
       };
+    }
+  },
+
+  findUserById: (id: string): User | undefined => {
+    try {
+      const users = mockDb.getAllUsers();
+      return users.find((user) => user.id === id);
+    } catch (error) {
+      console.error("Error finding user by ID:", error);
+      return undefined;
+    }
+  },
+
+  updateUserRole: (email: string, newRole: string): { success: boolean; error?: string } => {
+    try {
+      const users = mockDb.getAllUsers();
+      const userToUpdate = users.find((user) => user.email === email);
+      if (!userToUpdate) {
+        return { success: false, error: "Usuario no encontrado" };
+      }
+      userToUpdate.role = newRole as User["role"];
+      if (!userToUpdate.password) {
+        userToUpdate.password = "123456";
+      }
+      mockDb.saveUsers(users);
+      return { success: true };
+    } catch (error) {
+      console.error("Error updating user role:", error);
+      return { success: false, error: "Error al actualizar el rol del usuario" };
     }
   },
 };

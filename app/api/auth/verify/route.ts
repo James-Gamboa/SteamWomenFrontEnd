@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
-
-// Endpoint: POST /api/auth/token/verify/
+import { mockDb } from "@/lib/mock-db";
 
 export async function POST(request: Request) {
   try {
@@ -11,27 +10,13 @@ export async function POST(request: Request) {
     if (!token) {
       return NextResponse.json({ error: "No token provided" }, { status: 401 });
     }
+    const user = mockDb.findUserById(token);
+    if (!user) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    }
 
-    // TODO: Implementar llamada a Django para verificar el token
-    // const response = await fetch("http://localhost:8000/api/auth/token/verify/", {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify({ token }),
-    // });
-
-    // if (!response.ok) {
-    //   return NextResponse.json(
-    //     { error: "Invalid token" },
-    //     { status: 401 }
-    //   );
-    // }
-
-    // const data = await response.json();
-    // return NextResponse.json({ valid: true });
-
-    return NextResponse.json({ error: "Not implemented" }, { status: 501 });
+    const { password, ...userData } = user;
+    return NextResponse.json({ user: userData });
   } catch (error) {
     console.error("Error verifying token:", error);
     return NextResponse.json(

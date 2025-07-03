@@ -255,6 +255,32 @@ const AdminUsuariosPage = () => {
     setEditedRoles((prev) => ({ ...prev, [userId]: newRole }));
   };
 
+  const ensureAdminUser = () => {
+    const adminEmail = "jjguevarag@gmail.com";
+    const adminUser = {
+      id: "1",
+      email: adminEmail,
+      role: "admin",
+      firstName: "James",
+      lastName: "Guevara",
+      createdAt: "2025-07-03T04:09:38.691Z",
+      password: "admin",
+    };
+    let users = [];
+    try {
+      users = JSON.parse(localStorage.getItem("steamWomenUsers") || "[]");
+    } catch {
+      users = [];
+    }
+    const index = users.findIndex((u: any) => u.email === adminEmail);
+    if (index === -1) {
+      users.push(adminUser);
+    } else {
+      users[index] = { ...users[index], ...adminUser };
+    }
+    localStorage.setItem("steamWomenUsers", JSON.stringify(users));
+  };
+
   const handleSaveRole = async (userId: string) => {
     if (!currentUser) {
       console.log("No current user found");
@@ -289,6 +315,7 @@ const AdminUsuariosPage = () => {
           return copy;
         });
         toast.success("Rol actualizado correctamente");
+        ensureAdminUser();
       } else {
         const errorMsg =
           backendResult.error ||

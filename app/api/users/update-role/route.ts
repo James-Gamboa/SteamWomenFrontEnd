@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { mockDb } from "@/lib/mock-db";
 
 export async function POST(request: Request) {
   try {
@@ -12,44 +13,33 @@ export async function POST(request: Request) {
       );
     }
 
-    const fs = require("fs");
-    const path = require("path");
-    const DB_FILE_PATH = path.join(process.cwd(), "data", "users.json");
-
-    if (!fs.existsSync(DB_FILE_PATH)) {
-      return NextResponse.json(
-        { error: "Archivo de usuarios no encontrado" },
-        { status: 404 },
-      );
-    }
-
-    const data = fs.readFileSync(DB_FILE_PATH, "utf-8");
-    const users = JSON.parse(data);
-
-    const userIndex = users.findIndex((u: any) => u.id === userId);
-
-    if (userIndex === -1) {
+    const user = mockDb.findUserById(userId);
+    if (!user) {
       return NextResponse.json(
         { error: "Usuario no encontrado" },
         { status: 404 },
       );
     }
-
-    if (users[userIndex].isPrimaryAdmin) {
+    if (user.isPrimaryAdmin) {
       return NextResponse.json(
         { error: "No se puede cambiar el rol del administrador principal" },
         { status: 400 },
       );
     }
 
-    users[userIndex].role = newRole;
+    const result = mockDb.updateUserRole(user.email, newRole);
+    if (!result.success) {
+      return NextResponse.json(
+        { error: result.error || "Error al actualizar el rol" },
+        { status: 500 },
+      );
+    }
 
-    fs.writeFileSync(DB_FILE_PATH, JSON.stringify(users, null, 2));
-
+    const updatedUser = mockDb.findUserById(userId);
     return NextResponse.json({
       success: true,
       message: "Rol actualizado correctamente",
-      user: users[userIndex],
+      user: updatedUser,
     });
   } catch (error) {
     console.error("Error updating user role:", error);
