@@ -45,6 +45,38 @@ interface Opportunity {
   applicationProcess: string;
 }
 
+const useQuery = (query: any) => {
+  const [data, setData] = useState<{ opportunities: Opportunity[] }>({ opportunities: [] });
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const items = safeStorageGet<any[]>("items") || [];
+    const opportunities = items.filter((item) => item.type === "opportunity");
+    setData({ opportunities });
+    setLoading(false);
+  }, []);
+  return { data, loading, error: null };
+};
+
+const useMutation = (mutation: any) => {
+  return [
+    async (variables: any) => {
+      let items = safeStorageGet<any[]>("items") || [];
+      if (mutation === CREATE_OPPORTUNITY) {
+        items.push(variables.input);
+        safeStorageSet("items", items);
+      } else if (mutation === UPDATE_OPPORTUNITY) {
+        items = items.map((o: Opportunity) => o.id === variables.id ? variables.input : o);
+        safeStorageSet("items", items);
+      } else if (mutation === DELETE_OPPORTUNITY) {
+        items = items.filter((o: Opportunity) => o.id !== variables.id);
+        safeStorageSet("items", items);
+      }
+      return { data: null };
+    },
+    { loading: false, error: null },
+  ];
+};
+
 export default function OpportunitiesPage() {
   const [opportunities, setOpportunities] = useState<Opportunity[]>([]);
   const [selectedOpportunity, setSelectedOpportunity] =

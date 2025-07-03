@@ -5,9 +5,16 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Briefcase, Calendar, Lightbulb, User } from "lucide-react";
 import Link from "next/link";
+import { GET_USER } from "@/backend-integration/graphql/queries";
+
+const useQuery = (query: any) => {
+  const { user } = useAuth();
+  return { data: { user }, loading: false, error: null };
+};
 
 export default function DashboardPage() {
-  const { user } = useAuth();
+  const { data, loading, error } = useQuery(GET_USER.loc?.source.body || "");
+  const user = data?.user;
 
   const studentDashboard = (
     <div className="space-y-6">

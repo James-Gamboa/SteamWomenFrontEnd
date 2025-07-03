@@ -33,6 +33,37 @@ interface Event {
   applicationProcess: string;
 }
 
+const useQuery = (query: any) => {
+  const [data, setData] = useState<{ events: Event[] }>({ events: [] });
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const storedEvents = JSON.parse(localStorage.getItem("events") || "[]");
+    setData({ events: storedEvents });
+    setLoading(false);
+  }, []);
+  return { data, loading, error: null };
+};
+
+const useMutation = (mutation: any) => {
+  return [
+    async (variables: any) => {
+      let updatedEvents = [];
+      if (mutation === CREATE_EVENT) {
+        updatedEvents = [...JSON.parse(localStorage.getItem("events") || "[]"), variables.input];
+        localStorage.setItem("events", JSON.stringify(updatedEvents));
+      } else if (mutation === UPDATE_EVENT) {
+        updatedEvents = JSON.parse(localStorage.getItem("events") || "[]").map((e: Event) => e.id === variables.id ? variables.input : e);
+        localStorage.setItem("events", JSON.stringify(updatedEvents));
+      } else if (mutation === DELETE_EVENT) {
+        updatedEvents = JSON.parse(localStorage.getItem("events") || "[]").filter((e: Event) => e.id !== variables.id);
+        localStorage.setItem("events", JSON.stringify(updatedEvents));
+      }
+      return { data: null };
+    },
+    { loading: false, error: null },
+  ];
+};
+
 export default function EventsPage() {
   const [events, setEvents] = useState<Event[]>([]);
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);

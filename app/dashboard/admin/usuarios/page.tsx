@@ -143,6 +143,31 @@ const UserDetailModal = ({ user, open, onClose }: UserDetailModalProps) => {
 
 type EditedRoles = Record<string, User["role"]>;
 
+const useQuery = (query: any) => {
+  const [data, setData] = useState<{ users: User[] }>({ users: [] });
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const users = storageUtils.getUsers();
+    setData({ users });
+    setLoading(false);
+  }, []);
+  return { data, loading, error: null };
+};
+
+const useMutation = (mutation: any) => {
+  return [
+    async (variables: any) => {
+      if (mutation === UPDATE_USER) {
+        await storageUtils.updateUserRole(variables.id, variables.input.role);
+      } else if (mutation === DELETE_USER) {
+        await storageUtils.deleteUser(variables.id);
+      }
+      return { data: null };
+    },
+    { loading: false, error: null },
+  ];
+};
+
 const AdminUsuariosPage = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
